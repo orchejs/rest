@@ -1,0 +1,25 @@
+{
+    "name": "@orche/core",
+    "version": "0.1.0",
+    "description": "Easy REST APIs in NodeJS",
+    "main": "index.js",
+    "dependencies": {
+        "file-matcher": "^1.1.0"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.24.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/orchejs/core.git"
+    },
+    "author": "Mauricio Gemelli Vigolo",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/orchejs/core/issues"
+    },
+    "homepage": "https://github.com/orchejs/core#readme"
+}
