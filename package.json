@@ -7,11 +7,18 @@
     "file-matcher": "^1.1.0"
   },
   "devDependencies": {
-    "mocha": "^3.4.2"
+    "@types/cors": "^2.8.1",
+    "@types/express": "^4.0.35",
+    "@types/mocha": "^2.2.41",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.0.4",
+    "tslint": "^5.3.2",
+    "tslint-config-airbnb": "^5.0.1",
+    "typescript": "^2.3.4"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint ./lib",
-    "build": "node_modules/.bin/babel lib -d dist"
+    "lint": "node_modules/.bin/tslint lib/**/*.ts tests/**/*.ts",
+    "test": "node_modules/.bin/mocha ts-node/register "
   },
   "repository": {
     "type": "git",
