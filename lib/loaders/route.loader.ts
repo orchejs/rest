@@ -2,20 +2,20 @@ import * as cors from 'cors';
 import { Application, Router, Request, Response, NextFunction, RequestHandler } from 'express';
 import { FileMatcher, FindOptions } from 'file-matcher';
 
-import { HttpResponseCode } from './constants/httpresponsecode';
-import { MimeType } from './constants/mimetype';
-import { ParamType } from './constants/paramtype';
-import { RouterConfig } from './interfaces/routerconfig';
-import { RouterUnit } from './interfaces/routerunit';
-import { ParamConfig } from './interfaces/paramconfig';
+import { HttpResponseCode } from '../constants/httpresponsecode';
+import { MimeType } from '../constants/mimetype';
+import { ParamType } from '../constants/paramtype';
+import { RouterConfig } from '../interfaces/routerconfig';
+import { RouterUnit } from '../interfaces/routerunit';
+import { ParamConfig } from '../interfaces/paramconfig';
 import { ParameterLoader } from './parameterloader';
 import { PathUtils } from '../utils/pathutils';
-import { HttpRequestMethod } from './constants/httprequestmethod';
+import { HttpRequestMethod } from '../constants/httprequestmethod';
 import { DefaultResponse } from '../responses/defaultresponse';
 import { RequestMapper } from '../requests/requestmapper';
 
 
-export class Routes {
+export class RouteLoader {
 
   private static routerConfigs: RouterConfig[] = [];
   private static routerUnits: RouterUnit[] = [];

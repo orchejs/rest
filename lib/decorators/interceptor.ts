@@ -1,24 +1,23 @@
-/*
-import { InterceptorLoader } from '../loaders/interceptorloader';
-import { InterceptorMethodType } from '../constants/interceptormethodtype';
+import { InterceptorLoader } from '../loaders/interceptor.loader';
+import { InterceptorType } from '../constants/interceptortype';
 
-export function Interceptor(paths: Array<string> = ['/'], order?: number) {
+
+export function interceptor(paths: string[] = ['/'], order?: number) {
   return function (target: any) {
     InterceptorLoader.addInterceptorConfig(paths, order);
   };
 }
 
-export function PreProcessing() {
+export function preProcessing() {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-      InterceptorMethodType.PreProcessing);
+                                         InterceptorType.PreProcessing);
   };
 }
 
-export function PostProcessing() {
+export function postProcessing() {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-      InterceptorMethodType.PostProcessing);
+                                         InterceptorType.PostProcessing);
   };
 }
-*/
