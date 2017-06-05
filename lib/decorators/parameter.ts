@@ -1,5 +1,4 @@
-/*
-import { ParameterLoader } from '../loaders/parameterloader';
+import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/paramtype';
 
 
@@ -44,4 +43,3 @@ export function RequestParamMapper() {
       ParamType.RequestParamMapper);
   };
 }
-*/
