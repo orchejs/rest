@@ -1,5 +1,5 @@
 import { Application, Router } from 'express';
-import { PathUtils } from '../utils/pathutils';
+import { PathUtils } from '../utils/path.utils';
 import { InterceptorConfig } from '../interfaces/interceptorconfig';
 import { InterceptorUnit } from '../interfaces/interceptorunit';
 import { InterceptorType } from '../constants/interceptortype';

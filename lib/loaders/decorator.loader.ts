@@ -1,6 +1,6 @@
 import { FileMatcher, FindOptions } from 'file-matcher';
 
-import { PathUtils } from '../utils/pathutils';
+import { PathUtils } from '../utils/path.utils';
 
 
 export class DecoratorLoader {

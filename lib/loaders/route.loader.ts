@@ -8,10 +8,9 @@ import { ParamType } from '../constants/paramtype';
 import { RouterConfig } from '../interfaces/routerconfig';
 import { RouterUnit } from '../interfaces/routerunit';
 import { ParamConfig } from '../interfaces/paramconfig';
-import { ParameterLoader } from './parameterloader';
-import { PathUtils } from '../utils/pathutils';
+import { ParameterLoader } from './parameter.loader';
+import { PathUtils } from '../utils/path.utils';
 import { HttpRequestMethod } from '../constants/httprequestmethod';
-import { DefaultResponse } from '../responses/defaultresponse';
 import { RequestMapper } from '../requests/requestmapper';
 
 
