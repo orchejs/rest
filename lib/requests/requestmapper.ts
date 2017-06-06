@@ -5,9 +5,9 @@ export abstract class RequestMapper {
 
   limit: number;
   start: number;
-  columns: Array<string>;
-  expand: Array<string>;
-  sort: Array<string>;
+  columns: string[];
+  expand: string[];
+  sort: string[];
   custom: any;
 
   constructor(request: any) {

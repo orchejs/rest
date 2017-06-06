@@ -9,7 +9,8 @@ export class ErrorResponse extends GenericResponse {
   protected detail?: any;
 
 
-  constructor(message?: string, detail?: any, contentType?: MimeType, httpStatus?: HttpResponseCode) {
+  constructor(message?: string, detail?: any, contentType?: MimeType, 
+              httpStatus?: HttpResponseCode) {
     super(contentType, httpStatus);
 
     this.message = message;
@@ -24,8 +25,7 @@ export class ErrorResponse extends GenericResponse {
   toObjectLiteral(): any {
     return {
       data: this.message,
-      detail: this.detail
+      detail: this.detail,
     };
   }
-
 }

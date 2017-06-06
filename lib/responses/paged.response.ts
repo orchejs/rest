@@ -11,7 +11,8 @@ export abstract class PagedResponse extends GenericResponse {
   protected totalPages?: number;
 
 
-  constructor(size: number, page: number, totalElements: number, contentType?: MimeType, httpStatus?: HttpResponseCode) {
+  constructor(size: number, page: number, totalElements: number, contentType?: MimeType, 
+              httpStatus?: HttpResponseCode) {
     super(contentType, httpStatus);
 
     this.size = size;

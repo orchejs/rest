@@ -24,7 +24,7 @@
   },
   "scripts": {
     "lint": "node_modules/.bin/tslint lib/**/*.ts tests/**/*.ts",
-    "test": "node_modules/.bin/mocha ts-node/register "
+    "test": "node_modules/.bin/mocha --compilers ts:ts-node/register,tsx:ts-node/register tests/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
