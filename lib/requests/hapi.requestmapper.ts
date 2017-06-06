@@ -8,11 +8,11 @@ export class HapiRequestMapper extends RequestMapper {
   }
 
   protected loadPathParams(request: Request): void {
-    throw new Error("Method not implemented.");
+
   }
 
   protected loadQueryParams(request: Request): void {
-    throw new Error("Method not implemented.");
+
   }
 
 }

@@ -2,44 +2,44 @@ import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/paramtype';
 
 
-export function RequestParam() {
+export function requestParam() {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-      ParamType.RequestParam);
+                                       ParamType.RequestParam);
   };
 }
 
-export function ResponseParam() {
+export function responseParam() {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-      ParamType.ResponseParam);
+                                       ParamType.ResponseParam);
   };
 }
 
-export function NextParam() {
+export function nextParam() {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-      ParamType.NextParam);
+                                       ParamType.NextParam);
   };
 }
 
-export function QueryParam(queryParamName: string) {
+export function queryParam(queryParamName: string) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, queryParamName, parameterIndex,
-      ParamType.QueryParam);
+                                       ParamType.QueryParam);
   };
 }
 
-export function PathParam(pathParamName: string) {
+export function pathParam(pathParamName: string) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, pathParamName, parameterIndex,
-      ParamType.PathParam);
+                                       ParamType.PathParam);
   };
 }
 
-export function RequestParamMapper() {
+export function requestParamMapper() {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-      ParamType.RequestParamMapper);
+                                       ParamType.RequestParamMapper);
   };
 }
