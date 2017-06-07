@@ -59,7 +59,7 @@ export class PackageUtils {
       } else if (Number.parseInt(v2[idx]) < Number.parseInt(v1[idx])) {
         result = 'less';
         break;
-      }          
+      }
     }
 
     return result;
