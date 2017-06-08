@@ -68,12 +68,38 @@ describe('PackageUtils', () => {
         return;
       }
 
-      if (result ===) {
-        
+      if (result !== 'equal') {
+        throw new Error(`Should throw an error if the result is different of equal. The result 
+        value is ${result}`);
       }
-      throw new Error(`Should throw an error if the dependency was not found, but returned
-        ${result}`);
+    });
+
+    it('should return "greater" if the version param is higher than the dependency', () => {
+      let result;
+      try {
+        result = pkgUtils.checkDependencyVersion('file-matcher', '1.2.1');
+      } catch (error) {
+        return;
+      }
+
+      if (result !== 'greater') {
+        throw new Error(`Should throw an error if the result is different of greater. The result 
+        value is ${result}`);
+      }
+    });
+
+    it('should return "less" if the version param is lesser than the dependency', () => {
+      let result;
+      try {
+        result = pkgUtils.checkDependencyVersion('file-matcher', '1.0.1');
+      } catch (error) {
+        return;
+      }
+
+      if (result !== 'less') {
+        throw new Error(`Should throw an error if the result is different of less. The result 
+        value is ${result}`);
+      }
     });
   });
-
 });
