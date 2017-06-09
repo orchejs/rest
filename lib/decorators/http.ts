@@ -1,6 +1,6 @@
-import { HttpRequestMethod } from '../constants/httprequestmethod';
+import { HttpRequestMethod } from '../constants/http-request-method';
 import { RouteLoader } from '../loaders/route.loader';
-import { CorsOptions } from '../interfaces/corsoptions';
+import { CorsOptions } from '../interfaces/cors-options';
 
 
 export function all(path: string = '', corsOptions?: CorsOptions, preflight?: boolean) {

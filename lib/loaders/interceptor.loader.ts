@@ -1,7 +1,7 @@
 import { PathUtils } from '../utils/path.utils';
-import { InterceptorConfig } from '../interfaces/interceptorconfig';
-import { InterceptorUnit } from '../interfaces/interceptorunit';
-import { InterceptorType } from '../constants/interceptortype';
+import { InterceptorConfig } from '../interfaces/interceptor-config';
+import { InterceptorUnit } from '../interfaces/interceptor-unit';
+import { InterceptorType } from '../constants/interceptor-type';
 
 export class InterceptorLoader {
 

@@ -1,4 +1,4 @@
-import { CorsOptions } from './corsoptions';
+import { CorsOptions } from './cors-options';
 
 export interface OrcheConfig {
   /**

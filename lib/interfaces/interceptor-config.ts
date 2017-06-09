@@ -1,4 +1,4 @@
-import { InterceptorUnit } from './interceptorunit';
+import { InterceptorUnit } from './interceptor-unit';
 
 export interface InterceptorConfig {
   paths?: string[];

@@ -1,4 +1,4 @@
-import { HttpResponseCode } from '../constants/httpresponsecode';
+import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 import { GenericResponse } from './generic.response';
 

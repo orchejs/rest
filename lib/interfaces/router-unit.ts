@@ -1,5 +1,5 @@
-import { CorsOptions } from './corsoptions';
-import { HttpRequestMethod } from '../constants/httprequestmethod';
+import { CorsOptions } from './cors-options';
+import { HttpRequestMethod } from '../constants/http-request-method';
 
 export interface RouterUnit {
   path?: string;
