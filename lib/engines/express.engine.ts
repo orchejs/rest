@@ -4,6 +4,7 @@ import * as http from 'http';
 
 import { HttpRequestMethod } from '../constants/http-request-method';
 import { Engine } from './engine';
+import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
 import { ExpressSettings } from '../interfaces/express-settings';
 import { RouterUnit } from '../interfaces/router-unit';
@@ -15,6 +16,8 @@ import { PathUtils } from '../utils/path.utils';
 
 
 export class ExpressEngine extends Engine {
+
+  protected workingVersions: CompatVersions = { dependency: 'express', from: '', to: '' };
 
   constructor(userConfig?: OrcheConfig) {
     super(userConfig);
@@ -64,7 +67,7 @@ export class ExpressEngine extends Engine {
   }
 
   protected isEngineVersionSupported(): boolean {
-    const workingVersions: any = { from: '', to: '' };
+
     throw new Error('Method not implemented.');
   }
 
@@ -86,8 +89,8 @@ export class ExpressEngine extends Engine {
         const routerUnits: RouterUnit[] = routerConfig.routerUnits;
 
         routerUnits.forEach((routerUnit) => {
-          const method: any = this.loadInterceptors(routerConfig.className, routerUnit.method, 
-                                                    routerUnit.methodName);
+          const method: any = this.loadInterceptors(routerConfig.className, routerUnit.method,
+            routerUnit.methodName);
 
           if (routerUnit.preflight) {
             router.options(routerUnit.path, cors(routerUnit.corsOptions));
@@ -269,7 +272,7 @@ export class ExpressEngine extends Engine {
 
   protected loadPreProcessors(app: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const loadedPreProcessors: InterceptorConfig[] = await 
+      const loadedPreProcessors: InterceptorConfig[] = await
         this.loadInterceptorUnit(app, InterceptorType.PreProcessing);
 
       resolve(loadedPreProcessors);
@@ -278,7 +281,7 @@ export class ExpressEngine extends Engine {
 
   protected loadPostProcessors(app: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const loadedPostProcessors: InterceptorConfig[] = 
+      const loadedPostProcessors: InterceptorConfig[] =
         await this.loadInterceptorUnit(app, InterceptorType.PostProcessing);
 
       resolve(loadedPostProcessors);
