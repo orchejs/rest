@@ -64,6 +64,7 @@ export class ExpressEngine extends Engine {
   }
 
   protected isEngineVersionSupported(): boolean {
+    const workingVersions: any = { from: '', to: '' };
     throw new Error('Method not implemented.');
   }
 
