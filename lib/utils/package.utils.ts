@@ -34,8 +34,8 @@ export class PackageUtils {
     return dependency;
   }
 
-  public checkDependencyVersion(dependencyName: string, versionToCheck: string): 'equal' | 'less'
-    | 'greater' {
+  public checkDependencyVersion(dependencyName: string, versionToCheck: string): 'eq' | 'lt'
+    | 'gt' {
 
     const version = this.getDependencyVersion(dependencyName);
 
@@ -43,26 +43,54 @@ export class PackageUtils {
       throw Error('Dependency not found');
     }
 
+    if (!versionToCheck || versionToCheck.replace(/\D+/g, '') === '') {
+      throw Error(`Version cannot be null, undefined or blank and cannot have invalid characters
+       other than dots and numbers.`);
+    }
+
     if (version.replace(/\D+/g, '') === versionToCheck.replace(/\D+/g, '')) {
-      return 'equal';
+      return 'eq';
     }
 
     const v1: string[] = version.replace(/[^0-9.]/g, '').split('.');
     const v2: string[] = versionToCheck.replace(/[^0-9.]/g, '').split('.');
 
-    let result: 'less' | 'greater';
+    if (v2.length < 3) {
+      throw Error(`Version must be SEMVER compatible, so it should be composed by
+       MAJOR.MINOR>PATCH.`);
+    }
+
+    let result: 'lt' | 'gt';
 
     for (let idx = 0; idx <= v1.length; idx += 1) {
       if (Number.parseInt(v2[idx]) > Number.parseInt(v1[idx])) {
-        result = 'greater';
+        result = 'gt';
         break;
       } else if (Number.parseInt(v2[idx]) < Number.parseInt(v1[idx])) {
-        result = 'less';
+        result = 'lt';
         break;
       }
     }
 
     return result;
+  }
+
+  public isDependencyVersionCompatible(dependencyName: string, fromVersion: string, toVersion:
+    string): boolean {
+
+    const fromResult = this.checkDependencyVersion(dependencyName, fromVersion);
+
+    if (fromResult === 'gt') {
+      return false;
+    }
+
+    const toResult = this.checkDependencyVersion(dependencyName, toVersion);
+
+    if (toResult === 'lt') {
+      return false;
+    }
+
+    return true;
   }
 
 }
