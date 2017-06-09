@@ -1,4 +1,4 @@
-import { ParamType } from '../constants/paramtype';
+import { ParamType } from '../constants/param-type';
 
 export interface ParamUnit {
   type: ParamType;

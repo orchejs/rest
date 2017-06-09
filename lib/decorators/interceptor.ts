@@ -1,5 +1,5 @@
 import { InterceptorLoader } from '../loaders/interceptor.loader';
-import { InterceptorType } from '../constants/interceptortype';
+import { InterceptorType } from '../constants/interceptor-type';
 
 
 export function interceptor(paths: string[] = ['/'], order?: number) {

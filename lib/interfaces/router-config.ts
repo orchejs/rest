@@ -1,4 +1,4 @@
-import { RouterUnit } from './routerunit';
+import { RouterUnit } from './router-unit';
 
 export interface RouterConfig {
   path: string;

@@ -1,6 +1,6 @@
-import { ParamConfig } from '../interfaces/paramconfig';
-import { ParamUnit } from '../interfaces/paramunit';
-import { ParamType } from '../constants/paramtype';
+import { ParamConfig } from '../interfaces/param-config';
+import { ParamUnit } from '../interfaces/param-unit';
+import { ParamType } from '../constants/param-type';
 
 export class ParameterLoader {
 

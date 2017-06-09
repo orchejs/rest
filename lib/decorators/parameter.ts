@@ -1,5 +1,5 @@
 import { ParameterLoader } from '../loaders/parameter.loader';
-import { ParamType } from '../constants/paramtype';
+import { ParamType } from '../constants/param-type';
 
 
 export function requestParam() {

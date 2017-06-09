@@ -1,4 +1,4 @@
-import { ParamUnit } from './paramunit';
+import { ParamUnit } from './param-unit';
 
 export interface ParamConfig {
   className?: string;

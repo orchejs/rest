@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { OrcheNames } from '../constants/orchenames';
 import * as appRootPath from 'app-root-path';
 
+import { OrcheNames } from '../constants/orche-names';
 
 export class PathUtils {
 

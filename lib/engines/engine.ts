@@ -1,9 +1,7 @@
 import * as fs from 'fs';
 import { EventEmitter } from 'events';
 
-import { InterceptorType } from '../constants/interceptortype';
-import { InterceptorConfig } from '../interfaces/interceptorconfig';
-import { OrcheConfig } from '../interfaces/orcheconfig';
+import { OrcheConfig } from '../interfaces/orche-config';
 import { PathUtils } from '../utils/path.utils';
 
 
@@ -48,11 +46,5 @@ export abstract class Engine {
   protected abstract isEngineVersionSupported(): boolean;
   protected abstract setupSettings(): void;
   protected abstract setupMiddleware(): void;
-  protected abstract loadRoutes(app: any, path: string): Promise<any>;
-  protected abstract loadInterceptors(target: string, method: Function, methodName: string): 
-    Function;
-  protected abstract loadPreProcessors(app: any): Promise<any>;
-  protected abstract loadPostProcessors(app: any): Promise<any>;
-  protected abstract loadInterceptorUnit(app: any, interceptorType: InterceptorType):
-    InterceptorConfig[];
+
 }
