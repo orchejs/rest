@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import { EventEmitter } from 'events';
 
 import { OrcheConfig } from '../interfaces/orche-config';
+import { CompatVersions } from '../interfaces/compat-versions';
+import { PackageUtils } from '../utils/package.utils';
 import { PathUtils } from '../utils/path.utils';
 
 
@@ -10,6 +12,7 @@ export abstract class Engine {
   protected app: any;
   protected server: any;
   protected config: OrcheConfig;
+  protected abstract compatVersions: CompatVersions;
 
   constructor(userConfig?: OrcheConfig) {
     this.loadOrcheConfig(userConfig);
@@ -42,8 +45,12 @@ export abstract class Engine {
     this.config = appConfig;
   }
 
+  protected isEngineVersionSupported(): boolean {
+    const pUtils: PackageUtils = new PackageUtils();
+    pUtils.checkDependencyVersion(this.compatVersions, )
+  }
+
   public abstract loadServer(): Promise<any>;
-  protected abstract isEngineVersionSupported(): boolean;
   protected abstract setupSettings(): void;
   protected abstract setupMiddleware(): void;
 
