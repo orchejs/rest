@@ -17,7 +17,7 @@ import { PathUtils } from '../utils/path.utils';
 
 export class ExpressEngine extends Engine {
 
-  protected workingVersions: CompatVersions = { dependency: 'express', from: '', to: '' };
+  protected compatVersions: CompatVersions = { dependency: 'express', from: '4.0.0', to: '4.2.0' };
 
   constructor(userConfig?: OrcheConfig) {
     super(userConfig);
@@ -64,11 +64,6 @@ export class ExpressEngine extends Engine {
         resolve(this.server);
       });
     });
-  }
-
-  protected isEngineVersionSupported(): boolean {
-
-    throw new Error('Method not implemented.');
   }
 
   protected loadRoutes(app: any, path: string): Promise<any> {

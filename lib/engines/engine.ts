@@ -15,7 +15,22 @@ export abstract class Engine {
   protected abstract compatVersions: CompatVersions;
 
   constructor(userConfig?: OrcheConfig) {
+    const isCompatible = this.isEngineVersionSupported();
+
+    if (!isCompatible) {
+      throw new Error(`Engine version not supported. For ${this.compatVersions.dependency}
+      you should use a version from ${this.compatVersions.from} to ${this.compatVersions.to}`);
+    }
+
     this.loadOrcheConfig(userConfig);
+  }
+
+  protected isEngineVersionSupported(): boolean {
+    const pUtils: PackageUtils = new PackageUtils();
+    
+    return pUtils.isDependencyVersionCompatible(this.compatVersions.dependency, 
+                                                this.compatVersions.from, 
+                                                this.compatVersions.to);
   }
 
   /**
@@ -43,11 +58,6 @@ export abstract class Engine {
     // TODO :: made config merge
 
     this.config = appConfig;
-  }
-
-  protected isEngineVersionSupported(): boolean {
-    const pUtils: PackageUtils = new PackageUtils();
-    pUtils.checkDependencyVersion(this.compatVersions, )
   }
 
   public abstract loadServer(): Promise<any>;
