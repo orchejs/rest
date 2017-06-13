@@ -1,10 +1,10 @@
-import { HttpRequestMethod } from '../constants/httprequestmethod';
-import { CorsOptions } from '../interfaces/corsoptions';
-import { RouterConfig } from '../interfaces/routerconfig';
-import { RouterUnit } from '../interfaces/routerunit';
+import { HttpRequestMethod } from '../constants/http-request-method';
+import { CorsOptions } from '../interfaces/cors-options';
+import { RouterConfig } from '../interfaces/router-config';
+import { RouterUnit } from '../interfaces/router-unit';
 
 
-export class RouteLoader {
+export class RouterLoader {
 
   static routerConfigs: RouterConfig[] = [];
   static routerUnits: RouterUnit[] = [];

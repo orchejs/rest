@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
 
-import { HttpRequestMethod } from '../constants/http-request-method';
+
 import { Engine } from './engine';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
@@ -11,7 +11,6 @@ import { RouterUnit } from '../interfaces/router-unit';
 import { RouterConfig } from '../interfaces/router-config';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { InterceptorLoader } from '../loaders/interceptor.loader';
-import { RouteLoader } from '../loaders/route.loader';
 import { PathUtils } from '../utils/path.utils';
 
 
@@ -67,99 +66,7 @@ export class ExpressEngine extends Engine {
   }
 
   protected loadRoutes(app: any, path: string): Promise<any> {
-    const loadedRoutes: RouterConfig[] = [];
-
-    return new Promise((resolve, reject) => {
-      if (!RouteLoader.routerConfigs || RouteLoader.routerConfigs.length === 0) {
-        reject('There is no express route to configure!');
-        return;
-      }
-
-      for (let index = 0; index < RouteLoader.routerConfigs.length; index += 1) {
-        let loaded: boolean = true;
-
-        const routerConfig: RouterConfig = RouteLoader.routerConfigs[index];
-        const routerConfigPath = PathUtils.urlSanitation(routerConfig.path);
-        const router: express.Router = express.Router();
-        const routerUnits: RouterUnit[] = routerConfig.routerUnits;
-
-        routerUnits.forEach((routerUnit) => {
-          const method: any = this.loadInterceptors(routerConfig.className, routerUnit.method,
-            routerUnit.methodName);
-
-          if (routerUnit.preflight) {
-            router.options(routerUnit.path, cors(routerUnit.corsOptions));
-          }
-
-          switch (routerUnit.httpMethod) {
-            case HttpRequestMethod.Get:
-              if (routerUnit.corsOptions) {
-                router.get(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.get(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Post:
-              if (routerUnit.corsOptions) {
-                router.post(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.post(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Put:
-              if (routerUnit.corsOptions) {
-                router.put(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.put(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Head:
-              if (routerUnit.corsOptions) {
-                router.head(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.head(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Delete:
-              if (routerUnit.corsOptions) {
-                router.delete(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.delete(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.All:
-              if (routerUnit.corsOptions) {
-                router.all(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.all(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Patch:
-              if (routerUnit.corsOptions) {
-                router.patch(routerUnit.path, cors(routerUnit.corsOptions), method);
-              } else {
-                router.patch(routerUnit.path, method);
-              }
-              break;
-            case HttpRequestMethod.Options:
-              router.options(routerUnit.path, method);
-              break;
-            default:
-              loaded = false;
-              break;
-          }
-        });
-
-        const resourcePath = path + routerConfigPath;
-        app.use(resourcePath, router);
-
-        if (loaded) {
-          loadedRoutes.push(routerConfig);
-        }
-      }
-
-      resolve(loadedRoutes);
-    });
+ 
   }
 
   protected setupSettings(): void {
@@ -210,60 +117,7 @@ export class ExpressEngine extends Engine {
     });
   }
 
-  protected loadInterceptors(target: string, method: Function, methodName: string): Function {
-    return function () {
-      const req: Request = arguments[0];
-      const res: Response = arguments[1];
-      const next: NextFunction = arguments[2];
 
-      let endpointArgs: any = [];
-
-      let paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
-      if (paramConfig.params && paramConfig.params.length > 0) {
-        paramConfig.params.forEach(function (param, index) {
-          switch (param.type) {
-            case ParamType.RequestParam:
-              endpointArgs[param.parameterIndex] = req;
-              break;
-            case ParamType.ResponseParam:
-              endpointArgs[param.parameterIndex] = res;
-              break;
-            case ParamType.NextParam:
-              endpointArgs[param.parameterIndex] = next;
-              break;
-            case ParamType.PathParam:
-              endpointArgs[param.parameterIndex] = req.params[param.paramName];
-              break;
-            case ParamType.QueryParam:
-              endpointArgs[param.parameterIndex] = req.query[param.paramName];
-              break;
-            case ParamType.RequestParamMapper:
-              let requestMapper: RequestMapper = new RequestMapper(req);
-              endpointArgs[param.parameterIndex] = requestMapper;
-              break;
-          }
-        });
-      } else {
-        endpointArgs = arguments;
-      }
-
-      let result: any;
-      try {
-        result = method.apply(this, endpointArgs);
-
-        if (result) {
-          res.contentType(result.getContentType());
-          res.status(result.getHttpStatus()).send(result.toObjectLiteral());
-        }
-
-        next();
-      } catch (e) {
-        result = new DefaultResponse(false, null, MimeType.json, e.message, HttpResponseCode.INTERNAL_SERVER_ERROR);
-        res.contentType(result.getContentType());
-        res.status(result.getHttpStatus()).send(result.toObjectLiteral());
-      }
-    };
-  }
 
   protected loadPreProcessors(app: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
