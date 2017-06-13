@@ -24,7 +24,7 @@ export class ErrorResponse extends GenericResponse {
    */
   toObjectLiteral(): any {
     return {
-      data: this.message,
+      message: this.message,
       detail: this.detail,
     };
   }
