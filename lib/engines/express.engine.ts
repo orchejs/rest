@@ -7,6 +7,7 @@ import { Engine } from './engine';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
 import { ExpressSettings } from '../interfaces/express-settings';
+import { ExpressRoute } from '../routers/express.router';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterConfig } from '../interfaces/router-config';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
@@ -63,10 +64,6 @@ export class ExpressEngine extends Engine {
         resolve(this.server);
       });
     });
-  }
-
-  protected loadRoutes(app: any, path: string): Promise<any> {
- 
   }
 
   protected setupSettings(): void {

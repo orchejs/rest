@@ -14,4 +14,5 @@ export class RestifyRequestMapper extends RequestMapper {
   protected loadQueryParams(request: Request): void {
 
   }
+
 }

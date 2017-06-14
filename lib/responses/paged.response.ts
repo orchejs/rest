@@ -11,9 +11,8 @@ export abstract class PagedResponse extends GenericResponse {
   protected totalPages?: number;
 
 
-  constructor(size: number, page: number, totalElements: number, contentType?: MimeType, 
-              httpStatus?: HttpResponseCode) {
-    super(contentType, httpStatus);
+  constructor(size: number, page: number, totalElements: number, httpStatus?: HttpResponseCode) {
+    super(httpStatus);
 
     this.size = size;
     this.page = page;
@@ -24,5 +23,16 @@ export abstract class PagedResponse extends GenericResponse {
       this.totalPages = Math.ceil(totalElements / size);
     }
   }
+
+  /**
+   * Return the response as a Object Literal, having the main fields.
+   *
+   * @return {ResponseTemplate}
+   */
+  toObjectLiteral(): any {
+    return {
+
+    };
+  }  
 
 }

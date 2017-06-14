@@ -5,7 +5,6 @@ import { MimeType } from '../constants/mimetype';
 export abstract class GenericResponse {
 
   protected responseType: string;
-  protected contentType: MimeType;
   protected httpStatus: HttpResponseCode;
 
   /**
@@ -17,9 +16,7 @@ export abstract class GenericResponse {
    * @param {HttpResponseCode} [httpStatus]
    * response http status.
    */
-  constructor(contentType?: MimeType, httpStatus?: HttpResponseCode) {
-    this.contentType = contentType || MimeType.json;
-
+  constructor(httpStatus?: HttpResponseCode) {
     if (!httpStatus) {
       this.httpStatus = HttpResponseCode.Ok;
     } else {
@@ -38,16 +35,8 @@ export abstract class GenericResponse {
     return this.httpStatus;
   }
 
-  /**
-   * Response's content type.
-   * The content-type that will be set to the header is the one passed during
-   * the creation of this object. If none was informed, then the default will be
-   * application/json.
-   *
-   * @returns string
-   */
-  getContentType(): string {
-    return this.contentType.toString();
+  getResponseType(): string {
+    return this.responseType;
   }
 
   /**

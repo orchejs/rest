@@ -1,6 +1,6 @@
 import { MimeType } from '../constants/mimetype';
 
 export interface ContentType {
-  request: MimeType;
-  response: MimeType;
+  request?: MimeType;
+  response?: MimeType;
 }

@@ -2,7 +2,8 @@ import { HttpRequestMethod } from '../constants/http-request-method';
 import { CorsOptions } from '../interfaces/cors-options';
 import { RouterConfig } from '../interfaces/router-config';
 import { RouterUnit } from '../interfaces/router-unit';
-
+import { ContentType } from '../interfaces/content-type';
+import { CorsConfig } from '../interfaces/cors-config';
 
 export class RouterLoader {
 
@@ -20,7 +21,8 @@ export class RouterLoader {
    * @param preflight 
    */
   static addRouteUnit(path: string, method: Function, methodName: string, 
-                      httpMethod: HttpRequestMethod, contentType?: any, cors?: any) {
+                      httpMethod: HttpRequestMethod, contentType?: ContentType, 
+                      cors?: CorsConfig) {
 
     const routerUnit: RouterUnit = {
       path,
