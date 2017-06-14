@@ -6,6 +6,6 @@ export interface RouterUnit {
   methodName?: string;
   method?: any;
   httpMethod?: HttpRequestMethod;
-  corsOptions?: CorsOptions;
-  preflight?: boolean;
+  contentType?: any;
+  cors?: any;
 }
