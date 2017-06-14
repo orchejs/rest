@@ -154,15 +154,17 @@ export class ExpressRoute extends Router {
       try {
         result = method.apply(this, endpointArgs);
 
-        if (result) {
+        if (result && result.responseType === 'GenericResponse') {
           res.contentType(result.getContentType());
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
+        } else {
+          res.status(HttpResponseCode.Ok).send(result);
         }
 
         next();
       } catch (e) {
         result = new ErrorResponse(e.message, null, MimeType.json,
-                                   HttpResponseCode.InternalServerError);
+          HttpResponseCode.InternalServerError);
         res.contentType(result.getContentType());
         res.status(result.getHttpStatus()).send(result.toObjectLiteral());
       }

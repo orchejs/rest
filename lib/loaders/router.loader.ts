@@ -20,16 +20,15 @@ export class RouterLoader {
    * @param preflight 
    */
   static addRouteUnit(path: string, method: Function, methodName: string, 
-                      httpMethod: HttpRequestMethod, corsOptions?: CorsOptions, 
-                      preflight?: boolean) {
+                      httpMethod: HttpRequestMethod, contentType?: any, cors?: any) {
 
     const routerUnit: RouterUnit = {
       path,
       methodName,
       method,
       httpMethod,
-      corsOptions,
-      preflight,
+      contentType,
+      cors,
     };
 
     this.routerUnits.push(routerUnit);
