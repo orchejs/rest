@@ -2,7 +2,7 @@ import { HttpRequestMethod } from '../constants/http-request-method';
 import { MimeType } from '../constants/mimetype';
 import { ContentType } from '../interfaces/content-type';
 import { RouterLoader } from '../loaders/router.loader';
-import { CorsOptions } from '../interfaces/cors-options';
+import { CorsConfig } from '../interfaces/cors-config';
 
 
 export function all(path: string = '',
@@ -10,10 +10,7 @@ export function all(path: string = '',
                       request: MimeType.json, 
                       response: MimeType.json, 
                     },
-                    cors?: { 
-                      corsOptions?: CorsOptions, 
-                      preflight?: boolean, 
-                    }) {
+                    cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
                               HttpRequestMethod.All);
@@ -21,15 +18,10 @@ export function all(path: string = '',
 }
 
 export function get(path: string = '',
-                    contentType: {
-                      response: MimeType,
-                    } = {  
+                    contentType: ContentType = { 
                       response: MimeType.json, 
                     },
-                    cors?: { 
-                      corsOptions?: CorsOptions, 
-                      preflight?: boolean, 
-                    }) {
+                    cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     const method: Function = descriptor.value;
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
@@ -38,17 +30,11 @@ export function get(path: string = '',
 }
 
 export function post(path: string = '',
-                     contentType: {
-                       request: MimeType,
-                       response: MimeType,
-                     } = { 
+                     contentType: ContentType = { 
                        request: MimeType.json, 
                        response: MimeType.json, 
                      },
-                     cors?: { 
-                       corsOptions?: CorsOptions, 
-                       preflight?: boolean, 
-                     }) {
+                     cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
                               HttpRequestMethod.Post);
@@ -56,17 +42,11 @@ export function post(path: string = '',
 }
 
 export function put(path: string = '',
-                    contentType: {
-                      request: string,
-                      response: string,
-                    } = { 
+                    contentType: ContentType = { 
                       request: MimeType.json, 
                       response: MimeType.json, 
                     },
-                    cors?: { 
-                      corsOptions?: CorsOptions, 
-                      preflight?: boolean, 
-                    }) {
+                    cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
                               HttpRequestMethod.Put);
@@ -74,17 +54,11 @@ export function put(path: string = '',
 }
 
 export function del(path: string = '',
-                    contentType: {
-                      request: string,
-                      response: string,
-                    } = { 
+                    contentType: ContentType = { 
                       request: MimeType.json, 
                       response: MimeType.json, 
                     },
-                    cors?: { 
-                      corsOptions?: CorsOptions, 
-                      preflight?: boolean, 
-                    }) {
+                    cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
                               HttpRequestMethod.Delete);
@@ -92,17 +66,11 @@ export function del(path: string = '',
 }
 
 export function patch(path: string = '',
-                      contentType: {
-                        request: string,
-                        response: string,
-                      } = { 
+                      contentType: ContentType = { 
                         request: MimeType.json, 
                         response: MimeType.json, 
                       },
-                      cors?: { 
-                        corsOptions?: CorsOptions, 
-                        preflight?: boolean, 
-                      }) {
+                      cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
                               HttpRequestMethod.Patch);
@@ -110,16 +78,11 @@ export function patch(path: string = '',
 }
 
 export function options(path: string = '',
-                        contentType: {
-                          request: string,
-                          response: string,
-                        } = { 
+                        contentType: ContentType = { 
                           request: MimeType.json, 
                           response: MimeType.json, 
                         },
-                        cors?: { 
-                          corsOptions?: CorsOptions, 
-                        }) {
+                        cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
                               HttpRequestMethod.Options);
@@ -127,15 +90,10 @@ export function options(path: string = '',
 }
 
 export function head(path: string = '',
-                     contentType: {
-                       response: string,
-                     } = { 
+                     contentType: ContentType = { 
                        response: MimeType.json, 
                      },
-                     cors?: { 
-                       corsOptions?: CorsOptions, 
-                       preflight?: boolean, 
-                     }) {
+                     cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
                               HttpRequestMethod.Head);

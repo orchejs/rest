@@ -1,5 +1,4 @@
 import { HttpResponseCode } from '../constants/http-response-code';
-import { MimeType } from '../constants/mimetype';
 import { GenericResponse } from './generic.response';
 
 
@@ -9,9 +8,8 @@ export class ErrorResponse extends GenericResponse {
   protected detail?: any;
 
 
-  constructor(message?: string, detail?: any, contentType?: MimeType, 
-              httpStatus?: HttpResponseCode) {
-    super(contentType, httpStatus);
+  constructor(message?: string, detail?: any, httpStatus?: HttpResponseCode) {
+    super(httpStatus);
 
     this.message = message;
     this.detail = detail;

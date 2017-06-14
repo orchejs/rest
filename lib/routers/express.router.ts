@@ -6,13 +6,15 @@ import { HttpRequestMethod } from '../constants/http-request-method';
 import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 import { ParamType } from '../constants/param-type';
+import { ContentType } from '../interfaces/content-type';
+import { CorsConfig } from '../interfaces/cors-config';
 import { ParamConfig } from '../interfaces/param-config';
-import { ErrorResponse } from '../responses/error.response';
-import { ExpressRequestMapper } from '../requests/express.requestmapper';
 import { RouterConfig } from '../interfaces/router-config';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterLoader } from '../loaders/router.loader';
 import { ParameterLoader } from '../loaders/parameter.loader';
+import { ErrorResponse } from '../responses/error.response';
+import { ExpressRequestMapper } from '../requests/express.requestmapper';
 import { PathUtils } from '../utils/path.utils';
 
 export class ExpressRoute extends Router {
@@ -35,59 +37,60 @@ export class ExpressRoute extends Router {
         const routerUnits: RouterUnit[] = routerConfig.routerUnits;
 
         routerUnits.forEach((routerUnit) => {
-          const method: any = this.routeExecution(routerConfig.className, routerUnit.method,
-                                                  routerUnit.methodName);
-
-          if (routerUnit.preflight) {
-            router.options(routerUnit.path, cors(routerUnit.corsOptions));
+          const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
+                                                  routerUnit.methodName, routerUnit.contentType);
+          
+          const corsConfig: CorsConfig = routerUnit.cors;
+          if (corsConfig.preflight) {
+            router.options(routerUnit.path, cors(corsConfig.corsOptions));
           }
 
           switch (routerUnit.httpMethod) {
             case HttpRequestMethod.Get:
-              if (routerUnit.corsOptions) {
-                router.get(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.get(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.get(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.Post:
-              if (routerUnit.corsOptions) {
-                router.post(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.post(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.post(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.Put:
-              if (routerUnit.corsOptions) {
-                router.put(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.put(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.put(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.Head:
-              if (routerUnit.corsOptions) {
-                router.head(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.head(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.head(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.Delete:
-              if (routerUnit.corsOptions) {
-                router.delete(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.delete(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.delete(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.All:
-              if (routerUnit.corsOptions) {
-                router.all(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.all(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.all(routerUnit.path, method);
               }
               break;
             case HttpRequestMethod.Patch:
-              if (routerUnit.corsOptions) {
-                router.patch(routerUnit.path, cors(routerUnit.corsOptions), method);
+              if (corsConfig.corsOptions) {
+                router.patch(routerUnit.path, cors(corsConfig.corsOptions), method);
               } else {
                 router.patch(routerUnit.path, method);
               }
@@ -113,7 +116,8 @@ export class ExpressRoute extends Router {
     });
   }
 
-  protected routeExecution(target: string, method: Function, methodName: string): Function {
+  protected routeProcessor(target: string, method: Function, methodName: string, 
+                           contentType: ContentType): Function {
     return function () {
       const req: express.Request = arguments[0];
       const res: express.Response = arguments[1];
@@ -154,8 +158,8 @@ export class ExpressRoute extends Router {
       try {
         result = method.apply(this, endpointArgs);
 
-        if (result && result.responseType === 'GenericResponse') {
-          res.contentType(result.getContentType());
+        if (result && result.getResponseType() === 'GenericResponse') {
+          res.contentType(contentType.request.toString());
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
         } else {
           res.status(HttpResponseCode.Ok).send(result);
@@ -163,9 +167,8 @@ export class ExpressRoute extends Router {
 
         next();
       } catch (e) {
-        result = new ErrorResponse(e.message, null, MimeType.json,
-          HttpResponseCode.InternalServerError);
-        res.contentType(result.getContentType());
+        result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
+        res.contentType(contentType.response.toString());
         res.status(result.getHttpStatus()).send(result.toObjectLiteral());
       }
     };
