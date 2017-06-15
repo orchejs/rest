@@ -9,26 +9,29 @@ import { PathUtils } from '../utils/path.utils';
 
 export class ExpressInterceptor extends Interceptor {
 
-  protected loadPreProcessors(app: express.Application): Promise<any> {
+  constructor(app: express.Application) {
+    super(app);
+  }
+
+  public loadPreProcessors(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const loadedPreProcessors: InterceptorConfig[] = await
-        this.loadInterceptorUnit(app, InterceptorType.PreProcessing);
+        this.loadInterceptorUnit(InterceptorType.PreProcessing);
 
       resolve(loadedPreProcessors);
     });
   }
 
-  protected loadPostProcessors(app: express.Application): Promise<any> {
+  public loadPostProcessors(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const loadedPostProcessors: InterceptorConfig[] =
-        await this.loadInterceptorUnit(app, InterceptorType.PostProcessing);
+        await this.loadInterceptorUnit(InterceptorType.PostProcessing);
 
       resolve(loadedPostProcessors);
     });
   }
 
-  protected loadInterceptorUnit(app: express.Application, 
-                                interceptorType: InterceptorType): InterceptorConfig[] {
+  public loadInterceptorUnit(interceptorType: InterceptorType): InterceptorConfig[] {
 
     const loadedProcessors: any = [];
     const interceptorConfigs: InterceptorConfig[] = InterceptorLoader.interceptorConfigs;
@@ -51,7 +54,7 @@ export class ExpressInterceptor extends Interceptor {
       interceptorConfig.paths.forEach((path) => {
         const interceptorConfigPath = PathUtils.urlSanitation(path);
 
-        app.use(interceptorConfigPath, processorUnit.classMethod);
+        this.app.use(interceptorConfigPath, processorUnit.classMethod);
 
         let loadedInterceptorConfig = loadedProcessors.
           find(config => config.path === interceptorConfigPath);

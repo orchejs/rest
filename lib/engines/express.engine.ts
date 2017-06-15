@@ -6,11 +6,11 @@ import { Engine } from './engine';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
 import { ExpressSettings } from '../interfaces/express-settings';
-import { ExpressRoute } from '../routers/express.router';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterConfig } from '../interfaces/router-config';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
-import { InterceptorLoader } from '../loaders/interceptor.loader';
+import { ExpressInterceptor } from '../interceptors/express.interceptor';
+import { ExpressRouter } from '../routers/express.router';
 import { PathUtils } from '../utils/path.utils';
 
 
@@ -31,18 +31,21 @@ export class ExpressEngine extends Engine {
         throw Error();
       }
 
+      const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
+
       // Loading preprocessing interceptors
       let loadedPreProcessingInterceptors: InterceptorConfig[];
       try {
-        loadedPreProcessingInterceptors = await this.loadPreProcessors(this.app);
+        loadedPreProcessingInterceptors = await expressInterceptor.loadPreProcessors();
       } catch (error) {
         reject();
       }
 
       // Loading app's Routes
+      const expressRouter:ExpressRouter = new ExpressRouter(this.app);
       let loadedRoutes: RouterConfig[] = [];
       try {
-        loadedRoutes = await this.loadRoutes(this.app, this.config.path);
+        loadedRoutes = await expressRouter.loadRoutes(this.config.path);
       } catch (error) {
         reject();
       }
@@ -50,7 +53,7 @@ export class ExpressEngine extends Engine {
       // Loading postprocessing interceptors
       let loadedPostProcessingInterceptors: InterceptorConfig[];
       try {
-        loadedPostProcessingInterceptors = await this.loadPostProcessors(this.app);
+        loadedPostProcessingInterceptors = await expressInterceptor.loadPostProcessors();
       } catch (error) {
         reject();
       }
