@@ -14,16 +14,16 @@ export class ParameterLoader {
 
     if (!paramConfig) {
       paramConfig = {
-        className: target.constructor.name,
         methodName,
         params: [],
+        className: target.constructor.name,
       };
     }
 
     paramConfig.params.push({
-      parameterIndex: paramIndex,
-      type: paramType,
       paramName,
+      type: paramType,
+      parameterIndex: paramIndex,
     });
 
     paramConfig.params.sort((a, b) => a.parameterIndex - b.parameterIndex);

@@ -2,7 +2,6 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
 
-
 import { Engine } from './engine';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
@@ -112,71 +111,6 @@ export class ExpressEngine extends Engine {
     middlewareConfigs.forEach(midConfig => {
       app.use(midConfig);
     });
-  }
-
-
-
-  protected loadPreProcessors(app: any): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const loadedPreProcessors: InterceptorConfig[] = await
-        this.loadInterceptorUnit(app, InterceptorType.PreProcessing);
-
-      resolve(loadedPreProcessors);
-    });
-  }
-
-  protected loadPostProcessors(app: any): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const loadedPostProcessors: InterceptorConfig[] =
-        await this.loadInterceptorUnit(app, InterceptorType.PostProcessing);
-
-      resolve(loadedPostProcessors);
-    });
-  }
-
-
-  protected loadInterceptorUnit(app: Application, interceptorType: InterceptorType):
-    InterceptorConfig[] {
-
-    const loadedProcessors: any = [];
-
-    if (!this.interceptorConfigs || this.interceptorConfigs.length === 0) {
-      return loadedProcessors;
-    }
-
-    for (let index = 0; index < this.interceptorConfigs.length; index += 1) {
-      const loaded: boolean = true;
-      const interceptorConfig: InterceptorConfig = this.interceptorConfigs[index];
-
-      const processorUnit = interceptorConfig.interceptorUnits.
-        find(unit => unit.type === interceptorType);
-
-      if (!processorUnit) {
-        continue;
-      }
-
-      interceptorConfig.paths.forEach((path) => {
-        const interceptorConfigPath = PathUtils.urlSanitation(path);
-
-        app.use(interceptorConfigPath, processorUnit.classMethod);
-
-        let loadedInterceptorConfig = loadedProcessors.
-          find(config => config.path === interceptorConfigPath);
-
-        if (!loadedInterceptorConfig) {
-          loadedInterceptorConfig = {
-            path: interceptorConfigPath,
-            order: interceptorConfig.order,
-            interceptorUnits: [],
-          };
-
-          loadedProcessors.push(loadedInterceptorConfig);
-        }
-        loadedInterceptorConfig.interceptorUnits.push(processorUnit);
-      });
-    }
-
-    return loadedProcessors;
   }
 
 }
