@@ -17,9 +17,13 @@ import { ErrorResponse } from '../responses/error.response';
 import { ExpressRequestMapper } from '../requests/express.requestmapper';
 import { PathUtils } from '../utils/path.utils';
 
-export class ExpressRoute extends Router {
+export class ExpressRouter extends Router {
 
-  public loadRoutes(app: express.Application, path: string): Promise<any> {
+  constructor(app: express.Application) {
+    super(app);
+  }
+
+  public loadRoutes(path: string): Promise<any> {
     const loadedRoutes: RouterConfig[] = [];
 
     return new Promise((resolve, reject) => {
@@ -105,7 +109,7 @@ export class ExpressRoute extends Router {
         });
 
         const resourcePath = path + routerConfigPath;
-        app.use(resourcePath, router);
+        this.app.use(resourcePath, router);
 
         if (loaded) {
           loadedRoutes.push(routerConfig);

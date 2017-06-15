@@ -3,10 +3,15 @@ import { InterceptorConfig } from '../interfaces/interceptor-config';
 
 export abstract class Interceptor {
 
-  protected abstract loadPreProcessors(app: any): Promise<any>;
+  protected app: any;
 
-  protected abstract loadPostProcessors(app: any): Promise<any>;
+  constructor(app: any) {
+    this.app = app;
+  }
 
-  protected abstract loadInterceptorUnit(app: any, interceptorType: InterceptorType): 
-    InterceptorConfig[];
+  public abstract loadPreProcessors(): Promise<any>;
+
+  public abstract loadPostProcessors(): Promise<any>;
+
+  public abstract loadInterceptorUnit(interceptorType: InterceptorType): InterceptorConfig[];
 }
