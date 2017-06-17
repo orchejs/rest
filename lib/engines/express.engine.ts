@@ -24,15 +24,27 @@ export class ExpressEngine extends Engine {
 
   public loadServer(): Promise<any> {
     return new Promise(async (resolve, reject) => {
+      // Express initialization and setup
       try {
         this.app = express();
       } catch (error) {
         // TODO engine library not loaded.
         throw Error();
       }
+      // Add Express's settings
+      this.setupSettings();
+      // Add Express's extensions
+      this.config.extensions = this.config.extensions || [];
+      // Check if CORS should be setup and add it as an extension
+      if (this.config.corsConfig) {
+        const corsExtension = cors(this.config.corsConfig);
+        this.config.extensions.push(corsExtension);
+      }
+      this.setupExtensions();
 
+
+      // Interceptors initialization
       const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
-
       // Loading preprocessing interceptors
       let loadedPreProcessingInterceptors: InterceptorConfig[];
       try {
@@ -41,7 +53,8 @@ export class ExpressEngine extends Engine {
         reject();
       }
 
-      // Loading app's Routes
+
+      // Routes initialization
       const expressRouter:ExpressRouter = new ExpressRouter(this.app);
       let loadedRoutes: RouterConfig[] = [];
       try {
@@ -49,6 +62,7 @@ export class ExpressEngine extends Engine {
       } catch (error) {
         reject();
       }
+
 
       // Loading postprocessing interceptors
       let loadedPostProcessingInterceptors: InterceptorConfig[];
@@ -69,50 +83,41 @@ export class ExpressEngine extends Engine {
   }
 
   protected setupSettings(): void {
-    let port = config.port || 3000;
-    let path = PathUtils.urlSanitation(config.path);
+    const settings = this.config.settings;
 
-    this.app = config.app || express();
-
-
-    app.set('case sensitive routing', settings['caseSentiveRouting'] || undefined);
-    app.set('env', settings['env'] || 'development');
-    app.set('etag', settings['etag'] || 'weak');
-    app.set('jsonp callback name', settings['jsonpCallbackName'] || 'callback');
-    app.set('json replacer', settings['jsonReplacer'] || undefined);
-    app.set('json spaces', settings['jsonSpaces'] || undefined);
-    app.set('query parser', settings['queryParser'] || 'extended');
-    app.set('strict routing', settings['strictRouting'] || undefined);
-    app.set('subdomain offset', settings['subdomainOffset'] || 2);
-    app.set('trust proxy', settings['trustProxy'] || false);
-    app.set('views', settings['views'] || process.cwd() + '/views');
-    app.set('view engine', settings['viewEngine'] || undefined);
-    app.set('x-powered-by', settings['xPoweredBy'] || false);
+    this.app.set('case sensitive routing', settings['caseSentiveRouting'] || undefined);
+    this.app.set('env', settings['env'] || 'development');
+    this.app.set('etag', settings['etag'] || 'weak');
+    this.app.set('jsonp callback name', settings['jsonpCallbackName'] || 'callback');
+    this.app.set('json replacer', settings['jsonReplacer'] || undefined);
+    this.app.set('json spaces', settings['jsonSpaces'] || undefined);
+    this.app.set('query parser', settings['queryParser'] || 'extended');
+    this.app.set('strict routing', settings['strictRouting'] || undefined);
+    this.app.set('subdomain offset', settings['subdomainOffset'] || 2);
+    this.app.set('trust proxy', settings['trustProxy'] || false);
+    this.app.set('views', settings['views'] || process.cwd() + '/views');
+    this.app.set('view engine', settings['viewEngine'] || undefined);
+    this.app.set('x-powered-by', settings['xPoweredBy'] || false);
 
     if (settings['env'] === 'production') {
-      app.set('view cache', settings['viewCache'] || true);
+      this.app.set('view cache', settings['viewCache'] || true);
     } else {
-      app.set('view cache', settings['viewCache'] || undefined);
+      this.app.set('view cache', settings['viewCache'] || undefined);
     }
-
-    // Express use configs
-    this.addExpressMiddlewareConfig(config.use, this.app);
-
-    // CORS
-    this.addCors(config.corsConfig);
   }
 
-  protected setupMiddleware(): void {
-    if (!middlewareConfigs || middlewareConfigs.length === 0) {
+  protected setupExtensions(): void {
+    const extensions = this.config.extensions;
+    if (!extensions || extensions.length === 0) {
       return;
     }
 
-    if (!app) {
+    if (!this.app) {
       throw new Error('Application must be defined!');
     }
 
-    middlewareConfigs.forEach(midConfig => {
-      app.use(midConfig);
+    extensions.forEach((extension) => {
+      this.app.use(extension);
     });
   }
 

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { EventEmitter } from 'events';
 
+import { OrcheEngines } from '../constants/orche-engines';
 import { OrcheConfig } from '../interfaces/orche-config';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
@@ -40,28 +41,42 @@ export abstract class Engine {
    * 3 - App .orcherc
    * load .orcherc local or SYSTEM VARIABLE
    */
-  protected loadOrcheConfig(appConfig?: OrcheConfig): void {
-    const cfgApp = appConfig.appName || PathUtils.appDirName;
+  protected loadOrcheConfig(appCfg?: OrcheConfig): void {
+    const configAppFileName = appCfg.appName || PathUtils.appDirName;
 
-    let envOrcheCfg;
+    let envCfg;
     if (process.env.ORCHE_CONFIG) {
       const fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
-      envOrcheCfg = fileContent[cfgApp];
+      envCfg = fileContent[configAppFileName];
     }
 
-    let localOrcheCfg;
+    let localCfg;
     if (PathUtils.localConfigFile) {
       const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
-      localOrcheCfg = fileContent;
+      localCfg = fileContent;
     }
+
+    /*
+     * Config's merge, following this priority:
+     * 1 - ENV's orche file configuration
+     * 2 - LOCAL's orche file configuration
+     * 3 - code orche config
+     */
+    appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine || 
+      OrcheEngines.ExpressJS;
+      
+    appCfg.port = envCfg.port || localCfg.port || appCfg.port || 3000;
+
+    const path = envCfg.path || localCfg.path || appCfg.path;
+    appCfg.path = PathUtils.urlSanitation(path);
 
     // TODO :: made config merge
 
-    this.config = appConfig;
+    this.config = appCfg;
   }
 
   public abstract loadServer(): Promise<any>;
   protected abstract setupSettings(): void;
-  protected abstract setupMiddleware(): void;
+  protected abstract setupExtensions(): void;
 
 }

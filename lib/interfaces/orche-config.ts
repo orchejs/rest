@@ -1,4 +1,5 @@
 import { CorsOptions } from './cors-options';
+import { OrcheEngines } from '../constants/orche-engines';
 
 export interface OrcheConfig {
   /**
@@ -14,7 +15,7 @@ export interface OrcheConfig {
    * - non resolved issues in a specific framework
    * - in this way, changing the api engine is a peace of cake :D
    */
-  apiEngine?: any;
+  apiEngine?: OrcheEngines;
   /**
    * The app name. It serves for config resolution.
    * Default value: module name
