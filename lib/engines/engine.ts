@@ -62,7 +62,7 @@ export abstract class Engine {
      * 2 - LOCAL's orche file configuration
      * 3 - code orche config
      */
-    appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine || 
+    appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine ||
       OrcheEngines.ExpressJS;
       
     appCfg.port = envCfg.port || localCfg.port || appCfg.port || 3000;
@@ -70,7 +70,17 @@ export abstract class Engine {
     const path = envCfg.path || localCfg.path || appCfg.path;
     appCfg.path = PathUtils.urlSanitation(path);
 
-    // TODO :: made config merge
+    appCfg.appName = envCfg.appName || localCfg.appName || appCfg.appName || PathUtils.appDirName;
+
+    appCfg.corsConfig = envCfg.corsConfig || localCfg.corsConfig || appCfg.corsConfig;
+
+    appCfg.debug = envCfg.debug || localCfg.debug || appCfg.debug || false;
+
+    appCfg.extensions = envCfg.extensions || localCfg.extensions || appCfg.extensions;
+
+    appCfg.initMessage = envCfg.initMessage || localCfg.initMessage || appCfg.initMessage;
+
+    appCfg.settings = envCfg.settings || localCfg.settings || appCfg.settings;
 
     this.config = appCfg;
   }
