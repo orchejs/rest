@@ -63,23 +63,17 @@ export abstract class Engine {
      * 3 - code orche config
      */
     appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine ||
-      OrcheEngines.ExpressJS;
-      
-    appCfg.port = envCfg.port || localCfg.port || appCfg.port || 3000;
+      OrcheEngines.ExpressJS;    
 
     const path = envCfg.path || localCfg.path || appCfg.path;
     appCfg.path = PathUtils.urlSanitation(path);
 
+    appCfg.port = envCfg.port || localCfg.port || appCfg.port || 3000;
     appCfg.appName = envCfg.appName || localCfg.appName || appCfg.appName || PathUtils.appDirName;
-
     appCfg.corsConfig = envCfg.corsConfig || localCfg.corsConfig || appCfg.corsConfig;
-
     appCfg.debug = envCfg.debug || localCfg.debug || appCfg.debug || false;
-
     appCfg.extensions = envCfg.extensions || localCfg.extensions || appCfg.extensions;
-
     appCfg.initMessage = envCfg.initMessage || localCfg.initMessage || appCfg.initMessage;
-
     appCfg.settings = envCfg.settings || localCfg.settings || appCfg.settings;
 
     this.config = appCfg;
