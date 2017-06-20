@@ -1,3 +1,7 @@
-/* Written for testing purposes */
 {
+  "apps": {
+    "core": {
+      
+    }
+  }
 }
