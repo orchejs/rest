@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { Engine } from '../../lib/engines/engine';
 import { OrcheEngines } from '../../lib/constants/orche-engines';
 import { CompatVersions } from '../../lib/interfaces/compat-versions';
+import { PathUtils } from '../../lib/utils/path.utils';
 
 describe('Engine', () => {
   /**
@@ -75,7 +76,9 @@ describe('Engine', () => {
       }
     });
 
-    it('Should load orche configs, following the hierarchy', () => {
+    it('Should load orche configs from env.ORCHE_CONFIG', () => {
+      process.env.ORCHE_CONFIG = PathUtils.localConfigFile;
+      
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
@@ -83,7 +86,30 @@ describe('Engine', () => {
       } catch (e) {
         console.log(e);
         expect(e).to.null;
+      }      
+    });
+
+    it('Should load orche configs, following the hierarchy', () => {
+      let engine: SpecEngine;
+      try {
+        engine = new SpecEngine();
+        expect(engine).to.not.null;
+      } catch (e) {
+        expect(e).to.null;
       }
-    });    
+    });
+
+    it('Should throw error if the env.ORCHE_CONFIG file is wrong', () => {
+      process.env.ORCHE_CONFIG = PathUtils.localConfigFile;
+      
+      let engine: SpecEngine;
+      try {
+        engine = new SpecEngine();
+        expect(engine).to.not.null;
+      } catch (e) {
+        console.log(e);
+        expect(e).to.null;
+      }      
+    });        
   });
 });
