@@ -52,21 +52,22 @@ export abstract class Engine {
 
       if (envConfigFile) {
         try {
-          const fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
-          envCfg = fileContent[configAppFileName];
+          let fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
 
-          LogUtils.debug(`Orche's environment config file loaded. 
-            File: ${process.env.ORCHE_CONFIG}`);
+          if (fileContent) {
+            fileContent = JSON.parse(fileContent);
+            envCfg = fileContent['apps'][configAppFileName];
+            LogUtils.debug(`Orche's environment config file loaded. 
+              File: ${process.env.ORCHE_CONFIG}`);
+          }
         } catch (error) {
-          LogUtils.error(`Orche's environment config file could not be loaded. Error: 
+          throw new Error(`Orche's environment config file could not be loaded. Error: 
             ${error.stack}`);
         }
-
       } else {
-        LogUtils.error(`Orche's environment config file not found. File: 
+        throw new Error(`Orche's environment config file not found. File: 
           ${process.env.ORCHE_CONFIG}`);
       }
-
     }
 
     // Load's the local orche config file contents
@@ -75,11 +76,13 @@ export abstract class Engine {
     if (localConfigFile) {
       try {
         const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
-        localCfg = fileContent;
-        LogUtils.debug(`Orche's environment config file loaded. 
-          File: ${process.env.ORCHE_CONFIG}`);
+        if (fileContent) {
+          localCfg = JSON.parse(fileContent);
+          LogUtils.debug(`Orche's environment config file loaded. 
+            File: ${process.env.ORCHE_CONFIG}`);
+        }
       } catch (error) {
-        LogUtils.error(`Orche's local config file could not be loaded. Error: ${error.stack}`);
+        throw new Error(`Orche's local config file could not be loaded. Error: ${error.stack}`);
       }
     }
 
