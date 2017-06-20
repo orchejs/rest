@@ -6,6 +6,7 @@ import { OrcheConfig } from '../interfaces/orche-config';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
 import { PathUtils } from '../utils/path.utils';
+import { LogUtils } from '../utils/log.utils';
 
 
 export abstract class Engine {
@@ -13,25 +14,25 @@ export abstract class Engine {
   protected app: any;
   protected server: any;
   protected config: OrcheConfig;
-  protected abstract compatVersions: CompatVersions;
 
-  constructor(userConfig?: OrcheConfig) {
-    const isCompatible = this.isEngineVersionSupported();
+  constructor(compatVersions: CompatVersions, userConfig?: OrcheConfig) {
+    const isCompatible = this.isEngineVersionSupported(compatVersions);
 
     if (!isCompatible) {
-      throw new Error(`Engine version not supported. For ${this.compatVersions.dependency}
-      you should use a version from ${this.compatVersions.from} to ${this.compatVersions.to}`);
+      throw new Error(`Engine version not supported. For ${compatVersions.dependency}
+      you should use a version from ${compatVersions.from} to ${compatVersions.to}`);
     }
 
     this.loadOrcheConfig(userConfig);
   }
 
-  protected isEngineVersionSupported(): boolean {
+  private isEngineVersionSupported(compatVersions: CompatVersions): boolean {
     const pUtils: PackageUtils = new PackageUtils();
-    
-    return pUtils.isDependencyVersionCompatible(this.compatVersions.dependency, 
-                                                this.compatVersions.from, 
-                                                this.compatVersions.to);
+
+    return pUtils.isDependencyVersionCompatible(
+      compatVersions.dependency,
+      compatVersions.from,
+      compatVersions.to);
   }
 
   /**
@@ -44,16 +45,42 @@ export abstract class Engine {
   protected loadOrcheConfig(appCfg?: OrcheConfig): void {
     const configAppFileName = appCfg.appName || PathUtils.appDirName;
 
-    let envCfg;
+    // Loads the environment orche config file contents
+    let envCfg: OrcheConfig = {};
     if (process.env.ORCHE_CONFIG) {
-      const fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
-      envCfg = fileContent[configAppFileName];
+      const envConfigFile = fs.existsSync(process.env.ORCHE_CONFIG);
+
+      if (envConfigFile) {
+        try {
+          const fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
+          envCfg = fileContent[configAppFileName];
+
+          LogUtils.debug(`Orche's environment config file loaded. 
+            File: ${process.env.ORCHE_CONFIG}`);
+        } catch (error) {
+          LogUtils.error(`Orche's environment config file could not be loaded. Error: 
+            ${error.stack}`);
+        }
+
+      } else {
+        LogUtils.error(`Orche's environment config file not found. File: 
+          ${process.env.ORCHE_CONFIG}`);
+      }
+
     }
 
-    let localCfg;
-    if (PathUtils.localConfigFile) {
-      const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
-      localCfg = fileContent;
+    // Load's the local orche config file contents
+    let localCfg: OrcheConfig = {};
+    const localConfigFile = fs.existsSync(PathUtils.localConfigFile);
+    if (localConfigFile) {
+      try {
+        const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
+        localCfg = fileContent;
+        LogUtils.debug(`Orche's environment config file loaded. 
+          File: ${process.env.ORCHE_CONFIG}`);
+      } catch (error) {
+        LogUtils.error(`Orche's local config file could not be loaded. Error: ${error.stack}`);
+      }
     }
 
     /*
@@ -63,7 +90,7 @@ export abstract class Engine {
      * 3 - code orche config
      */
     appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine ||
-      OrcheEngines.ExpressJS;    
+      OrcheEngines.ExpressJS;
 
     const path = envCfg.path || localCfg.path || appCfg.path;
     appCfg.path = PathUtils.urlSanitation(path);

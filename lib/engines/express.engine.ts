@@ -16,10 +16,15 @@ import { PathUtils } from '../utils/path.utils';
 
 export class ExpressEngine extends Engine {
 
-  protected compatVersions: CompatVersions = { dependency: 'express', from: '4.0.0', to: '4.2.0' };
-
   constructor(userConfig?: OrcheConfig) {
-    super(userConfig);
+    super(
+      {
+        dependency: 'express', 
+        from: '4.0.0', 
+        to: '4.2.0',
+      },
+      userConfig,
+    );
   }
 
   public loadServer(): Promise<any> {
@@ -55,7 +60,7 @@ export class ExpressEngine extends Engine {
 
 
       // Routes initialization
-      const expressRouter:ExpressRouter = new ExpressRouter(this.app);
+      const expressRouter: ExpressRouter = new ExpressRouter(this.app);
       let loadedRoutes: RouterConfig[] = [];
       try {
         loadedRoutes = await expressRouter.loadRoutes(this.config.path);
