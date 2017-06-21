@@ -47,7 +47,6 @@ export class ExpressEngine extends Engine {
       }
       this.setupExtensions();
 
-
       // Interceptors initialization
       const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
       // Loading preprocessing interceptors
@@ -58,7 +57,6 @@ export class ExpressEngine extends Engine {
         reject();
       }
 
-
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
       let loadedRoutes: RouterConfig[] = [];
@@ -67,7 +65,6 @@ export class ExpressEngine extends Engine {
       } catch (error) {
         reject();
       }
-
 
       // Loading postprocessing interceptors
       let loadedPostProcessingInterceptors: InterceptorConfig[];
