@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as path from 'path';
 
 import { Engine } from '../../lib/engines/engine';
 import { OrcheEngines } from '../../lib/constants/orche-engines';
@@ -65,6 +66,10 @@ describe('Engine', () => {
     }
   }
 
+  beforeEach(() => {
+    process.env.ORCHE_CONFIG = '';
+  });
+
   describe('#constructor', () => {
     it('Should throw error if the version is not compatible', () => {
       let engine: IncompatibleEngine;
@@ -84,7 +89,6 @@ describe('Engine', () => {
         engine = new SpecEngine();
         expect(engine).to.not.null;
       } catch (e) {
-        console.log(e);
         expect(e).to.null;
       }      
     });
@@ -100,16 +104,39 @@ describe('Engine', () => {
     });
 
     it('Should throw error if the env.ORCHE_CONFIG file is wrong', () => {
-      process.env.ORCHE_CONFIG = PathUtils.localConfigFile;
+      process.env.ORCHE_CONFIG = path.resolve(PathUtils.appRoot, 'LICENSE');
       
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.not.null;
+        expect(engine).to.null;
       } catch (e) {
-        console.log(e);
-        expect(e).to.null;
+        expect(e).to.not.null;
       }      
-    });        
+    });
+
+    it('Should throw error if the env.ORCHE_CONFIG file was informed but not found', () => {
+      process.env.ORCHE_CONFIG = path.resolve(PathUtils.appRoot, 'not-a-existent-file.json');
+      
+      let engine: SpecEngine;
+      try {
+        engine = new SpecEngine();
+        expect(engine).to.null;
+      } catch (e) {
+        expect(e).to.not.null;
+      }      
+    });
+
+    it('Should throw error if the local ORCHE_CONFIG file is wrong', () => {
+      PathUtils.localConfigFile = path.resolve(PathUtils.appRoot, 'LICENSE');
+      
+      let engine: SpecEngine;
+      try {
+        engine = new SpecEngine();
+        expect(engine).to.null;
+      } catch (e) {
+        expect(e).to.not.null;
+      }      
+    });    
   });
 });
