@@ -30,16 +30,13 @@ export class ExpressEngine extends Engine {
   public loadServer(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       // Express initialization and setup
-      try {
-        this.app = express();
-      } catch (error) {
-        // TODO engine library not loaded.
-        throw Error();
-      }
+      this.app = express();
+
       // Add Express's settings
       this.setupSettings();
       // Add Express's extensions
       this.config.extensions = this.config.extensions || [];
+
       // Check if CORS should be setup and add it as an extension
       if (this.config.corsConfig) {
         const corsExtension = cors(this.config.corsConfig);
@@ -55,6 +52,7 @@ export class ExpressEngine extends Engine {
         loadedPreProcessingInterceptors = await expressInterceptor.loadPreProcessors();
       } catch (error) {
         reject();
+        return;
       }
 
       // Routes initialization
@@ -64,6 +62,7 @@ export class ExpressEngine extends Engine {
         loadedRoutes = await expressRouter.loadRoutes(this.config.path);
       } catch (error) {
         reject();
+        return;
       }
 
       // Loading postprocessing interceptors
@@ -72,6 +71,7 @@ export class ExpressEngine extends Engine {
         loadedPostProcessingInterceptors = await expressInterceptor.loadPostProcessors();
       } catch (error) {
         reject();
+        return;
       }
 
       this.server = this.app.listen(this.config.port, () => {
@@ -122,5 +122,4 @@ export class ExpressEngine extends Engine {
       this.app.use(extension);
     });
   }
-
 }
