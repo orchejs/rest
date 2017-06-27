@@ -42,7 +42,7 @@ export abstract class Engine {
    * 3 - App .orcherc
    * load .orcherc local or SYSTEM VARIABLE
    */
-  private loadOrcheConfig(appCfg?: OrcheConfig): void {
+  private loadOrcheConfig(appCfg: OrcheConfig = {}): void {
     const configAppFileName = appCfg.appName || PathUtils.appDirName;
 
     // Loads the environment orche config file contents
@@ -105,6 +105,7 @@ export abstract class Engine {
     if (localConfigFile) {
       try {
         const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
+        console.log(PathUtils.localConfigFile);
         if (fileContent) {
           localCfg = JSON.parse(fileContent);
           LogUtils.debug(`Orche's local config file loaded. 

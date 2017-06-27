@@ -21,7 +21,7 @@ export class ExpressEngine extends Engine {
       {
         dependency: 'express', 
         from: '4.0.0', 
-        to: '4.2.0',
+        to: '4.20.0',
       },
       userConfig,
     );
