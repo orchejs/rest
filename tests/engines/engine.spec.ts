@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import * as path from 'path';
 
-import { Engine } from '../../lib/engines/engine';
+import { OrcheNames } from '../../lib/constants/orche-names';
 import { OrcheEngines } from '../../lib/constants/orche-engines';
+import { Engine } from '../../lib/engines/engine';
 import { CompatVersions } from '../../lib/interfaces/compat-versions';
 import { PathUtils } from '../../lib/utils/path.utils';
 
@@ -68,6 +69,12 @@ describe('Engine', () => {
 
   beforeEach(() => {
     process.env.ORCHE_CONFIG = '';
+  });
+
+  after(() => {
+    process.env.ORCHE_CONFIG = '';
+    PathUtils.localConfigFile = path.resolve(PathUtils.appRoot, './'
+      .concat(OrcheNames.configFile));
   });
 
   describe('#constructor', () => {

@@ -28,7 +28,9 @@ export class ExpressRouter extends Router {
 
     return new Promise((resolve, reject) => {
       if (!RouterLoader.routerConfigs || RouterLoader.routerConfigs.length === 0) {
-        reject('There is no express route to configure!');
+        reject(loadedRoutes);
+        // TODO add log here
+        // msg 'There is no express route to configure!'
         return;
       }
 
