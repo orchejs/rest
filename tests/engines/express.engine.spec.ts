@@ -4,13 +4,16 @@ describe('ExpressEngine', () => {
   let exEngine: ExpressEngine;
 
   before(() => {
-    
+    exEngine = new ExpressEngine();    
   });
 
   describe('#loadServer', () => {
     it('Should initialize the express app with the default options', async () => {
-      exEngine = new ExpressEngine();
-      const server = await exEngine.loadServer();
+      try {
+        const server = await exEngine.loadServer();
+      } catch (error) {
+        // TODO tratar result
+      }
     });
   });
 });

@@ -51,7 +51,8 @@ export class ExpressEngine extends Engine {
       try {
         loadedPreProcessingInterceptors = await expressInterceptor.loadPreProcessors();
       } catch (error) {
-        reject();
+        const msg = `Error while loading the pre processing interceptors. Details: ${error.stack}`;
+        reject(msg);
         return;
       }
 
@@ -61,7 +62,8 @@ export class ExpressEngine extends Engine {
       try {
         loadedRoutes = await expressRouter.loadRoutes(this.config.path);
       } catch (error) {
-        reject();
+        const msg = `Error while loading the app routes. Details: ${error.stack}`;
+        reject(msg);
         return;
       }
 
@@ -70,7 +72,8 @@ export class ExpressEngine extends Engine {
       try {
         loadedPostProcessingInterceptors = await expressInterceptor.loadPostProcessors();
       } catch (error) {
-        reject();
+        const msg = `Error while loading the post processing interceptors. Details: ${error.stack}`;
+        reject(msg);
         return;
       }
 
@@ -85,7 +88,7 @@ export class ExpressEngine extends Engine {
   }
 
   protected setupSettings(): void {
-    const settings = this.config.settings;
+    const settings = this.config.settings || {};
 
     this.app.set('case sensitive routing', settings['caseSentiveRouting'] || undefined);
     this.app.set('env', settings['env'] || 'development');
