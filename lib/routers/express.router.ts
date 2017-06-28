@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as cors from 'cors';
+import * as moment from 'moment';
 
 import { Router } from './router';
 import { HttpRequestMethod } from '../constants/http-request-method';
@@ -8,6 +9,7 @@ import { MimeType } from '../constants/mimetype';
 import { ParamType } from '../constants/param-type';
 import { ContentType } from '../interfaces/content-type';
 import { CorsConfig } from '../interfaces/cors-config';
+import { LoadRouterStats } from '../interfaces/load-router-stats';
 import { ParamConfig } from '../interfaces/param-config';
 import { RouterConfig } from '../interfaces/router-config';
 import { RouterUnit } from '../interfaces/router-unit';
@@ -23,12 +25,16 @@ export class ExpressRouter extends Router {
     super(app);
   }
 
-  public loadRoutes(path: string): Promise<any> {
-    const loadedRoutes: RouterConfig[] = [];
+  public loadRoutes(path: string): Promise<LoadRouterStats> {
+    const routerStats: LoadRouterStats = {
+      loadedRoutes: [],
+      initializationTime: 0,
+    };
 
     return new Promise((resolve, reject) => {
+      const initTime = moment();
       if (!RouterLoader.routerConfigs || RouterLoader.routerConfigs.length === 0) {
-        reject(loadedRoutes);
+        resolve(routerStats);
         // TODO add log here
         // msg 'There is no express route to configure!'
         return;
@@ -114,11 +120,12 @@ export class ExpressRouter extends Router {
         this.app.use(resourcePath, router);
 
         if (loaded) {
-          loadedRoutes.push(routerConfig);
+          routerStats.loadedRoutes.push(routerConfig);
         }
       }
 
-      resolve(loadedRoutes);
+      routerStats.initializationTime = initTime.diff(moment(), 'seconds');
+      resolve(routerStats);
     });
   }
 
@@ -179,5 +186,4 @@ export class ExpressRouter extends Router {
       }
     };
   }
-
 }

@@ -1,8 +1,10 @@
 import * as express from 'express';
+import * as moment from 'moment';
 
 import { Interceptor } from './interceptor';
 import { InterceptorType } from '../constants/interceptor-type';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
+import { LoadInterceptorStats } from '../interfaces/load-interceptor-stats';
 import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { PathUtils } from '../utils/path.utils';
 
@@ -13,21 +15,39 @@ export class ExpressInterceptor extends Interceptor {
     super(app);
   }
 
-  public loadPreProcessors(): Promise<any> {
+  public loadPreProcessors(): Promise<LoadInterceptorStats> {
     return new Promise(async (resolve, reject) => {
+      const preStats: LoadInterceptorStats = {};
+      
+      const initTime = moment();
+      
       const loadedPreProcessors: InterceptorConfig[] = await
         this.loadInterceptorUnit(InterceptorType.PreProcessing);
 
-      resolve(loadedPreProcessors);
+      const elapsedTime: number = initTime.diff(moment(), 'seconds');
+
+      preStats.loadedPreProcessingInterceptors = loadedPreProcessors;
+      preStats.initializationTime = elapsedTime;
+
+      resolve(preStats);
     });
   }
 
-  public loadPostProcessors(): Promise<any> {
+  public loadPostProcessors(): Promise<LoadInterceptorStats> {
     return new Promise(async (resolve, reject) => {
+      const postStats: LoadInterceptorStats = {};
+      
+      const initTime = moment();
+
       const loadedPostProcessors: InterceptorConfig[] =
         await this.loadInterceptorUnit(InterceptorType.PostProcessing);
 
-      resolve(loadedPostProcessors);
+      const elapsedTime: number = initTime.diff(moment(), 'seconds');
+
+      postStats.loadedPostProcessingInterceptors = loadedPostProcessors;
+      postStats.initializationTime += elapsedTime;
+      
+      resolve(postStats);
     });
   }
 

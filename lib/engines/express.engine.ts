@@ -5,7 +5,11 @@ import * as http from 'http';
 import { Engine } from './engine';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { OrcheConfig } from '../interfaces/orche-config';
+import { OrcheResult } from '../interfaces/orche-result';
 import { ExpressSettings } from '../interfaces/express-settings';
+import { LoadRouterStats } from '../interfaces/load-router-stats';
+import { LoadInterceptorStats } from '../interfaces/load-interceptor-stats';
+import { LoadStats } from '../interfaces/load-stats';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterConfig } from '../interfaces/router-config';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
@@ -27,7 +31,7 @@ export class ExpressEngine extends Engine {
     );
   }
 
-  public loadServer(): Promise<any> {
+  public loadServer(): Promise<OrcheResult> {
     return new Promise(async (resolve, reject) => {
       // Express initialization and setup
       this.app = express();
@@ -45,11 +49,17 @@ export class ExpressEngine extends Engine {
       this.setupExtensions();
 
       // Interceptors initialization
+      const interceptorStats: LoadInterceptorStats = {};
       const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
+
       // Loading preprocessing interceptors
-      let loadedPreProcessingInterceptors: InterceptorConfig[];
       try {
-        loadedPreProcessingInterceptors = await expressInterceptor.loadPreProcessors();
+        const preInterceptorStats: LoadInterceptorStats = await expressInterceptor.
+          loadPreProcessors();
+
+        interceptorStats.initializationTime = preInterceptorStats.initializationTime;
+        interceptorStats.loadedPreProcessingInterceptors = preInterceptorStats.
+          loadedPreProcessingInterceptors;
       } catch (error) {
         const msg = `Error while loading the pre processing interceptors. Details: ${error.stack}`;
         reject(msg);
@@ -58,9 +68,9 @@ export class ExpressEngine extends Engine {
 
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
-      let loadedRoutes: RouterConfig[] = [];
+      let routerStats: LoadRouterStats;
       try {
-        loadedRoutes = await expressRouter.loadRoutes(this.config.path);
+        routerStats = await expressRouter.loadRoutes(this.config.path);
       } catch (error) {
         const msg = `Error while loading the app routes. Details: ${error.stack}`;
         reject(msg);
@@ -68,9 +78,13 @@ export class ExpressEngine extends Engine {
       }
 
       // Loading postprocessing interceptors
-      let loadedPostProcessingInterceptors: InterceptorConfig[];
       try {
-        loadedPostProcessingInterceptors = await expressInterceptor.loadPostProcessors();
+        const postInterceptorStats: LoadInterceptorStats = await expressInterceptor.
+          loadPostProcessors();
+        
+        interceptorStats.initializationTime += postInterceptorStats.initializationTime;
+        interceptorStats.loadedPostProcessingInterceptors = postInterceptorStats.
+          loadedPostProcessingInterceptors;        
       } catch (error) {
         const msg = `Error while loading the post processing interceptors. Details: ${error.stack}`;
         reject(msg);
@@ -78,11 +92,17 @@ export class ExpressEngine extends Engine {
       }
 
       this.server = this.app.listen(this.config.port, () => {
-        const initMsg = this.config.initMessage || 'Server is up on port ' + this.config.port;
         // TODO add an logging library to the project
-        console.log(initMsg);
-        // TODO return statistics and express app reference
-        resolve(this.server);
+        const loadStats: LoadStats = {};
+        loadStats.interceptorStats = interceptorStats;
+        loadStats.routerStats = routerStats;
+
+        const result: OrcheResult = {
+          server: this.server,
+          stats: loadStats,
+        };
+
+        resolve(result);
       });
     });
   }
