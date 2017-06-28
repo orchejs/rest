@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { ExpressEngine } from '../../lib/engines/express.engine';
 
 describe('ExpressEngine', () => {
