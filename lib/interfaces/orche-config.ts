@@ -51,13 +51,6 @@ export interface OrcheConfig {
    */
   debug?: boolean;
   /**
-   * Specifies the message that should be showed after the app initialization, considering
-   * that the app initialization will be handled by this library.
-   *
-   * Default value: "App is up and running on port {{:port}}!"
-   */
-  initMessage?: string;
-  /**
    * TODO: Add monitor api to the project to get some statistics about the usage.
    */
   // monitorRequests?: boolean;
