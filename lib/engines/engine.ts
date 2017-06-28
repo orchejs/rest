@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 
 import { OrcheEngines } from '../constants/orche-engines';
 import { OrcheConfig } from '../interfaces/orche-config';
+import { OrcheResult } from '../interfaces/orche-result';
 import { LoadStats } from '../interfaces/load-stats';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
@@ -44,6 +45,7 @@ export abstract class Engine {
    * load .orcherc local or SYSTEM VARIABLE
    */
   private loadOrcheConfig(appCfg: OrcheConfig = {}): void {
+    this.config = {};
     const configAppFileName = appCfg.appName || PathUtils.appDirName;
 
     // Loads the environment orche config file contents
@@ -104,7 +106,6 @@ export abstract class Engine {
     if (localConfigFile) {
       try {
         const fileContent = fs.readFileSync(PathUtils.localConfigFile, 'utf8');
-        console.log(PathUtils.localConfigFile);
         if (fileContent) {
           localCfg = JSON.parse(fileContent);
           LogUtils.debug(`Orche's local config file loaded. 
@@ -117,7 +118,7 @@ export abstract class Engine {
     return localCfg;
   }
 
-  public abstract loadServer(): Promise<LoadStats>;
+  public abstract loadServer(): Promise<OrcheResult>;
   protected abstract setupSettings(): void;
   protected abstract setupExtensions(): void;
 
