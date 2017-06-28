@@ -38,6 +38,7 @@ describe('Engine', () => {
         engine = new SpecEngine();
         expect(engine).to.not.null;
       } catch (e) {
+        console.log(e);
         expect(e).to.null;
       }
     });
@@ -129,7 +130,6 @@ class SpecEngine extends Engine {
       },
       {
         path: '/myapp',
-        initMessage: 'App initialized',
         extensions: [],
         settings: {},
         corsConfig: {
