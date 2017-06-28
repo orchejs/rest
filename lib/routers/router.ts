@@ -1,4 +1,5 @@
 import { ContentType } from '../interfaces/content-type';
+import { LoadRouterStats } from '../interfaces/load-router-stats';
 
 export abstract class Router {
   
@@ -8,7 +9,7 @@ export abstract class Router {
     this.app = app;
   }
 
-  public abstract loadRoutes(path: string): Promise<any>;  
+  public abstract loadRoutes(path: string): Promise<LoadRouterStats>;  
 
   protected abstract routeProcessor(target: string, method: Function, methodName: string, 
                                     contentType: ContentType): Function;

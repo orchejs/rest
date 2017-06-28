@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 
 import { OrcheEngines } from '../constants/orche-engines';
 import { OrcheConfig } from '../interfaces/orche-config';
+import { LoadStats } from '../interfaces/load-stats';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
 import { PathUtils } from '../utils/path.utils';
@@ -56,21 +57,19 @@ export abstract class Engine {
      * 2 - LOCAL's orche file configuration
      * 3 - code orche config
      */
-    appCfg.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine ||
+    this.config.apiEngine = envCfg.apiEngine || localCfg.apiEngine || appCfg.apiEngine ||
       OrcheEngines.ExpressJS;
 
     const path = envCfg.path || localCfg.path || appCfg.path;
-    appCfg.path = PathUtils.urlSanitation(path);
+    this.config.path = PathUtils.urlSanitation(path);
 
-    appCfg.port = envCfg.port || localCfg.port || appCfg.port || 3000;
-    appCfg.appName = envCfg.appName || localCfg.appName || appCfg.appName || PathUtils.appDirName;
-    appCfg.corsConfig = envCfg.corsConfig || localCfg.corsConfig || appCfg.corsConfig;
-    appCfg.debug = envCfg.debug || localCfg.debug || appCfg.debug || false;
-    appCfg.extensions = envCfg.extensions || localCfg.extensions || appCfg.extensions;
-    appCfg.initMessage = envCfg.initMessage || localCfg.initMessage || appCfg.initMessage;
-    appCfg.settings = envCfg.settings || localCfg.settings || appCfg.settings;
-
-    this.config = appCfg;
+    this.config.port = envCfg.port || localCfg.port || appCfg.port || 3000;
+    this.config.appName = envCfg.appName || localCfg.appName || appCfg.appName || 
+      PathUtils.appDirName;
+    this.config.corsConfig = envCfg.corsConfig || localCfg.corsConfig || appCfg.corsConfig;
+    this.config.debug = envCfg.debug || localCfg.debug || appCfg.debug || false;
+    this.config.extensions = envCfg.extensions || localCfg.extensions || appCfg.extensions;
+    this.config.settings = envCfg.settings || localCfg.settings || appCfg.settings;
   }
 
   private loadEnvConfigFile(configAppFileName: string): OrcheConfig {
@@ -118,7 +117,7 @@ export abstract class Engine {
     return localCfg;
   }
 
-  public abstract loadServer(): Promise<any>;
+  public abstract loadServer(): Promise<LoadStats>;
   protected abstract setupSettings(): void;
   protected abstract setupExtensions(): void;
 
