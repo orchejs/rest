@@ -12,8 +12,9 @@ describe('ExpressEngine', () => {
     it('Should initialize the express app with the default options', async () => {
       try {
         const server = await exEngine.loadServer();
+        expect(server).to.not.undefined;
       } catch (error) {
-        // TODO tratar result
+        expect(error).to.undefined;
       }
     });
   });
