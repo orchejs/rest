@@ -92,7 +92,7 @@ export class ExpressEngine extends Engine {
       }
 
       this.server = this.app.listen(this.config.port, () => {
-        // TODO add an logging library to the project
+        // TODO add a logging library to the project
         const loadStats: LoadStats = {};
         loadStats.interceptorStats = interceptorStats;
         loadStats.routerStats = routerStats;
@@ -135,10 +135,6 @@ export class ExpressEngine extends Engine {
     const extensions = this.config.extensions;
     if (!extensions || extensions.length === 0) {
       return;
-    }
-
-    if (!this.app) {
-      throw new Error('Application must be defined!');
     }
 
     extensions.forEach((extension) => {
