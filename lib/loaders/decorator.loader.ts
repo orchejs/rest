@@ -13,7 +13,7 @@ export class DecoratorLoader {
    * @returns { Promise<any> }
    * Returns the list of files that were found and required.
    */
-  loadDecorators(): Promise<any> {
+  loadDecorators(): Promise<string[]> {
     const fileMatcher = new FileMatcher();
 
     const criteria: FindOptions = {
@@ -33,7 +33,7 @@ export class DecoratorLoader {
 
     return new Promise(async (resolve, reject) => {
       try {
-        const files = await fileMatcher.find(criteria);
+        const files: string[] = await fileMatcher.find(criteria);
 
         if (!files || files.length === 0) {
           reject('No Path, Interceptor or Error decorators found!');
