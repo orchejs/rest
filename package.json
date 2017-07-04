@@ -19,6 +19,7 @@
     "@types/node": "^7.0.32",
     "@types/restify": "^4.3.4",
     "chai": "^4.0.2",
+    "cors": "^2.8.3",
     "express": "^4.15.3",
     "mocha": "^3.4.2",
     "ts-node": "^3.0.6",
