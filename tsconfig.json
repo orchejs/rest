@@ -4,6 +4,10 @@
     "target": "es6",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "rootDir": ".",
+    "outDir": "build/core",
+    "sourceMap": true,
+    "declaration": true
   }
 }
