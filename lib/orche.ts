@@ -19,22 +19,24 @@ export class Orche {
         reject();
       }
 
-      resolve();
+      resolve({});
     });
   }
 
-  private async loadDecorators(reject): string[] {
+  private loadDecorators(reject): Promise<any> {
     const decoratorLoader = new DecoratorLoader();
 
-    let files: string [];
-    try {
-      files = await decoratorLoader.loadDecorators();
-    } catch (error) {
-      // TODO
-      reject();
-    }
+    return new Promise(async (resolve, reject) => {
+      let files: string [];
+      try {
+        files = await decoratorLoader.loadDecorators();
+      } catch (error) {
+        // TODO
+        reject();
+      }
 
-    return files;
+      resolve(files)
+    });
   }
 
   private engineInitialization(config: OrcheConfig, reject: any) {
