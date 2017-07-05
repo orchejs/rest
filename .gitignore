@@ -1,3 +1,9 @@
 node_modules
 dist
 .vscode
+
+*.iml
+
+.idea
+.nyc_output
+coverage
