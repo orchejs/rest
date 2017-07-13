@@ -7,19 +7,20 @@ import { ExpressEngine } from './engines/express.engine';
 export class Orche {
 
   init(config: OrcheConfig): Promise<OrcheResult> {
-    return new Promise(async (resolve, reject) => {
+    let result: OrcheResult;
 
+    return new Promise(async (resolve, reject) => {
       this.loadDecorators(reject);
 
       const engine = this.engineInitialization(config, reject);
       try {
-        engine.loadServer();
+        result = engine.loadServer();
       } catch (error) {
         // TODO
         reject();
       }
 
-      resolve({});
+      resolve(result);
     });
   }
 
