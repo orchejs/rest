@@ -14,8 +14,9 @@ export class Orche {
 
       const engine = this.engineInitialization(config, reject);
       try {
-        result = engine.loadServer();
+        result = await engine.loadServer();
       } catch (error) {
+        console.log('error');
         // TODO
         reject();
       }
@@ -27,11 +28,13 @@ export class Orche {
   private loadDecorators(reject): Promise<any> {
     const decoratorLoader = new DecoratorLoader();
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       let files: string [];
       try {
         files = await decoratorLoader.loadDecorators();
+        console.log(files);
       } catch (error) {
+        console.log('error', error);
         // TODO
         reject();
       }
