@@ -3,7 +3,10 @@ import { RouterLoader } from '../loaders/router.loader';
 
 export function path(path: string) {
   return function (target: Object) {
-    const className: string = target.toString().match(/function ([^(]*)/)[1];
-    RouterLoader.addRouterConfig(className, path);
+    const className: any = target.toString().match(/(function|class) ([^{(]*)/i);
+    if (!className || className.length < 3) {
+      return;
+    }
+    RouterLoader.addRouterConfig(className[2].trim(), path);
   };
 }
