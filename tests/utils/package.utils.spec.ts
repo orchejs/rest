@@ -1,3 +1,4 @@
+import { assert } from 'chai';
 import { PackageUtils } from '../../lib/utils/package.utils';
 
 describe('PackageUtils', () => {
