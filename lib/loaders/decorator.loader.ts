@@ -21,12 +21,14 @@ export class DecoratorLoader {
       fileFilter: {
         fileNamePattern: [
           '**/*.js',
+          '**/*.ts',
           'node_modules/orche/lib/interceptors/**',
-          '!decoratorloader*',
+          '!decorator.loader*',
           '!node_modules',
           '!typings',
         ],
-        content: /(?=.[^]*__decorate)(?=.[^]*Path|Interceptor)/i,
+        // content: /(?=.[^]*__decorate)(?=.[^]*path|interceptor)/i,
+        content: /(@path|@interceptor)/i,
       },
       recursiveSearch: true,
     };
