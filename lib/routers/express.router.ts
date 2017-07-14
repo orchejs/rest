@@ -52,7 +52,7 @@ export class ExpressRouter extends Router {
           const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
                                                   routerUnit.methodName, routerUnit.contentType);
           
-          const corsConfig: CorsConfig = routerUnit.cors;
+          const corsConfig: CorsConfig = routerUnit.cors || {};
           if (corsConfig.preflight) {
             router.options(routerUnit.path, cors(corsConfig.corsOptions));
           }
