@@ -32,9 +32,11 @@
     "clean": "rm -rf ./build ./coverage",
     "lint": "node_modules/.bin/tslint lib/**/*.ts ./tests/**/*.spec.ts",
     "cp-package": "cp ./package.json ./build/core/",
-    "build": "npm run clean &&  npm run lint && node_modules/.bin/tsc && npm run cp-package",
+    "compile": "node_modules/.bin/tsc",
+    "build": "npm run clean &&  npm run lint && npm run compile && npm run cp-package",
     "test": "node_modules/.bin/mocha",
-    "coverage": "npm run clean && node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha",
+    "coverage": "node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha",
+    "clean_coverage": "npm run clean & npm run coverage",
     "travis": ""
   },
   "nyc": {
