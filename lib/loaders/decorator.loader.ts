@@ -27,8 +27,7 @@ export class DecoratorLoader {
           '!node_modules',
           '!typings',
         ],
-        // content: /(?=.[^]*__decorate)(?=.[^]*path|interceptor)/i,
-        content: /(@path|@interceptor)/i,
+        content: /((?=.[^]*__decorate)(?=.[^]*path|interceptor))|(@path|@interceptor)/i,
       },
       recursiveSearch: true,
     };
