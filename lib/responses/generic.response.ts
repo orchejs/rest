@@ -4,7 +4,7 @@ import { MimeType } from '../constants/mimetype';
 
 export abstract class GenericResponse {
 
-  protected responseType: string;
+  public responseType: string = 'GenericResponse';
   protected httpStatus: HttpResponseCode;
 
   /**
@@ -22,8 +22,6 @@ export abstract class GenericResponse {
     } else {
       this.httpStatus = httpStatus;
     }
-
-    this.responseType = 'GenericResponse';
   }
 
   /**
@@ -33,10 +31,6 @@ export abstract class GenericResponse {
    */
   getHttpStatus(): number {
     return this.httpStatus;
-  }
-
-  getResponseType(): string {
-    return this.responseType;
   }
 
   /**
