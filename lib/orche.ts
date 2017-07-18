@@ -32,14 +32,12 @@ export class Orche {
       let files: string [];
       try {
         files = await decoratorLoader.loadDecorators();
-        console.log(files);
       } catch (error) {
-        console.log('error', error);
         // TODO
         reject();
       }
 
-      resolve(files)
+      resolve(files);
     });
   }
 
