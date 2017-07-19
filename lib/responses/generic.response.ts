@@ -1,43 +1,30 @@
+import { ContentType } from '../interfaces/content-type';
+import { Response } from './response';
 import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 
 
-export abstract class GenericResponse {
+export class GenericResponse extends Response {
 
-  public responseType: string = 'GenericResponse';
-  protected httpStatus: HttpResponseCode;
+  protected data: any;
+  protected contentType: MimeType;
 
-  /**
-   * Most basic response type. 
-   * The default http status is OK (200), if not will be INTERNAL_SERVER_ERROR (500).
-   *
-   * @param {any} [contentType]
-   * content type for the response.
-   * @param {HttpResponseCode} [httpStatus]
-   * response http status.
-   */
-  constructor(httpStatus?: HttpResponseCode) {
-    if (!httpStatus) {
-      this.httpStatus = HttpResponseCode.Ok;
+  constructor(data?: any, contentType?: MimeType, httpStatus?: HttpResponseCode) {
+    super(httpStatus);
+
+    if (!contentType) {
+      this.contentType = MimeType.json;
     } else {
-      this.httpStatus = httpStatus;
+      this.contentType = contentType;
     }
+
+    this.data = data;
   }
 
-  /**
-   * Returns the HTTP status code.
-   *
-   * @return {number}
-   */
-  getHttpStatus(): number {
-    return this.httpStatus;
+  toObjectLiteral() {
+    return {
+      
+    };
   }
-
-  /**
-   * Return the response as a Object Literal, having the main fields.
-   *
-   * @return {ResponseTemplate}
-   */
-  abstract toObjectLiteral(): any;
 
 }

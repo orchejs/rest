@@ -1,7 +1,8 @@
 import { expect } from 'chai';
-import { get as httpGet } from 'http';
+import { get as httpGet, request } from 'http';
 
-import { path, get, Orche, OrcheEngines, OrcheResult, OrcheConfig } from '../';
+import { path, post, put, del, get, Orche, OrcheEngines, OrcheResult, 
+         OrcheConfig, GenericResponse, pathParam } from '../';
 
 
 describe('Orche Main Class', () => {
@@ -39,6 +40,23 @@ describe('Orche Main Class', () => {
         });
       });
     });
+
+    /*
+    it('Should make an http GET to /orche-test/utilities and receive \'ping\'', (done) => {
+      httpGet('http://localhost:8888/orche-test/utilities', (res) => {
+        let rawData: any = '';
+
+        res.on('data', (chunk) => {
+          rawData += chunk;
+        });
+
+        res.on('end', () => {
+          expect(rawData).to.be.equal('{"msg":"ping"}');
+          done();
+        });
+      });
+    });    
+    */
   });
 });
 
@@ -48,6 +66,12 @@ class Utilities {
   @get()
   justPing() {
     return { msg: 'ping' };
+  }
+
+  @post()
+  postPing(@pathParam('ip') ip: string): GenericResponse {
+    const response: GenericResponse = new GenericResponse({ msg: 'pinging ' + ip });
+    return response;
   }
 
 }
