@@ -5,97 +5,103 @@ import { RouterLoader } from '../loaders/router.loader';
 import { CorsConfig } from '../interfaces/cors-config';
 
 
-export function all(path: string = '',
-                    contentType: ContentType = { 
-                      request: MimeType.json, 
-                      response: MimeType.json, 
-                    },
-                    cors?: CorsConfig) {
+export function all(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.All);
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = { 
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
+                              HttpRequestMethod.All, ct);
   };
 }
 
-export function get(path: string = '',
-                    contentType: ContentType = { 
-                      response: MimeType.json, 
-                    },
-                    cors?: CorsConfig) {
+export function get(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = { response: MimeType.json };
+    }
     const method: Function = descriptor.value;
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Get);
-  };
-}
-
-export function post(path: string = '',
-                     contentType: ContentType = { 
-                       request: MimeType.json, 
-                       response: MimeType.json, 
-                     },
-                     cors?: CorsConfig) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Post);
-  };
-}
-
-export function put(path: string = '',
-                    contentType: ContentType = { 
-                      request: MimeType.json, 
-                      response: MimeType.json, 
-                    },
-                    cors?: CorsConfig) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Put);
-  };
-}
-
-export function del(path: string = '',
-                    contentType: ContentType = { 
-                      request: MimeType.json, 
-                      response: MimeType.json, 
-                    },
-                    cors?: CorsConfig) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Delete);
-  };
-}
-
-export function patch(path: string = '',
-                      contentType: ContentType = { 
-                        request: MimeType.json, 
-                        response: MimeType.json, 
-                      },
-                      cors?: CorsConfig) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Patch);
-  };
-}
-
-export function options(path: string = '',
-                        contentType: ContentType = { 
-                          request: MimeType.json, 
-                          response: MimeType.json, 
-                        },
-                        cors?: CorsConfig) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Options);
+                              HttpRequestMethod.Get, ct);
   };
 }
 
-export function head(path: string = '',
-                     contentType: ContentType = { 
-                       response: MimeType.json, 
-                     },
-                     cors?: CorsConfig) {
+export function post(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.Head);
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = {
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Post, ct);
+  };
+}
+
+export function put(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = {
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Put, ct);
+  };
+}
+
+export function del(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = {
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Delete, ct);
+  };
+}
+
+export function patch(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = {
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Patch, ct);
+  };
+}
+
+export function options(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = {
+        request: MimeType.json,
+        response: MimeType.json };
+    }
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Options, ct);
+  };
+}
+
+export function head(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+    let ct: ContentType = contentType;
+    if (!ct) {
+      ct = { response: MimeType.json };
+    }    
+    RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
+                              HttpRequestMethod.Head, ct);
   };
 }

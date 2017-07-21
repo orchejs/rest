@@ -1,8 +1,8 @@
 import { HttpResponseCode } from '../constants/http-response-code';
-import { GenericResponse } from './generic.response';
+import { Response } from './response';
 
 
-export class ErrorResponse extends GenericResponse {
+export class ErrorResponse extends Response {
 
   protected message?: string;
   protected detail?: any;

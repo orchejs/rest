@@ -137,7 +137,7 @@ export class ExpressRouter extends Router {
       const next: express.NextFunction = arguments[2];
 
       let endpointArgs: any = [];
-
+      
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
       if (paramConfig && paramConfig.params && paramConfig.params.length > 0) {
         paramConfig.params.forEach((param, index) => {
@@ -170,8 +170,8 @@ export class ExpressRouter extends Router {
       let result: any;
       try {
         result = method.apply(this, endpointArgs);
-        if (result && result.responseType === 'GenericResponse') {
-          res.contentType(contentType.request.toString());
+        res.contentType(contentType.response['value']);
+        if (result && result.responseType) {
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
         } else {
           res.status(HttpResponseCode.Ok).send(result);
@@ -180,9 +180,6 @@ export class ExpressRouter extends Router {
         next();
       } catch (e) {
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
-        if (contentType) {
-          res.contentType(contentType.response.toString());
-        }
         res.status(result.getHttpStatus()).send(result.toObjectLiteral());
       }
     };

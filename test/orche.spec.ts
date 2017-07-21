@@ -1,8 +1,11 @@
+import { hostname } from 'os';
 import { expect } from 'chai';
-import { get as httpGet, request } from 'http';
+import { Request } from 'express';
+import { json } from 'body-parser';
+import { get as httpGet, request, RequestOptions } from 'http';
 
 import { path, post, put, del, get, Orche, OrcheEngines, OrcheResult, 
-         OrcheConfig, GenericResponse, pathParam } from '../';
+         OrcheConfig, GenericResponse, pathParam, requestParam } from '../';
 
 
 describe('Orche Main Class', () => {
@@ -16,7 +19,7 @@ describe('Orche Main Class', () => {
       path: '/orche-test',
       apiEngine: OrcheEngines.ExpressJS,
       port: 8888,
-    };
+      extensions: [json()] };
 
     result = await orche.init(config);
   });
@@ -41,22 +44,40 @@ describe('Orche Main Class', () => {
       });
     });
 
-    /*
-    it('Should make an http GET to /orche-test/utilities and receive \'ping\'', (done) => {
-      httpGet('http://localhost:8888/orche-test/utilities', (res) => {
-        let rawData: any = '';
+    it('Should make an http POST to /orche-test/utilities and receive \'ping {ip}\''
+      ,(done) => {
+        const data = JSON.stringify({ ip: '192.189.0.21' });
 
-        res.on('data', (chunk) => {
-          rawData += chunk;
+        const options: RequestOptions = {
+          protocol: 'http:',
+          host: 'localhost',
+          port: 8888,
+          method: 'POST',
+          path: '/orche-test/utilities',
+          headers: { 'Content-Type': 'application/json' }};
+
+        const req = request(options, (res) => {
+          let rawData: any = '';
+
+          res.on('data', (chunk) => {
+            rawData += chunk;
+          });
+
+          res.on('error', (error) => {
+            console.log(error);
+            done();
+          });
+
+          res.on('end', () => {
+            console.log(rawData);
+            expect(rawData).to.be.equal('{"msg":"pinging 192.189.0.21}');
+            done();
+          });
         });
 
-        res.on('end', () => {
-          expect(rawData).to.be.equal('{"msg":"ping"}');
-          done();
-        });
+        req.write(data);
+        req.end();
       });
-    });    
-    */
   });
 });
 
@@ -69,8 +90,12 @@ class Utilities {
   }
 
   @post()
-  postPing(@pathParam('ip') ip: string): GenericResponse {
-    const response: GenericResponse = new GenericResponse({ msg: 'pinging ' + ip });
+  postPing(@requestParam() request): GenericResponse {
+    let ip: string = '';
+    if (request.body) {
+      ip = request.body['ip'];
+    }
+    const response: GenericResponse = new GenericResponse({ msg: `pinging ${ip}` });
     return response;
   }
 
