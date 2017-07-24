@@ -1,8 +1,8 @@
 import { HttpResponseCode } from '../constants/http-response-code';
-import { Response } from './response';
+import { GenericResponse } from './generic.response';
 
 
-export class ErrorResponse extends Response {
+export class ErrorResponse extends GenericResponse {
 
   protected message?: string;
   protected detail?: any;
@@ -23,7 +23,6 @@ export class ErrorResponse extends Response {
   toObjectLiteral(): any {
     return {
       message: this.message,
-      detail: this.detail,
-    };
+      detail: this.detail };
   }
 }
