@@ -3,7 +3,7 @@ import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 
 
-export abstract class PagedResponse extends GenericResponse {
+export class PagedResponse extends GenericResponse {
 
   protected size: number;
   protected page: number;
@@ -11,10 +11,10 @@ export abstract class PagedResponse extends GenericResponse {
   protected totalPages?: number;
 
 
-  constructor(size: number, page: number, totalElements: number, data?: any,
-              contentType?: MimeType, httpStatus?: HttpResponseCode) {
-    super(data, contentType, httpStatus);
-
+  constructor(data: any, size: number, page: number, totalElements: number, 
+              httpStatus?: HttpResponseCode) {
+    super(data, httpStatus);
+    
     this.size = size;
     this.page = page;
     this.totalElements = totalElements;
@@ -32,8 +32,11 @@ export abstract class PagedResponse extends GenericResponse {
    */
   toObjectLiteral(): any {
     return {
-
-    };
+      data: this.data,
+      size: this.size,
+      page: this.page,
+      totalElements: this.totalElements,
+      totalPages: this.totalPages };
   }  
 
 }

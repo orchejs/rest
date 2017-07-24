@@ -4,7 +4,7 @@ import { MimeType } from '../constants/mimetype';
 
 export abstract class Response {
 
-  readonly responseType: boolean = true;
+  readonly isResponseType: boolean = true;
   protected httpStatus: HttpResponseCode;
 
   /**
