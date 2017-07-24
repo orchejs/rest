@@ -19,6 +19,7 @@ export class Orche {
         console.log('error');
         // TODO
         reject();
+        return;
       }
 
       resolve(result);
@@ -35,6 +36,7 @@ export class Orche {
       } catch (error) {
         // TODO
         reject();
+        return;
       }
 
       resolve(files);
@@ -62,6 +64,7 @@ export class Orche {
     } catch (error) {
       // TODO
       reject();
+      return;
     }
 
     return engine;
