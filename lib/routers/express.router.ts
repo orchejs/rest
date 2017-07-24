@@ -170,16 +170,20 @@ export class ExpressRouter extends Router {
       let result: any;
       try {
         result = method.apply(this, endpointArgs);
-        res.contentType(contentType.response['value']);
-        if (result && result.responseType) {
+        
+        if (result && result.isResponseType) {
+          res.contentType(contentType.response['value']);
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
-        } else {
+        } else if (result) {
+          res.contentType(contentType.response['value']);
           res.status(HttpResponseCode.Ok).send(result);
+        } else {
+          next();
         }
 
-        next();
       } catch (e) {
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
+        res.contentType(MimeType.json.toString());
         res.status(result.getHttpStatus()).send(result.toObjectLiteral());
       }
     };
