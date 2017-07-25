@@ -8,22 +8,25 @@ export class InterceptorLoader {
   static interceptorConfigs: InterceptorConfig[] = [];
   static interceptorUnits: InterceptorUnit[] = [];
 
-  static addInterceptorUnit(classMethod: any, type: InterceptorType) {
+  static addInterceptorUnit(method: any, type: InterceptorType, methodName: string) {
     const interceptorUnit: InterceptorUnit = {
-      classMethod,
+      method,
+      methodName,
       type,
     };
 
     this.interceptorUnits.push(interceptorUnit);
   }
 
-  static addInterceptorConfig(paths?: string[], order?: number) {
+  static addInterceptorConfig(paths?: string[], order?: number, className?: string) {
     const interceptorPaths: string[] = paths || ['/'];
     const interceptorOrder: number = order || this.interceptorConfigs.length + 1;
+    const interceptorClassName: string = className || '';
 
     const interceptorConfig: InterceptorConfig = {
       paths: interceptorPaths,
       order: interceptorOrder,
+      className: interceptorClassName,
       interceptorUnits: this.interceptorUnits,
     };
 
