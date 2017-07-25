@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 import { all, del, GenericResponse, get, head, headerParam, HttpResponseCode, options,
          patch, path, pathParam, post, put, requestParam } from '../../';
 

@@ -11,8 +11,8 @@ import {
 
 describe('Interceptor Decorators Tests', () => {
 
-  it('Should interceptor /orche-test/utilities', () => {
-
+  it('Should interceptor /orche-interceptors/utilities', () => {
+    
   });
 
 });
