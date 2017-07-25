@@ -19,9 +19,6 @@ export * from './lib/decorators/interceptor';
 export * from './lib/decorators/parameter';
 export * from './lib/decorators/path';
 
-// interceptors
-export * from './lib/interceptors/express.interceptor';
-
 // request
 export * from './lib/requests/express.requestmapper';
 export * from './lib/requests/hapi.requestmapper';
