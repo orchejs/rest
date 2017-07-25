@@ -10,7 +10,7 @@ export class Orche {
     let result: OrcheResult;
 
     return new Promise(async (resolve, reject) => {
-      this.loadDecorators(reject);
+      await this.loadDecorators(reject);
 
       const engine = this.engineInitialization(config, reject);
       try {
