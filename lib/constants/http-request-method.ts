@@ -9,8 +9,6 @@ export enum HttpRequestMethod {
   Head,
   Options,
   Delete,
-  Trace,
-  Connect,
   All,
   Patch,
 }
