@@ -43,4 +43,14 @@ describe('Interceptor Decorators Tests', () => {
     expect(result.stats.interceptorStats.loadedPostProcessingInterceptors.length).to.be.gt(0);
   });
 
+  it('Should intercept PRE-PROCESSING a HTTP GET Method of \'\orche/restricted\'', async () => {
+    const result: string = await RequestHelper.get('/orche/restricted');
+    expect(result).to.be.equal('{"authorization":"custom-token"}');
+  });  
+
+  it('Should intercept POST-PROCESSING a HTTP GET Method of \'\orche/restricted\'', async () => {
+    const result: string = await RequestHelper.get('/orche/restricted');
+    expect(result).to.be.equal('{"authorization":"custom-token"}');
+  }); 
+
 });

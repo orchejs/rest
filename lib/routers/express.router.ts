@@ -161,6 +161,12 @@ export class ExpressRouter extends Router {
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
               endpointArgs[param.parameterIndex] = requestMapper;
               break;
+            case ParamType.BodyParam:
+              endpointArgs[param.parameterIndex] = req.body;
+              break;
+            case ParamType.HeaderParam:
+              endpointArgs[param.parameterIndex] = req.headers[param.paramName];
+              break;
           }
         });
       } else {
