@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as moment from 'moment';
 
 import { MimeType } from '../constants/mimetype';
+import { HttpRequestMethod } from '../constants/http-request-method';
 import { HttpResponseCode } from '../constants/http-response-code';
 import { InterceptorType } from '../constants/interceptor-type';
 import { Interceptor } from './interceptor';
@@ -63,10 +64,6 @@ export class ExpressInterceptor extends Interceptor {
     const loadedProcessors: any = [];
     const interceptorConfigs: InterceptorConfig[] = InterceptorLoader.interceptorConfigs;
 
-    if (!interceptorConfigs || interceptorConfigs.length === 0) {
-      return loadedProcessors;
-    }
-
     for (let index = 0; index < interceptorConfigs.length; index += 1) {
       const loaded: boolean = true;
       const interceptorConfig: InterceptorConfig = interceptorConfigs[index];
@@ -74,25 +71,57 @@ export class ExpressInterceptor extends Interceptor {
       const processorUnit = interceptorConfig.interceptorUnits.
         find(unit => unit.type === interceptorType);
 
-      if (!processorUnit) {
-        continue;
-      }
-
       const method = this.interceptorProcessor(interceptorConfig.className, processorUnit.method,
                                                processorUnit.methodName);
 
       interceptorConfig.paths.forEach((path) => {
+        const loadedHttpMethods: HttpRequestMethod[] = [];
         const interceptorConfigPath = PathUtils.urlSanitation(path);
 
-        this.app.use(interceptorConfigPath, method);
+        if (interceptorConfig.httpMethods.length === 0) {
+          this.app.use(interceptorConfigPath, method);
+        } else {
+          interceptorConfig.httpMethods.some((httpMethod: HttpRequestMethod) => {
+            switch (httpMethod) {
+              case HttpRequestMethod.All:
+                this.app.use(interceptorConfigPath, method);
+                loadedHttpMethods.push(httpMethod);
+                return false;
+              case HttpRequestMethod.Get:
+                this.app.get(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Delete:
+                this.app.delete(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Head:
+                this.app.head(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Options:
+                this.app.options(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Patch:
+                this.app.patch(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Post:
+                this.app.post(interceptorConfigPath, method);
+                break;
+              case HttpRequestMethod.Put:
+                this.app.put(interceptorConfigPath, method);
+                break;
+            }
+            loadedHttpMethods.push(httpMethod);
+            return true;
+          });
+        }
 
-        let loadedInterceptorConfig = loadedProcessors.
+        let loadedInterceptorConfig: any = loadedProcessors.
           find(config => config.path === interceptorConfigPath);
 
         if (!loadedInterceptorConfig) {
           loadedInterceptorConfig = {
             path: interceptorConfigPath,
             order: interceptorConfig.order,
+            httpMethods: loadedHttpMethods,
             interceptorUnits: [],
           };
 
@@ -135,6 +164,12 @@ export class ExpressInterceptor extends Interceptor {
             case ParamType.RequestParamMapper:
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
               endpointArgs[param.parameterIndex] = requestMapper;
+              break;
+            case ParamType.BodyParam:
+              endpointArgs[param.parameterIndex] = req.body;
+              break;
+            case ParamType.HeaderParam:
+              endpointArgs[param.parameterIndex] = req.headers[param.paramName];
               break;
           }
         });
