@@ -5,4 +5,6 @@ export enum ParamType {
   QueryParam,
   PathParam,
   RequestParamMapper,
+  BodyParam,
+  HeaderParam,
 }

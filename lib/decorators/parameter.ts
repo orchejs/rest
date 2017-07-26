@@ -44,18 +44,16 @@ export function requestParamMapper() {
   };
 }
 
-// TODO add body param
-export function body(body: string) {
+export function bodyParam(body: string) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-                                       ParamType.PathParam);
+    ParameterLoader.addParameterConfig(target, propertyKey, body, parameterIndex,
+                                       ParamType.BodyParam);
   };
 }
 
-// TODO add header attr
 export function headerParam(attribute: string) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
-                                       ParamType.RequestParamMapper);
+    ParameterLoader.addParameterConfig(target, propertyKey, attribute, parameterIndex,
+                                       ParamType.HeaderParam);
   };
 }
