@@ -1,4 +1,3 @@
-import { InterceptorType } from '../constants/interceptor-type';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { LoadInterceptorStats } from '../interfaces/load-interceptor-stats';
 
@@ -10,9 +9,7 @@ export abstract class Interceptor {
     this.app = app;
   }
 
-  public abstract loadPreProcessors(): Promise<LoadInterceptorStats>;
+  public abstract loadProcessors(): Promise<LoadInterceptorStats>;
 
-  public abstract loadPostProcessors(): Promise<LoadInterceptorStats>;
-
-  public abstract loadInterceptorUnit(interceptorType: InterceptorType): InterceptorConfig[];
+  public abstract loadInterceptorUnit(): InterceptorConfig[];
 }

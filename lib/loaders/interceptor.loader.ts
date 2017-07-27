@@ -1,13 +1,12 @@
 import { PathUtils } from '../utils/path.utils';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { InterceptorUnit } from '../interfaces/interceptor-unit';
-import { InterceptorType } from '../constants/interceptor-type';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 export class InterceptorLoader {
 
   static interceptorConfigs: InterceptorConfig[] = [];
-  static interceptorUnits: InterceptorUnit[] = [];
+  static interceptorUnit: InterceptorUnit;
 
   static addInterceptorConfig(paths?: string[], order?: number, className?: string, 
                               httpMethods?: HttpRequestMethod[]) {
@@ -21,22 +20,18 @@ export class InterceptorLoader {
       order: interceptorOrder,
       className: interceptorClassName,
       httpMethods: interceptorHttpMethods,
-      interceptorUnits: this.interceptorUnits,
+      interceptorUnit: this.interceptorUnit,
     };
 
     this.interceptorConfigs.push(interceptorConfig);
     this.interceptorConfigs.sort((a, b) => a.order - b.order);
-    this.interceptorUnits = [];
   }
 
-  static addInterceptorUnit(method: any, type: InterceptorType, methodName: string) {
+  static addInterceptorUnit(method: any, methodName: string) {
     const interceptorUnit: InterceptorUnit = {
       method,
-      methodName,
-      type,
-    };
+      methodName };
 
-    this.interceptorUnits.push(interceptorUnit);
+    this.interceptorUnit = interceptorUnit;
   }
-
 }

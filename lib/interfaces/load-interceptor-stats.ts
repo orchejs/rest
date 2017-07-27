@@ -2,8 +2,7 @@ import { InterceptorConfig } from './interceptor-config';
 
 export interface LoadInterceptorStats {
 
-  loadedPreProcessingInterceptors?: InterceptorConfig[];
-  loadedPostProcessingInterceptors?: InterceptorConfig[];
+  loadedInterceptors?: InterceptorConfig[];
   initializationTime?: number;
 
 }

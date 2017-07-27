@@ -6,5 +6,5 @@ export interface InterceptorConfig {
   order?: number;
   className?: string;
   httpMethods?: HttpRequestMethod[];
-  interceptorUnits?: InterceptorUnit[];
+  interceptorUnit?: InterceptorUnit;
 }

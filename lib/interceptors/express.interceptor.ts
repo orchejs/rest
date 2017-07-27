@@ -1,10 +1,10 @@
+import { InterceptorUnit } from '../interfaces/interceptor-unit';
 import * as express from 'express';
 import * as moment from 'moment';
 
 import { MimeType } from '../constants/mimetype';
 import { HttpRequestMethod } from '../constants/http-request-method';
 import { HttpResponseCode } from '../constants/http-response-code';
-import { InterceptorType } from '../constants/interceptor-type';
 import { Interceptor } from './interceptor';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { LoadInterceptorStats } from '../interfaces/load-interceptor-stats';
@@ -23,43 +23,24 @@ export class ExpressInterceptor extends Interceptor {
     super(app);
   }
 
-  public loadPreProcessors(): Promise<LoadInterceptorStats> {
+  public loadProcessors(): Promise<LoadInterceptorStats> {
     return new Promise(async (resolve, reject) => {
       const preStats: LoadInterceptorStats = {};
       
       const initTime = moment();
       
-      const loadedPreProcessors: InterceptorConfig[] = await
-        this.loadInterceptorUnit(InterceptorType.PreProcessing);
+      const loadedProcessors: InterceptorConfig[] = await this.loadInterceptorUnit();
 
       const elapsedTime: number = initTime.diff(moment(), 'seconds');
 
-      preStats.loadedPreProcessingInterceptors = loadedPreProcessors;
+      preStats.loadedInterceptors = loadedProcessors;
       preStats.initializationTime = elapsedTime;
 
       resolve(preStats);
     });
   }
 
-  public loadPostProcessors(): Promise<LoadInterceptorStats> {
-    return new Promise(async (resolve, reject) => {
-      const postStats: LoadInterceptorStats = {};
-      
-      const initTime = moment();
-
-      const loadedPostProcessors: InterceptorConfig[] =
-        await this.loadInterceptorUnit(InterceptorType.PostProcessing);
-
-      const elapsedTime: number = initTime.diff(moment(), 'seconds');
-
-      postStats.loadedPostProcessingInterceptors = loadedPostProcessors;
-      postStats.initializationTime += elapsedTime;
-      
-      resolve(postStats);
-    });
-  }
-
-  public loadInterceptorUnit(interceptorType: InterceptorType): InterceptorConfig[] {
+  public loadInterceptorUnit(): InterceptorConfig[] {
 
     const loadedProcessors: any = [];
     const interceptorConfigs: InterceptorConfig[] = InterceptorLoader.interceptorConfigs;
@@ -67,10 +48,12 @@ export class ExpressInterceptor extends Interceptor {
     for (let index = 0; index < interceptorConfigs.length; index += 1) {
       const loaded: boolean = true;
       const interceptorConfig: InterceptorConfig = interceptorConfigs[index];
+      
+      if (!interceptorConfig.interceptorUnit) {
+        continue;
+      }
 
-      const processorUnit = interceptorConfig.interceptorUnits.
-        find(unit => unit.type === interceptorType);
-
+      const processorUnit: InterceptorUnit = interceptorConfig.interceptorUnit;
       const method = this.interceptorProcessor(interceptorConfig.className, processorUnit.method,
                                                processorUnit.methodName);
 

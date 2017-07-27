@@ -1,5 +1,4 @@
 import { InterceptorLoader } from '../loaders/interceptor.loader';
-import { InterceptorType } from '../constants/interceptor-type';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 
@@ -27,18 +26,9 @@ export function interceptor(paths: string | string[] = ['/'],
   };
 }
 
-export function preProcessing() {
+export function processing() {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-                                         InterceptorType.PreProcessing,
-                                         propertyKey);
-  };
-}
-
-export function postProcessing() {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-                                         InterceptorType.PostProcessing,
                                          propertyKey);
   };
 }

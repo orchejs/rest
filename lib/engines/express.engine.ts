@@ -54,8 +54,7 @@ export class ExpressEngine extends Engine {
 
       // Loading preprocessing interceptors
       try {
-        const preInterceptorStats: LoadInterceptorStats = await expressInterceptor.
-          loadPreProcessors();
+        const interceptorStats: LoadInterceptorStats = await expressInterceptor.loadProcessors();
 
         interceptorStats.initializationTime = preInterceptorStats.initializationTime;
         interceptorStats.loadedPreProcessingInterceptors = preInterceptorStats.
@@ -73,20 +72,6 @@ export class ExpressEngine extends Engine {
         routerStats = await expressRouter.loadRoutes(this.config.path);
       } catch (error) {
         const msg = `Error while loading the app routes. Details: ${error.stack}`;
-        reject(msg);
-        return;
-      }
-
-      // Loading postprocessing interceptors
-      try {
-        const postInterceptorStats: LoadInterceptorStats = await expressInterceptor.
-          loadPostProcessors();
-        
-        interceptorStats.initializationTime += postInterceptorStats.initializationTime;
-        interceptorStats.loadedPostProcessingInterceptors = postInterceptorStats.
-          loadedPostProcessingInterceptors;        
-      } catch (error) {
-        const msg = `Error while loading the post processing interceptors. Details: ${error.stack}`;
         reject(msg);
         return;
       }
