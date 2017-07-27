@@ -13,7 +13,9 @@ describe('Interceptor Decorators Tests', () => {
 
   let result: OrcheResult;
 
-  before(async () => {
+  before(async function () {
+    this.timeout(0);
+    
     const orche = new Orche();
 
     const config: OrcheConfig = {
