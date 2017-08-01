@@ -49,18 +49,14 @@ export class ExpressEngine extends Engine {
       this.setupExtensions();
 
       // Interceptors initialization
-      const interceptorStats: LoadInterceptorStats = {};
+      let interceptorStats: LoadInterceptorStats = {};
       const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
 
       // Loading preprocessing interceptors
       try {
-        const interceptorStats: LoadInterceptorStats = await expressInterceptor.loadProcessors();
-
-        interceptorStats.initializationTime = preInterceptorStats.initializationTime;
-        interceptorStats.loadedPreProcessingInterceptors = preInterceptorStats.
-          loadedPreProcessingInterceptors;
+        interceptorStats = await expressInterceptor.loadProcessors();
       } catch (error) {
-        const msg = `Error while loading the pre processing interceptors. Details: ${error.stack}`;
+        const msg = `Error while loading the interceptors. Details: ${error.stack}`;
         reject(msg);
         return;
       }

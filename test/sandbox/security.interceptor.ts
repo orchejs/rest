@@ -1,19 +1,14 @@
 import { Request, Response } from 'express';
 
-import { interceptor, postProcessing, preProcessing, requestParam, responseParam,
+import { interceptor, processing, requestParam, responseParam,
          HttpRequestMethod } from '../../';
 
-@interceptor('/orche/restricted', HttpRequestMethod.Get)
+@interceptor('/orche/restricted', HttpRequestMethod.Get, 1)
 class SecurityInterceptor {
 
-  @preProcessing()
-  public preProcessing(@requestParam() req: Request): void {
+  @processing()
+  public processing(@requestParam() req: Request): void {
     req.headers['Authorization'] = 'custom-token';
-  }
-
-  @postProcessing()
-  public postProcessing(@responseParam() res: Response): void {
-    res.send('hi');
   }
 
 }

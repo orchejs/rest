@@ -1,19 +1,14 @@
 import { Request, Response } from 'express';
 
-import { interceptor, postProcessing, preProcessing, requestParam, responseParam,
+import { interceptor, processing, requestParam, responseParam,
          HttpRequestMethod } from '../../';
 
-@interceptor(null, null)
+@interceptor(null, null, 3)
 class SecurityNullInterceptor {
 
-  @preProcessing()
+  @processing()
   public preProcessing(@requestParam() req: Request): void {
     req.headers['Authorization'] = 'custom-token';
-  }
-
-  @postProcessing()
-  public postProcessing(@responseParam() res: Response): void {
-    res.setHeader['Custom-Header'] = 'Response Custom Header';
   }
 
 }

@@ -1,3 +1,5 @@
+import { InterceptorConfig } from '../../lib/interfaces/interceptor-config';
+import { InterceptorUnit } from '../../lib/interfaces/interceptor-unit';
 import { hostname } from 'os';
 import { expect } from 'chai';
 import { Request } from 'express';
@@ -37,22 +39,13 @@ describe('Interceptor Decorators Tests', () => {
     }
   });
 
-  it('Should initialize pre processing interceptors', () => {
-    expect(result.stats.interceptorStats.loadedPreProcessingInterceptors.length).to.be.gt(0);
+  it('Should initialize the interceptors', () => {
+    expect(result.stats.interceptorStats.loadedInterceptors.length).to.be.gt(0);
   });
 
-  it('Should initialize post processing interceptors', () => {
-    expect(result.stats.interceptorStats.loadedPostProcessingInterceptors.length).to.be.gt(0);
+  it('Should intercept HTTP GET Method of \'\orche/restricted\'', async () => {
+    const result: string = await RequestHelper.get('/orche/restricted');
+    expect(result).to.be.equal('{"authorization":"custom-token"}');
   });
-
-  it('Should intercept PRE-PROCESSING a HTTP GET Method of \'\orche/restricted\'', async () => {
-    const result: string = await RequestHelper.get('/orche/restricted');
-    expect(result).to.be.equal('{"authorization":"custom-token"}');
-  });  
-
-  it('Should intercept POST-PROCESSING a HTTP GET Method of \'\orche/restricted\'', async () => {
-    const result: string = await RequestHelper.get('/orche/restricted');
-    expect(result).to.be.equal('{"authorization":"custom-token"}');
-  }); 
 
 });
