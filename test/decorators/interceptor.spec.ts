@@ -5,6 +5,7 @@ import { expect } from 'chai';
 import { Request } from 'express';
 import { json } from 'body-parser';
 import { RequestHelper } from '../helpers/request.helper';
+import { ServerHelper } from '../helpers/server.helper';
 
 import {
   Orche, OrcheConfig, OrcheEngines, OrcheResult,
@@ -17,26 +18,7 @@ describe('Interceptor Decorators Tests', () => {
 
   before(async function () {
     this.timeout(0);
-    
-    const orche = new Orche();
-
-    const config: OrcheConfig = {
-      path: '/orche',
-      apiEngine: OrcheEngines.ExpressJS,
-      port: 8888,
-      extensions: [
-        json(),
-      ]};
-
-    result = await orche.init(config);
-  });
-
-  after((done) => {
-    if (result.server) {
-      result.server.close(() => {
-        done();
-      });
-    }
+    result = await ServerHelper.init();
   });
 
   it('Should initialize the interceptors', () => {
