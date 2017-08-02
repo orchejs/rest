@@ -1,6 +1,5 @@
 import { InterceptorConfig } from '../../lib/interfaces/interceptor-config';
 import { InterceptorUnit } from '../../lib/interfaces/interceptor-unit';
-import { hostname } from 'os';
 import { expect } from 'chai';
 import { Request } from 'express';
 import { json } from 'body-parser';
