@@ -1,18 +1,10 @@
-import { Request } from 'restify';
-import { RequestMapper } from './requestmapper';
+import { Request } from 'express';
+import { ExpressRequestMapper } from './express.requestmapper';
 
-export class RestifyRequestMapper extends RequestMapper {
+export class RestifyRequestMapper extends ExpressRequestMapper {
 
   constructor(request: Request) {
     super(request);
-  }
-
-  protected loadPathParams(request: Request): void {
-
-  }
-
-  protected loadQueryParams(request: Request): void {
-
   }
 
 }

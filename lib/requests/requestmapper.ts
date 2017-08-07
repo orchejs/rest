@@ -1,6 +1,3 @@
-import { Request as RequestRestify } from 'restify';
-import { Request as RequestExpress } from 'express';
-
 export abstract class RequestMapper {
 
   limit: number;
@@ -8,10 +5,11 @@ export abstract class RequestMapper {
   columns: string[];
   expand: string[];
   sort: string[];
-  custom: any;
+  pathParams: any;
+  [queryParams : string]: any;
 
   constructor(request: any) {
-    this.custom = {};
+    this.pathParams = {};
     this.loadPathParams(request);
     this.loadQueryParams(request);
   }

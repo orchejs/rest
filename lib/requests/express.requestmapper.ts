@@ -16,7 +16,7 @@ export class ExpressRequestMapper extends RequestMapper {
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
-        this.custom[key] = params[key];
+        this.pathParams[key] = params[key];
       }
     }
   }
@@ -30,6 +30,23 @@ export class ExpressRequestMapper extends RequestMapper {
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
+        let paramValue: any = params[key];
+        if (paramValue) {
+          if (paramValue.indexOf(',') > -1) {
+            paramValue = paramValue.split(',');
+          }
+          
+          paramValue.forEach((value) => {
+            if (value.indexOf())
+          });
+          if (paramValue.indexOf('') > -1) {
+            finalValue
+          }
+        } 
+
+            }
+        this[key] = ;
+        /*
         switch (key) {
           case 'expand':
             const expand: string = params['expand'];
@@ -59,6 +76,7 @@ export class ExpressRequestMapper extends RequestMapper {
             this.custom[key] = params[key];
             break;
         }
+        */
       }
     }
   }

@@ -35,4 +35,6 @@ export class PathUtils {
     return finalUrl;
   }
 
+  static getSortFields() : 
+
 }
