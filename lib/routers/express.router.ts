@@ -52,63 +52,65 @@ export class ExpressRouter extends Router {
           const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
                                                   routerUnit.methodName, routerUnit.contentType);
           
+          const unitPath: string = PathUtils.urlSanitation(routerUnit.path);
+
           const corsConfig: CorsConfig = routerUnit.cors || {};
           if (corsConfig.preflight) {
-            router.options(routerUnit.path, cors(corsConfig.corsOptions));
+            router.options(unitPath, cors(corsConfig.corsOptions));
           }
 
           switch (routerUnit.httpMethod) {
             case HttpRequestMethod.Get:
               if (corsConfig.corsOptions) {
-                router.get(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.get(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.get(routerUnit.path, method);
+                router.get(unitPath, method);
               }
               break;
             case HttpRequestMethod.Post:
               if (corsConfig.corsOptions) {
-                router.post(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.post(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.post(routerUnit.path, method);
+                router.post(unitPath, method);
               }
               break;
             case HttpRequestMethod.Put:
               if (corsConfig.corsOptions) {
-                router.put(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.put(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.put(routerUnit.path, method);
+                router.put(unitPath, method);
               }
               break;
             case HttpRequestMethod.Head:
               if (corsConfig.corsOptions) {
-                router.head(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.head(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.head(routerUnit.path, method);
+                router.head(unitPath, method);
               }
               break;
             case HttpRequestMethod.Delete:
               if (corsConfig.corsOptions) {
-                router.delete(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.delete(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.delete(routerUnit.path, method);
+                router.delete(unitPath, method);
               }
               break;
             case HttpRequestMethod.All:
               if (corsConfig.corsOptions) {
-                router.all(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.all(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.all(routerUnit.path, method);
+                router.all(unitPath, method);
               }
               break;
             case HttpRequestMethod.Patch:
               if (corsConfig.corsOptions) {
-                router.patch(routerUnit.path, cors(corsConfig.corsOptions), method);
+                router.patch(unitPath, cors(corsConfig.corsOptions), method);
               } else {
-                router.patch(routerUnit.path, method);
+                router.patch(unitPath, method);
               }
               break;
             case HttpRequestMethod.Options:
-              router.options(routerUnit.path, method);
+              router.options(unitPath, method);
               break;
             default:
               loaded = false;

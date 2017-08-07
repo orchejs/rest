@@ -23,6 +23,8 @@ export * from './lib/requests/express.requestmapper';
 export * from './lib/requests/hapi.requestmapper';
 export * from './lib/requests/koa.requestmapper';
 export * from './lib/requests/restify.requestmapper';
+export * from './lib/requests/requestmapper';
+
 
 // responses
 export * from './lib/responses/error.response';
