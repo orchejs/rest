@@ -18,9 +18,24 @@ describe('Parameter Decorators Tests', () => {
     result = await ServerHelper.init();
   });
 
-  it('Should intercept HTTP GET Method of \'\orche/restricted\'', async () => {
-    const result: string = await RequestHelper.get('/orche/restricted');
-    expect(result).to.be.equal('{"authorization":"custom-token"}');
+  it('Should test req, res, next, query params and result calledNext === true', async () => {
+    const result: string = await RequestHelper.get('/orche/reports');
+    expect(result).to.be.equal('{"calledNext":true}');
+  });
+
+  it('Should test path para and get the result uuid === 123456', async () => {
+    const result: string = await RequestHelper.get('/orche/reports/123456');
+    expect(result).to.be.equal('{"uuid":"123456"}');
+  });
+
+  it('Should test RequestMapper returning the passed values', async () => {
+    const columns: string = 'columns=column1, column2';
+    const expand: string = 'expand=resource1, resource2';
+    const limit: string = 'limit';
+    const sort: string = '';
+    const start: string = '';
+    const queryUrl: string = '/orche/reports/custom?columns=column1,column2&expand=test1,test2&';
+    const result: any = await RequestHelper.get(queryUrl);
   });
 
 });
