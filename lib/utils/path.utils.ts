@@ -1,3 +1,5 @@
+import { SortType } from '../constants/sorttype';
+import { SortField } from '../interfaces/sort-field';
 import * as path from 'path';
 import * as appRootPath from 'app-root-path';
 
@@ -35,6 +37,37 @@ export class PathUtils {
     return finalUrl;
   }
 
-  static getSortFields() : 
+  static getPathValue(value: string): any {
+    if (!value) {
+      return null;
+    }
+
+    if (value.indexOf(',') === -1) {
+      const values = value.split(',');
+    }
+  }
+
+  static getSortFields(value: string): any {
+    if (!value) {
+      return null;
+    }
+    
+    const length = value.length - 1;
+    const asc = value.indexOf('+');
+    if (asc === 0 || asc === length) {
+      return {
+        name: value,
+        type: SortType.Asc };
+    }
+    
+    const desc = value.indexOf('-');
+    if (desc === 0 || desc === length) {
+      return {
+        name: value,
+        type: SortType.Desc };
+    }
+
+    return value;
+  }
 
 }
