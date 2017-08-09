@@ -1,3 +1,4 @@
+import { PathUtils } from '../utils/path.utils';
 import { Request } from 'express';
 import { RequestMapper } from './requestmapper';
 
@@ -30,54 +31,12 @@ export class ExpressRequestMapper extends RequestMapper {
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
-        let paramValue: any = params[key];
+        const paramValue: any = params[key];
         if (paramValue) {
-          if (paramValue.indexOf(',') > -1) {
-            paramValue = paramValue.split(',');
-          }
-          
-          paramValue.forEach((value) => {
-            if (value.indexOf())
-          });
-          if (paramValue.indexOf('') > -1) {
-            finalValue
-          }
-        } 
-
-            }
-        this[key] = ;
-        /*
-        switch (key) {
-          case 'expand':
-            const expand: string = params['expand'];
-            if (expand) {
-              this.expand = expand.split(',');
-            }
-            break;
-          case 'columns':
-            const columns: string = params['columns'];
-            if (columns) {
-              this.columns = columns.split(',');
-            }
-            break;
-          case 'sort':
-            const sort: string = params['sort'];
-            if (sort) {
-              this.sort = sort.split(',');
-            }
-            break;
-          case 'limit':
-            this.limit = params['limit'];
-            break;
-          case 'start':
-            this.start = params['start'];
-            break;
-          default:
-            this.custom[key] = params[key];
-            break;
+          this[key] = PathUtils.getPathValue(paramValue);
         }
-        */
       }
     }
   }
+  
 }
