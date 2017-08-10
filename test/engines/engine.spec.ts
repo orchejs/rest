@@ -26,7 +26,7 @@ describe('Engine', () => {
         engine = new IncompatibleEngine();
         expect(engine).to.null;
       } catch (e) {
-        expect(e).to.not.null;
+        expect(e).not.null;
       }
     });
 
@@ -36,10 +36,9 @@ describe('Engine', () => {
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.not.null;
+        expect(engine).not.null;
       } catch (e) {
-        console.log(e);
-        expect(e).to.null;
+        expect(e).to.be.null;
       }
     });
 
@@ -47,9 +46,9 @@ describe('Engine', () => {
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.not.null;
+        expect(engine).not.null;
       } catch (e) {
-        expect(e).to.null;
+        expect(e).to.be.null;
       }
     });
 
@@ -59,9 +58,9 @@ describe('Engine', () => {
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.null;
+        expect(engine).to.be.null;
       } catch (e) {
-        expect(e).to.not.null;
+        expect(e).not.null;
       }
     });
 
@@ -71,9 +70,9 @@ describe('Engine', () => {
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.null;
+        expect(engine).to.be.null;
       } catch (e) {
-        expect(e).to.not.null;
+        expect(e).not.null;
       }
     });
 
@@ -83,9 +82,9 @@ describe('Engine', () => {
       let engine: SpecEngine;
       try {
         engine = new SpecEngine();
-        expect(engine).to.null;
+        expect(engine).to.be.null;
       } catch (e) {
-        expect(e).to.not.null;
+        expect(e).not.null;
       }
     });
   });
