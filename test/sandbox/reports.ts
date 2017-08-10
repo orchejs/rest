@@ -1,9 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 
 import {
-  path, get, post, headerParam, requestParam, nextParam,
-  pathParam, queryParam, responseParam, HttpResponseCode,
-  requestParamMapper, RequestMapper
+  bodyParam,
+  get,
+  headerParam,
+  HttpResponseCode,
+  nextParam,
+  path,
+  pathParam,
+  post,
+  queryParam,
+  RequestMapper,
+  requestParam,
+  requestParamMapper,
+  responseParam,
 } from '../../';
 
 @path('reports')
@@ -26,8 +36,8 @@ class Reports {
     return report;
   }
 
-  @get('custom')
-  getCustomReports(@requestParamMapper() reqMapper: RequestMapper) {
+  @get('custom/reports')
+  getCustomReports(@requestParamMapper() reqMapper: RequestMapper): any {
     const result: any = {
       columns: reqMapper.columns,
       custom: reqMapper.custom,
@@ -37,5 +47,11 @@ class Reports {
       start: reqMapper.start };
     
     return result;
+  }
+
+  @post()
+  saveReport(@bodyParam() body) {
+    return {
+      report: body.reportUuid };
   }
 }
