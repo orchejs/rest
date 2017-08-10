@@ -44,9 +44,9 @@ export function requestParamMapper() {
   };
 }
 
-export function bodyParam(body: string) {
+export function bodyParam() {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, body, parameterIndex,
+    ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
                                        ParamType.BodyParam);
   };
 }
