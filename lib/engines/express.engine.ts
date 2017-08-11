@@ -49,28 +49,13 @@ export class ExpressEngine extends Engine {
       this.setupExtensions();
 
       // Interceptors initialization
-      let interceptorStats: LoadInterceptorStats = {};
       const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
-
       // Loading preprocessing interceptors
-      try {
-        interceptorStats = await expressInterceptor.loadProcessors();
-      } catch (error) {
-        const msg = `Error while loading the interceptors. Details: ${error.stack}`;
-        reject(msg);
-        return;
-      }
+      const interceptorStats: LoadInterceptorStats = await expressInterceptor.loadProcessors();
 
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
-      let routerStats: LoadRouterStats;
-      try {
-        routerStats = await expressRouter.loadRoutes(this.config.path);
-      } catch (error) {
-        const msg = `Error while loading the app routes. Details: ${error.stack}`;
-        reject(msg);
-        return;
-      }
+      const routerStats: LoadRouterStats = await expressRouter.loadRoutes(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
