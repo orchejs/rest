@@ -5,11 +5,7 @@ export class PackageUtils {
   private package: any;
 
   constructor() {
-    try {
-      this.package = require(path.resolve(PathUtils.appRoot, 'package.json'));
-    } catch (error) {
-      throw new Error('Package.json file not found!');
-    }
+    this.package = require(path.resolve(PathUtils.appRoot, 'package.json'));
   }
 
   public getDescrition(): string {

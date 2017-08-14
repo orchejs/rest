@@ -75,10 +75,6 @@ export class PathUtils {
    * @param value 
    */
   private static prepareValue(value: string): any {
-    if (!value) {
-      return null;
-    }
-    
     const length = value.length - 1;
     const asc = value.indexOf('+');
     if (asc === 0 || asc === length) {
