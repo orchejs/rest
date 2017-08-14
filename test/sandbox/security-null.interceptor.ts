@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { interceptor, processing, requestParam, responseParam,
          HttpRequestMethod } from '../../';
 
-@interceptor(null, null, 3)
+@interceptor(null, HttpRequestMethod.All, 3)
 class SecurityNullInterceptor {
 
   @processing()

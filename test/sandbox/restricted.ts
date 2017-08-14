@@ -1,4 +1,4 @@
-import { path, get, headerParam } from '../../';
+import { bodyParam, get, headerParam, path, put, requestParam } from '../../';
 
 @path('/restricted')
 class Restricted {
@@ -8,5 +8,4 @@ class Restricted {
     const result: any = { authorization: auth };
     return result;
   }
-
 }

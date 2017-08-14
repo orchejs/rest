@@ -1,20 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
-import {
-  bodyParam,
-  get,
-  headerParam,
-  HttpResponseCode,
-  nextParam,
-  path,
-  pathParam,
-  post,
-  queryParam,
-  RequestMapper,
-  requestParam,
-  requestParamMapper,
-  responseParam,
-} from '../../';
+import { bodyParam, get, headerParam, HttpResponseCode, nextParam,
+         path, pathParam, post, queryParam, RequestMapper, requestParam,
+         requestParamMapper, responseParam } from '../../';
 
 @path('reports')
 class Reports {
