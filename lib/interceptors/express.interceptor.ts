@@ -49,10 +49,6 @@ export class ExpressInterceptor extends Interceptor {
       const loaded: boolean = true;
       const interceptorConfig: InterceptorConfig = interceptorConfigs[index];
       
-      if (!interceptorConfig.interceptorUnit) {
-        continue;
-      }
-
       const processorUnit: InterceptorUnit = interceptorConfig.interceptorUnit;
       const method = this.interceptorProcessor(interceptorConfig.className, processorUnit.method,
                                                processorUnit.methodName);
@@ -61,41 +57,37 @@ export class ExpressInterceptor extends Interceptor {
         const loadedHttpMethods: HttpRequestMethod[] = [];
         const interceptorConfigPath = PathUtils.urlSanitation(path);
 
-        if (interceptorConfig.httpMethods.length === 0) {
-          this.app.use(interceptorConfigPath, method);
-        } else {
-          interceptorConfig.httpMethods.some((httpMethod: HttpRequestMethod) => {
-            switch (httpMethod) {
-              case HttpRequestMethod.All:
-                this.app.use(interceptorConfigPath, method);
-                loadedHttpMethods.push(httpMethod);
-                return false;
-              case HttpRequestMethod.Get:
-                this.app.get(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Delete:
-                this.app.delete(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Head:
-                this.app.head(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Options:
-                this.app.options(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Patch:
-                this.app.patch(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Post:
-                this.app.post(interceptorConfigPath, method);
-                break;
-              case HttpRequestMethod.Put:
-                this.app.put(interceptorConfigPath, method);
-                break;
-            }
-            loadedHttpMethods.push(httpMethod);
-            return true;
-          });
-        }
+        interceptorConfig.httpMethods.some((httpMethod: HttpRequestMethod) => {
+          switch (httpMethod) {
+            case HttpRequestMethod.All:
+              this.app.use(interceptorConfigPath, method);
+              loadedHttpMethods.push(httpMethod);
+              return true;
+            case HttpRequestMethod.Get:
+              this.app.get(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Delete:
+              this.app.delete(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Head:
+              this.app.head(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Options:
+              this.app.options(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Patch:
+              this.app.patch(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Post:
+              this.app.post(interceptorConfigPath, method);
+              break;
+            case HttpRequestMethod.Put:
+              this.app.put(interceptorConfigPath, method);
+              break;
+          }
+          loadedHttpMethods.push(httpMethod);
+          return false;
+        });
 
         let loadedInterceptorConfig: any = loadedProcessors.
           find(config => config.path === interceptorConfigPath);
