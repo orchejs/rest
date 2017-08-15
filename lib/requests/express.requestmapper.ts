@@ -11,10 +11,6 @@ export class ExpressRequestMapper extends RequestMapper {
   protected loadPathParams(request: Request): void {
     const params = request.params;
 
-    if (!params) {
-      return;
-    }
-
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         this.pathParams[key] = params[key];
@@ -24,10 +20,6 @@ export class ExpressRequestMapper extends RequestMapper {
 
   protected loadQueryParams(request: Request): void {
     const params = request.query;
-
-    if (!params) {
-      return;
-    }
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
