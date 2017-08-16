@@ -55,7 +55,7 @@ export class ExpressEngine extends Engine {
 
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
-      const routerStats: LoadRouterStats = await expressRouter.loadRoutes(this.config.path);
+      const routerStats: LoadRouterStats = expressRouter.loadRoutes(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project

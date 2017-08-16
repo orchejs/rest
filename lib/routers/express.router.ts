@@ -25,110 +25,102 @@ export class ExpressRouter extends Router {
     super(app);
   }
 
-  public loadRoutes(path: string): Promise<LoadRouterStats> {
+  public loadRoutes(path: string): LoadRouterStats {
     const routerStats: LoadRouterStats = {
       loadedRoutes: [],
       initializationTime: 0,
     };
 
-    return new Promise((resolve, reject) => {
-      const initTime = moment();
-      if (!RouterLoader.routerConfigs || RouterLoader.routerConfigs.length === 0) {
-        resolve(routerStats);
-        // TODO add log here
-        // msg 'There is no express route to configure!'
-        return;
-      }
+    const initTime = moment();
 
-      for (let index = 0; index < RouterLoader.routerConfigs.length; index += 1) {
-        let loaded: boolean = true;
+    for (let index = 0; index < RouterLoader.routerConfigs.length; index += 1) {
+      let loaded: boolean = true;
 
-        const routerConfig: RouterConfig = RouterLoader.routerConfigs[index];
-        const routerConfigPath = PathUtils.urlSanitation(routerConfig.path);
-        const router: express.Router = express.Router();
-        const routerUnits: RouterUnit[] = routerConfig.routerUnits;
+      const routerConfig: RouterConfig = RouterLoader.routerConfigs[index];
+      const routerConfigPath = PathUtils.urlSanitation(routerConfig.path);
+      const router: express.Router = express.Router();
+      const routerUnits: RouterUnit[] = routerConfig.routerUnits;
 
-        routerUnits.forEach((routerUnit) => {
-          const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
-                                                  routerUnit.methodName, routerUnit.contentType);
-          
-          const unitPath: string = PathUtils.urlSanitation(routerUnit.path);
+      routerUnits.forEach((routerUnit) => {
+        const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
+                                                routerUnit.methodName, routerUnit.contentType);
+        
+        const unitPath: string = PathUtils.urlSanitation(routerUnit.path);
 
-          const corsConfig: CorsConfig = routerUnit.cors || {};
-          if (corsConfig.preflight) {
-            router.options(unitPath, cors(corsConfig.corsOptions));
-          }
-
-          switch (routerUnit.httpMethod) {
-            case HttpRequestMethod.Get:
-              if (corsConfig.corsOptions) {
-                router.get(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.get(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Post:
-              if (corsConfig.corsOptions) {
-                router.post(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.post(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Put:
-              if (corsConfig.corsOptions) {
-                router.put(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.put(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Head:
-              if (corsConfig.corsOptions) {
-                router.head(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.head(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Delete:
-              if (corsConfig.corsOptions) {
-                router.delete(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.delete(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.All:
-              if (corsConfig.corsOptions) {
-                router.all(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.all(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Patch:
-              if (corsConfig.corsOptions) {
-                router.patch(unitPath, cors(corsConfig.corsOptions), method);
-              } else {
-                router.patch(unitPath, method);
-              }
-              break;
-            case HttpRequestMethod.Options:
-              router.options(unitPath, method);
-              break;
-            default:
-              loaded = false;
-              break;
-          }
-        });
-
-        const resourcePath = path + routerConfigPath;
-        this.app.use(resourcePath, router);
-
-        if (loaded) {
-          routerStats.loadedRoutes.push(routerConfig);
+        const corsConfig: CorsConfig = routerUnit.cors || {};
+        if (corsConfig.preflight) {
+          router.options(unitPath, cors(corsConfig.corsOptions));
         }
-      }
 
-      routerStats.initializationTime = initTime.diff(moment(), 'seconds');
-      resolve(routerStats);
-    });
+        switch (routerUnit.httpMethod) {
+          case HttpRequestMethod.Get:
+            if (corsConfig.corsOptions) {
+              router.get(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.get(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Post:
+            if (corsConfig.corsOptions) {
+              router.post(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.post(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Put:
+            if (corsConfig.corsOptions) {
+              router.put(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.put(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Head:
+            if (corsConfig.corsOptions) {
+              router.head(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.head(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Delete:
+            if (corsConfig.corsOptions) {
+              router.delete(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.delete(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.All:
+            if (corsConfig.corsOptions) {
+              router.all(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.all(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Patch:
+            if (corsConfig.corsOptions) {
+              router.patch(unitPath, cors(corsConfig.corsOptions), method);
+            } else {
+              router.patch(unitPath, method);
+            }
+            break;
+          case HttpRequestMethod.Options:
+            router.options(unitPath, method);
+            break;
+          default:
+            loaded = false;
+            break;
+        }
+      });
+
+      const resourcePath = path + routerConfigPath;
+      this.app.use(resourcePath, router);
+
+      if (loaded) {
+        routerStats.loadedRoutes.push(routerConfig);
+      }
+    }
+
+    routerStats.initializationTime = initTime.diff(moment(), 'seconds');
+    return routerStats;
   }
 
   protected routeProcessor(target: string, method: Function, methodName: string, 

@@ -9,7 +9,7 @@ export abstract class Router {
     this.app = app;
   }
 
-  public abstract loadRoutes(path: string): Promise<LoadRouterStats>;  
+  public abstract loadRoutes(path: string): LoadRouterStats;  
 
   protected abstract routeProcessor(target: string, method: Function, methodName: string, 
                                     contentType: ContentType): Function;
