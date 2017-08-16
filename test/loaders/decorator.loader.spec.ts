@@ -9,7 +9,7 @@ describe('DecoratorLoader', () => {
     const appRoot = PathUtils.appRoot;
 
     before(() => {
-      PathUtils.appRoot = path.join(appRoot, 'test', 'fakedir');
+      PathUtils.appRoot = path.join(appRoot, 'test', 'sandbox', 'fakedir');
     });
 
     after(() => {

@@ -3,7 +3,11 @@ import { get, del, ErrorResponse, path, pathParam } from '../..';
 @path('/mocked')
 class Mocked {
 
-  @get(':uuid')
+  @get(':uuid', null, {
+    preflight: true,
+    corsOptions: {
+    },
+  })
   getMocked(@pathParam('uuid') uuid) {
     return uuid;
   }
