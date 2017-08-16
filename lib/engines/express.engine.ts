@@ -16,6 +16,7 @@ import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { ExpressInterceptor } from '../interceptors/express.interceptor';
 import { ExpressRouter } from '../routers/express.router';
 import { PathUtils } from '../utils/path.utils';
+import { ConfigUtils } from '../utils/config.utils';
 
 
 export class ExpressEngine extends Engine {
