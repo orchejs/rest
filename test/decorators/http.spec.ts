@@ -13,7 +13,7 @@ describe('HTTP Decorators Tests', () => {
 
   before(async function () {
     this.timeout(0);
-    result = await ServerHelper.init();
+    result = await ServerHelper.initBasicServer();
   });
 
   it('Should initialize routes', () => {

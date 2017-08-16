@@ -11,7 +11,7 @@ describe('ExpressInterceptor', () => {
   
   before(async function () {
     this.timeout(0);
-    serverResult = await ServerHelper.init();
+    serverResult = await ServerHelper.initBasicServer();
   });
   
   describe('#interceptorProcessor', () => {

@@ -13,7 +13,7 @@ describe('Parameter Decorators Tests', () => {
 
   before(async function () {
     this.timeout(0);
-    result = await ServerHelper.init();
+    result = await ServerHelper.initBasicServer();
   });
 
   it('Should test req, res, next, query params and result calledNext === true', async () => {
