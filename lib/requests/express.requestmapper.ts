@@ -24,9 +24,7 @@ export class ExpressRequestMapper extends RequestMapper {
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         const paramValue: any = params[key];
-        if (paramValue) {
-          this[key] = PathUtils.getPathValue(paramValue);
-        }
+        this[key] = PathUtils.getPathValue(paramValue);
       }
     }
   }
