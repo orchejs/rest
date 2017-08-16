@@ -9,6 +9,8 @@ export * from './lib/constants/orche-engines';
 export * from './lib/constants/mimetype';
 
 // interfaces
+export * from './lib/interfaces/cors-config';
+export * from './lib/interfaces/cors-options';
 export * from './lib/interfaces/orche-config';
 export { OrcheResult } from './lib/interfaces/orche-result';
 
