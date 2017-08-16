@@ -38,7 +38,7 @@
     "build": "npm run clean &&  npm run lint && npm run compile && npm run cp-package",
     "test": "node_modules/.bin/mocha",
     "coverage": "node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha",
-    "clean_coverage": "npm run clean & npm run coverage",
+    "clean-coverage": "npm run clean & npm run coverage",
     "travis": ""
   },
   "nyc": {
