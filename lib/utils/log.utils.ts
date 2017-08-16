@@ -3,12 +3,12 @@ import * as moment from 'moment';
 
 import { PathUtils } from './path.utils';
 
-class LogUtils {
+export class LogUtils {
 
-  private static log: any;
-  public filename: string;
+  private log: any;
+  private filename: string;
 
-  private constructor() {
+  constructor() {
     if (!this.filename) {
       this.filename = `${PathUtils.appDirName}-${moment().format('YYYYMMDDHHmmss')}.log`;
     }
@@ -23,26 +23,25 @@ class LogUtils {
     });
   }
 
-  static setLogFileName(fileName: string) {
+  info(msg: string) {
 
   }
 
-  static info(msg: string) {
+  error(msg: string) {
 
   }
 
-  static error(msg: string) {
+  warn(msg: string) {
 
   }
 
-  static warn(msg: string) {
+  debug(msg: string) {
 
   }
 
-  static debug(msg: string) {
-
+  customizeLoggerLibrary(): any {
+    return winston;
   }
-
 }
 
-export { LogUtils as log };
+export const logger: LogUtils = new LogUtils();

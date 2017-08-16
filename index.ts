@@ -24,7 +24,10 @@ export * from './lib/decorators/path';
 export * from './lib/requests/express.requestmapper';
 export * from './lib/requests/requestmapper';
 
-
 // responses
 export * from './lib/responses/error.response';
 export * from './lib/responses/generic.response';
+
+// utils
+export { ConfigUtils } from './lib/utils/config.utils';
+export { logger } from './lib/utils/log.utils';
