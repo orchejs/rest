@@ -14,7 +14,7 @@ export function all(path: string = '', contentType?: ContentType, cors?: CorsCon
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey, 
-                              HttpRequestMethod.All, ct);
+                              HttpRequestMethod.All, ct, cors);
   };
 }
 
@@ -26,7 +26,7 @@ export function get(path: string = '', contentType?: ContentType, cors?: CorsCon
     }
     const method: Function = descriptor.value;
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Get, ct);
+                              HttpRequestMethod.Get, ct, cors);
   };
 }
 
@@ -39,7 +39,7 @@ export function post(path: string = '', contentType?: ContentType, cors?: CorsCo
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Post, ct);
+                              HttpRequestMethod.Post, ct, cors);
   };
 }
 
@@ -52,7 +52,7 @@ export function put(path: string = '', contentType?: ContentType, cors?: CorsCon
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Put, ct);
+                              HttpRequestMethod.Put, ct, cors);
   };
 }
 
@@ -65,7 +65,7 @@ export function del(path: string = '', contentType?: ContentType, cors?: CorsCon
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Delete, ct);
+                              HttpRequestMethod.Delete, ct, cors);
   };
 }
 
@@ -78,7 +78,7 @@ export function patch(path: string = '', contentType?: ContentType, cors?: CorsC
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Patch, ct);
+                              HttpRequestMethod.Patch, ct, cors);
   };
 }
 
@@ -91,7 +91,7 @@ export function options(path: string = '', contentType?: ContentType, cors?: Cor
         response: MimeType.json };
     }
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Options, ct);
+                              HttpRequestMethod.Options, ct, cors);
   };
 }
 
@@ -102,6 +102,6 @@ export function head(path: string = '', contentType?: ContentType, cors?: CorsCo
       ct = { response: MimeType.json };
     }    
     RouterLoader.addRouteUnit(path, descriptor.value.bind(target), propertyKey,
-                              HttpRequestMethod.Head, ct);
+                              HttpRequestMethod.Head, ct, cors);
   };
 }
