@@ -6,22 +6,13 @@ import { OrcheConfig } from '../interfaces/orche-config';
 import { OrcheEngines } from '../constants/orche-engines';
 
 export class ConfigUtils {
-  
-  private static instance: ConfigUtils;
   /**
    * App config file
    */
   config: OrcheConfig;
 
-  private constructor() {
+  constructor() {
     this.loadOrcheConfig();
-  }
-
-  static getConfigUtils(): ConfigUtils {
-    if (!this.instance) {
-      this.instance = new ConfigUtils();
-    }
-    return this.instance;
   }
 
   /**
@@ -105,3 +96,8 @@ export class ConfigUtils {
     return localCfg;
   }
 }
+
+const configUtils: ConfigUtils = new ConfigUtils();
+const appConfig: OrcheConfig = configUtils.config;
+
+export { configUtils, appConfig };

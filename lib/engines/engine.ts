@@ -3,7 +3,7 @@ import { OrcheResult } from '../interfaces/orche-result';
 import { LoadStats } from '../interfaces/load-stats';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
-import { ConfigUtils } from '../utils/config.utils';
+import { configUtils } from '../utils/config.utils';
 
 
 export abstract class Engine {
@@ -20,7 +20,6 @@ export abstract class Engine {
       you should use a version from ${compatVersions.from} to ${compatVersions.to}`);
     }
 
-    const configUtils = ConfigUtils.getConfigUtils();
     configUtils.loadOrcheConfig(userConfig);
     this.config = configUtils.config;
   }

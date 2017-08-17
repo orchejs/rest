@@ -4,6 +4,7 @@
   "description": "Easy REST APIs in NodeJS",
   "main": "index.js",
   "dependencies": {
+    "@types/winston": "^2.3.4",
     "app-root-path": "^2.0.1",
     "file-matcher": "^1.1.0",
     "moment": "^2.18.1",
@@ -20,7 +21,6 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.32",
     "@types/restify": "^4.3.4",
-    "@types/winston": "^2.3.4",
     "body-parser": "^1.17.2",
     "chai": "^4.0.2",
     "cors": "^2.8.3",

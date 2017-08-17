@@ -1,5 +1,7 @@
+import { Environment } from '../constants/environment';
 import { CorsOptions } from './cors-options';
 import { OrcheEngines } from '../constants/orche-engines';
+import { LogOptions } from './log-options';
 
 export interface OrcheConfig {
   /**
@@ -50,6 +52,14 @@ export interface OrcheConfig {
    * Default value: false
    */
   debug?: boolean;
+  /**
+   * 
+   */
+  environment?: Environment;
+  /**
+   * 
+   */
+  logOptions?: LogOptions;
   /**
    * TODO: Add monitor api to the project to get some statistics about the usage.
    */

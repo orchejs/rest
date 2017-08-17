@@ -13,6 +13,7 @@ export * from './lib/interfaces/cors-config';
 export * from './lib/interfaces/cors-options';
 export * from './lib/interfaces/orche-config';
 export { OrcheResult } from './lib/interfaces/orche-result';
+export { FileTransportOptions, ConsoleTransportOptions } from 'winston';
 
 // decorators
 export * from './lib/decorators/http';
