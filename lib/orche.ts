@@ -6,68 +6,25 @@ import { ExpressEngine } from './engines/express.engine';
 
 export class Orche {
 
-  init(config: OrcheConfig): Promise<OrcheResult> {
-    let result: OrcheResult;
-
-    return new Promise(async (resolve, reject) => {
-      await this.loadDecorators(reject);
-
-      const engine = this.engineInitialization(config, reject);
-      try {
-        result = await engine.loadServer();
-      } catch (error) {
-        console.log('error');
-        // TODO
-        reject();
-        return;
-      }
-
-      resolve(result);
-    });
-  }
-
-  private loadDecorators(reject): Promise<any> {
+  async init(config: OrcheConfig): Promise<OrcheResult> {
     const decoratorLoader = new DecoratorLoader();
+    await decoratorLoader.loadDecorators();
 
-    return new Promise(async (resolve) => {
-      let files: string [];
-      try {
-        files = await decoratorLoader.loadDecorators();
-      } catch (error) {
-        // TODO
-        reject();
-        return;
-      }
-
-      resolve(files);
-    });
-  }
-
-  private engineInitialization(config: OrcheConfig, reject: any) {
     let engine;
-
-    try {
-      switch (config.apiEngine) {
-        case OrcheEngines.ExpressJS:
-          engine = new ExpressEngine(config);
-          break;
-        case OrcheEngines.Hapi:
-          break;
-        case OrcheEngines.Koa:
-          break;
-        case OrcheEngines.Restify:
-          break;
-        default:
-          engine = new ExpressEngine(config);
-          break;
-      }
-    } catch (error) {
-      // TODO
-      reject();
-      return;
-    }
-
-    return engine;
+    switch (config.apiEngine) {
+      /*
+      case OrcheEngines.Hapi:
+        break;
+      case OrcheEngines.Koa:
+        break;
+      case OrcheEngines.Restify:
+        break;
+      */
+      default:
+        engine = new ExpressEngine(config);
+        break;
+    }        
+    
+    return engine.loadServer();
   }
-
 }
