@@ -3,7 +3,8 @@ import { OrcheResult } from '../interfaces/orche-result';
 import { LoadStats } from '../interfaces/load-stats';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
-import { configUtils } from '../utils/config.utils';
+import { configUtils, appConfig } from '../utils/config.utils';
+import { logger } from '../utils/log.utils';
 
 
 export abstract class Engine {
@@ -22,6 +23,8 @@ export abstract class Engine {
 
     configUtils.loadOrcheConfig(userConfig);
     this.config = configUtils.config;
+    
+    logger.init(this.config);
   }
 
   private isEngineVersionSupported(compatVersions: CompatVersions): boolean {

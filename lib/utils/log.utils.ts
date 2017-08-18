@@ -1,9 +1,9 @@
-import { Environment } from '../constants/environment';
-import { LogOptions } from '../interfaces/log-options';
 import * as winston from 'winston';
 import * as moment from 'moment';
 
-import { appConfig } from './config.utils';
+import { Environment } from '../constants/environment';
+import { LogOptions } from '../interfaces/log-options';
+import { OrcheConfig } from '../interfaces/orche-config';
 import { PathUtils } from './path.utils';
 
 export class LogUtils {
@@ -13,20 +13,19 @@ export class LogUtils {
 
   constructor() {
     this.transports = [];
-    this.init();
   }
 
-  private init(): void {
-    const logOptions = appConfig.logOptions;
+  public init(appConfig: OrcheConfig): void {
+    const logOptions: LogOptions = appConfig.logOptions || {};
 
-    if (!logOptions.enableLog) {
+    if (logOptions.disableLog) {
       return;
     }
 
     /**
      * Console log is enabled when:
      *  - the app is in debug mode
-     *  - if consoleOptions has values
+     *  - if consoleOptions is defined
      *  - if fileOptions was not informed and it's not production
      */
     if ((appConfig.environment !== Environment.Production) && 
@@ -35,17 +34,35 @@ export class LogUtils {
       const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
       this.transports.push(consoleTransport);
     }
+
+    /**
+     * File log is enabled when:
+     *  - the app is running in production
+     *  - if fileOptions is defined
+     */
+    if ((appConfig.environment === Environment.Production) || logOptions.fileOptions) {
+      logOptions.fileOptions = this.loadFileOptions(logOptions.fileOptions);
+      const fileTransport = new (winston.transports.File)(logOptions.fileOptions);
+      this.transports.push(fileTransport);
+    }
+
+    this.log = new (winston.Logger)({ transports: this.transports });
   }
 
   private loadConsoleOptions(consoleOptions: winston.ConsoleTransportOptions): 
     winston.ConsoleTransportOptions {
     const options: winston.ConsoleTransportOptions = consoleOptions || {};
     options.level = options.level || 'info';
-    options.name = options.name || 'console';
     options.prettyPrint = options.prettyPrint || true;
     options.handleExceptions = options.handleExceptions || true;
     options.humanReadableUnhandledException = options.humanReadableUnhandledException || true;
     options.formatter = options.formatter || this.defaultFormatter;
+    return options;
+  }
+
+  private loadFileOptions(fileOptions: winston.FileTransportOptions):
+    winston.FileTransportOptions {
+    const options: winston.FileTransportOptions = fileOptions || {};
     return options;
   }
 
@@ -77,4 +94,5 @@ export class LogUtils {
   }
 }
 
-export const logger: LogUtils = new LogUtils();
+const logger: LogUtils = new LogUtils();
+export { logger };

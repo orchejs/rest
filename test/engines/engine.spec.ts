@@ -6,6 +6,7 @@ import { OrcheEngines } from '../../lib/constants/orche-engines';
 import { Engine } from '../../lib/engines/engine';
 import { CompatVersions } from '../../lib/interfaces/compat-versions';
 import { PathUtils } from '../../lib/utils/path.utils';
+import { logger } from '../..';
 
 describe('Engine', () => {
 
@@ -133,6 +134,9 @@ class SpecEngine extends Engine {
         settings: {},
         corsConfig: {
           origin: '*',
+        },
+        logOptions: {
+          disableLog: true,
         },
       });
   }

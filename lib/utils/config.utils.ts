@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import * as fs from 'fs';
 
 import { PathUtils } from './path.utils';
@@ -5,13 +6,15 @@ import { logger } from './log.utils';
 import { OrcheConfig } from '../interfaces/orche-config';
 import { OrcheEngines } from '../constants/orche-engines';
 
-export class ConfigUtils {
+export class ConfigUtils extends EventEmitter {
   /**
    * App config file
    */
   config: OrcheConfig;
 
   constructor() {
+    super();
+    this.setMaxListeners(0);
     this.loadOrcheConfig();
   }
 
@@ -50,6 +53,8 @@ export class ConfigUtils {
     this.config.debug = envCfg.debug || localCfg.debug || userConfig.debug || false;
     this.config.extensions = envCfg.extensions || localCfg.extensions || userConfig.extensions;
     this.config.settings = envCfg.settings || localCfg.settings || userConfig.settings;
+
+    this.emit('configLoaded', this.config);
   }
 
   private loadEnvConfigFile(configAppFileName: string): OrcheConfig {
@@ -97,7 +102,9 @@ export class ConfigUtils {
   }
 }
 
-const configUtils: ConfigUtils = new ConfigUtils();
-const appConfig: OrcheConfig = configUtils.config;
+export const configUtils: ConfigUtils = new ConfigUtils();
 
-export { configUtils, appConfig };
+export let appConfig = configUtils.config;
+configUtils.on('configLoaded', (config) => {
+  appConfig = config;
+});
