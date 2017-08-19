@@ -1,5 +1,6 @@
 import * as winston from 'winston';
 import * as moment from 'moment';
+import * as path from 'path';
 
 import { Environment } from '../constants/environment';
 import { LogOptions } from '../interfaces/log-options';
@@ -9,6 +10,7 @@ import { PathUtils } from './path.utils';
 export class LogUtils {
 
   private log: any;
+  private env: Environment;
   private transports: winston.TransportInstance[];
 
   constructor() {
@@ -17,6 +19,7 @@ export class LogUtils {
 
   public init(appConfig: OrcheConfig): void {
     const logOptions: LogOptions = appConfig.logOptions || {};
+    this.env = appConfig.environment || Environment.Development;
 
     if (logOptions.disableLog) {
       return;
@@ -28,7 +31,7 @@ export class LogUtils {
      *  - if consoleOptions is defined
      *  - if fileOptions was not informed and it's not production
      */
-    if ((appConfig.environment !== Environment.Production) && 
+    if ((this.env !== Environment.Production) && 
         (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)) {
       logOptions.consoleOptions = this.loadConsoleOptions(logOptions.consoleOptions);
       const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
@@ -40,7 +43,7 @@ export class LogUtils {
      *  - the app is running in production
      *  - if fileOptions is defined
      */
-    if ((appConfig.environment === Environment.Production) || logOptions.fileOptions) {
+    if ((this.env === Environment.Production) || logOptions.fileOptions) {
       logOptions.fileOptions = this.loadFileOptions(logOptions.fileOptions);
       const fileTransport = new (winston.transports.File)(logOptions.fileOptions);
       this.transports.push(fileTransport);
@@ -63,6 +66,31 @@ export class LogUtils {
   private loadFileOptions(fileOptions: winston.FileTransportOptions):
     winston.FileTransportOptions {
     const options: winston.FileTransportOptions = fileOptions || {};
+    
+    let level: string;
+    let humanReadable: boolean;
+    let prettyPrint: boolean;
+    let filename: string = PathUtils.appDirName + '-' + moment().format('YYYY-MM-DD') + '.log';
+    const dirname: string = path.join(PathUtils.appRoot, 'log');
+
+    if (this.env === Environment.Production) {
+      level = 'warn';
+      humanReadable = false;
+      prettyPrint = false;
+    } else {
+      level = 'info';
+      humanReadable = true;
+      prettyPrint = true;
+    }
+
+    options.level = options.level || level;
+    filename = options.filename || filename;
+    options.dirname = options.dirname || dirname;
+    options.maxsize = options.maxsize || 5000000;
+    options.prettyPrint = options.prettyPrint || prettyPrint;
+    options.formatter = options.formatter || this.defaultFormatter;
+    options.humanReadableUnhandledException = options.humanReadableUnhandledException || 
+      humanReadable;
     return options;
   }
 
@@ -73,20 +101,32 @@ export class LogUtils {
         + JSON.stringify(options.meta) : '');
   }
 
-  info(msg: string) {
-
+  info(msg: string, metadata?: any) {
+    if (!this.log) {
+      return;
+    }
+    this.log.log('info', msg, metadata);
   }
 
-  error(msg: string) {
-
+  error(msg: string, metadata?: any) {
+    if (!this.log) {
+      return;
+    }    
+    this.log.log('error', msg, metadata);
   }
 
-  warn(msg: string) {
-
+  warn(msg: string, metadata?: any) {
+    if (!this.log) {
+      return;
+    }    
+    this.log.log('warn', msg, metadata);
   }
 
-  debug(msg: string) {
-
+  debug(msg: string, metadata?: any) {
+    if (!this.log) {
+      return;
+    }    
+    this.log.log('debug', msg, metadata);
   }
 
   customizeLoggerLibrary(): any {
