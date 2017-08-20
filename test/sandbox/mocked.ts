@@ -1,4 +1,4 @@
-import { get, del, ErrorResponse, path, pathParam } from '../..';
+import { all, patch, post, head, put, get, del, ErrorResponse, path, pathParam } from '../..';
 
 @path('/mocked')
 class Mocked {
@@ -17,7 +17,45 @@ class Mocked {
     return uuid;
   }
 
-  @del()
+  @post(null, null, {
+    corsOptions: {},
+  })
+  postMocked() {
+    return null;
+  }
+
+  @put(null, null, {
+    corsOptions: {},
+  })  
+  putMocked() {
+    return null;
+  }
+
+  @patch(null, null, {
+    corsOptions: {},
+  })  
+  patchMocked() {
+    return null;
+  }
+
+  @head(null, null, {
+    corsOptions: {},
+  })  
+  headMocked() {
+    return null;
+  }
+
+  @all(null, null, {
+    corsOptions: {},
+  })  
+  allMocked() {
+    return null;
+  }
+
+  @del(null, null, {
+    corsOptions: {
+    },
+  })
   removeMocked() {
     const result: ErrorResponse = new ErrorResponse('Resource identifier not informed');
     return result;
