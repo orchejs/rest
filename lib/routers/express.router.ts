@@ -34,8 +34,6 @@ export class ExpressRouter extends Router {
     const initTime = moment();
 
     for (let index = 0; index < RouterLoader.routerConfigs.length; index += 1) {
-      let loaded: boolean = true;
-
       const routerConfig: RouterConfig = RouterLoader.routerConfigs[index];
       const routerConfigPath = PathUtils.urlSanitation(routerConfig.path);
       const router: express.Router = express.Router();
@@ -105,18 +103,13 @@ export class ExpressRouter extends Router {
           case HttpRequestMethod.Options:
             router.options(unitPath, method);
             break;
-          default:
-            loaded = false;
-            break;
         }
       });
 
       const resourcePath = path + routerConfigPath;
       this.app.use(resourcePath, router);
 
-      if (loaded) {
-        routerStats.loadedRoutes.push(routerConfig);
-      }
+      routerStats.loadedRoutes.push(routerConfig);
     }
 
     routerStats.initializationTime = initTime.diff(moment(), 'seconds');
