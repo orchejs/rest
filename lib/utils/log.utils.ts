@@ -15,14 +15,22 @@ export class LogUtils {
 
   constructor() {
     this.transports = [];
+    this.init();
   }
 
-  public init(appConfig: OrcheConfig): void {
+  public init(appConfig: OrcheConfig = {}): void {
     const logOptions: LogOptions = appConfig.logOptions || {};
     this.env = appConfig.environment || Environment.Development;
 
     if (logOptions.disableLog) {
       return;
+    }
+
+    if (this.log && this.transports && this.transports.length > 0) {
+      this.transports.forEach((transport, index) => {
+        this.log.remove(transport);
+        this.transports.splice(index, 1);
+      });
     }
 
     /**
@@ -86,7 +94,7 @@ export class LogUtils {
     options.level = options.level || level;
     filename = options.filename || filename;
     options.dirname = options.dirname || dirname;
-    options.maxsize = options.maxsize || 5000000;
+    options.maxsize = options.maxsize || 1000000;
     options.prettyPrint = options.prettyPrint || prettyPrint;
     options.formatter = options.formatter || this.defaultFormatter;
     options.humanReadableUnhandledException = options.humanReadableUnhandledException || 
@@ -102,35 +110,31 @@ export class LogUtils {
   }
 
   info(msg: string, metadata?: any) {
-    if (!this.log) {
-      return;
-    }
     this.log.log('info', msg, metadata);
   }
 
   error(msg: string, metadata?: any) {
-    if (!this.log) {
-      return;
-    }    
     this.log.log('error', msg, metadata);
   }
 
   warn(msg: string, metadata?: any) {
-    if (!this.log) {
-      return;
-    }    
     this.log.log('warn', msg, metadata);
   }
 
   debug(msg: string, metadata?: any) {
-    if (!this.log) {
-      return;
-    }    
     this.log.log('debug', msg, metadata);
   }
 
-  customizeLoggerLibrary(): any {
-    return winston;
+  customizeTransports(...transports: winston.TransportInstance[]): any {
+    if (this.log && this.transports && this.transports.length > 0) {
+      this.transports.forEach((transport, index) => {
+        this.log.remove(transport);
+        this.transports.splice(index, 1);
+      });
+    }
+
+    this.transports = transports;
+    this.log = new (winston.Logger)({ transports: this.transports });
   }
 }
 
