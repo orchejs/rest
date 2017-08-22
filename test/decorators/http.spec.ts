@@ -25,6 +25,11 @@ describe('HTTP Decorators Tests', () => {
     expect(result).to.be.equal('{"msg":"ping"}');
   });
 
+  it('Should make an http GET to /orche/utilities/with-throw and get an error msg', async () => {
+    const result: string = await RequestHelper.get('/orche/utilities/with-throw');
+    expect(result).to.be.equal('{"message":"GET with throw exception!","detail":null}');
+  });
+
   it('Should make an http POST to /orche/utilities and receive \'ping {ip}\'', async () => {
     const result: string = await RequestHelper.post('/orche/utilities',
                                                     { ip: '192.168.0.21' });

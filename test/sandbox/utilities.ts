@@ -65,4 +65,9 @@ class Utilities {
                                               HttpResponseCode.Ok);
     return response;
   }
+
+  @get('/with-throw')
+  justPringWithThrow() {
+    throw new Error('GET with throw exception!');
+  }  
 }
