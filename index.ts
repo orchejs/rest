@@ -7,6 +7,7 @@ export * from './lib/constants/http-request-method';
 export * from './lib/constants/http-response-code';
 export * from './lib/constants/orche-engines';
 export * from './lib/constants/mimetype';
+export * from './lib/constants/environment';
 
 // interfaces
 export * from './lib/interfaces/cors-config';

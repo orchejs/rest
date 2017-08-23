@@ -9,7 +9,7 @@ import { PathUtils } from './path.utils';
 
 export class LogUtils {
 
-  private log: any;
+  private instance: any;
   private env: Environment;
   private transports: winston.TransportInstance[];
 
@@ -26,9 +26,9 @@ export class LogUtils {
       return;
     }
 
-    if (this.log && this.transports && this.transports.length > 0) {
+    if (this.instance && this.transports && this.transports.length > 0) {
       this.transports.forEach((transport, index) => {
-        this.log.remove(transport);
+        this.instance.remove(transport);
         this.transports.splice(index, 1);
       });
     }
@@ -39,7 +39,7 @@ export class LogUtils {
      *  - if consoleOptions is defined
      *  - if fileOptions was not informed and it's not production
      */
-    if ((this.env !== Environment.Production) && 
+    if ((this.env !== Environment.Production || appConfig.debug) && 
         (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)) {
       logOptions.consoleOptions = this.loadConsoleOptions(logOptions.consoleOptions);
       const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
@@ -57,7 +57,7 @@ export class LogUtils {
       this.transports.push(fileTransport);
     }
 
-    this.log = new (winston.Logger)({ transports: this.transports });
+    this.instance = new (winston.Logger)({ transports: this.transports });
   }
 
   private loadConsoleOptions(consoleOptions: winston.ConsoleTransportOptions): 
@@ -110,31 +110,31 @@ export class LogUtils {
   }
 
   info(msg: string, metadata?: any) {
-    this.log.log('info', msg, metadata);
+    this.instance.log('info', msg, metadata);
   }
 
   error(msg: string, metadata?: any) {
-    this.log.log('error', msg, metadata);
+    this.instance.log('error', msg, metadata);
   }
 
   warn(msg: string, metadata?: any) {
-    this.log.log('warn', msg, metadata);
+    this.instance.log('warn', msg, metadata);
   }
 
   debug(msg: string, metadata?: any) {
-    this.log.log('debug', msg, metadata);
+    this.instance.log('debug', msg, metadata);
   }
 
   customizeTransports(...transports: winston.TransportInstance[]): any {
-    if (this.log && this.transports && this.transports.length > 0) {
+    if (this.instance && this.transports && this.transports.length > 0) {
       this.transports.forEach((transport, index) => {
-        this.log.remove(transport);
+        this.instance.remove(transport);
         this.transports.splice(index, 1);
       });
     }
 
     this.transports = transports;
-    this.log = new (winston.Logger)({ transports: this.transports });
+    this.instance = new (winston.Logger)({ transports: this.transports });
   }
 }
 
