@@ -3,6 +3,11 @@ import { expect } from 'chai';
 import { LogUtils, logger } from '../../lib/utils/log.utils';
 
 describe('LogUtils', () => {
+
+  before(() => {
+    setTimeout(0);
+  });
+
   describe('#constructor', () => {
     it('Should initialize the LogUtils object with the default options, just console', () => {
       const log = new LogUtils();
@@ -30,6 +35,23 @@ describe('LogUtils', () => {
             environment: Environment.Production,
           });
           expect(log.info).to.be.not.null;
-        });      
+        });
+    
+    it(
+        `Should just load the file transport with the default options`, 
+        () => {
+          const log = new LogUtils();
+          log.init({
+            logOptions: {
+              fileOptions: {
+                colorize: true,
+                filename: 'test',
+                level: 'debug',
+              },
+            },
+          });
+          log.info('test');
+          expect(log.info).to.be.not.null;
+        });
   });  
 });
