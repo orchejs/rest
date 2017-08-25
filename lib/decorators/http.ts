@@ -5,7 +5,8 @@ import { RouterLoader } from '../loaders/router.loader';
 import { CorsConfig } from '../interfaces/cors-config';
 
 
-export function all(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+export function all(path: string = '', contentType?: ContentType, cors?: CorsConfig, 
+                    ...middlewares: Function[]) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = contentType;
     if (!ct) {
@@ -18,7 +19,8 @@ export function all(path: string = '', contentType?: ContentType, cors?: CorsCon
   };
 }
 
-export function get(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+export function get(path: string = '', contentType?: ContentType, cors?: CorsConfig, 
+                    ...middlewares: Function[]) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = contentType;
     if (!ct) {
@@ -30,7 +32,8 @@ export function get(path: string = '', contentType?: ContentType, cors?: CorsCon
   };
 }
 
-export function post(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+export function post(path: string = '', contentType?: ContentType, cors?: CorsConfig, 
+                     ...middlewares: Function[]) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = contentType;
     if (!ct) {
@@ -43,7 +46,8 @@ export function post(path: string = '', contentType?: ContentType, cors?: CorsCo
   };
 }
 
-export function put(path: string = '', contentType?: ContentType, cors?: CorsConfig) {
+export function put(path: string = '', contentType?: ContentType, cors?: CorsConfig, 
+                    ...middlewares: Function[]) {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = contentType;
     if (!ct) {
