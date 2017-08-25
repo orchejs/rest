@@ -1,12 +1,10 @@
-import { Environment } from '../../lib/constants/environment';
 import { expect } from 'chai';
+import * as winston from 'winston';
+
+import { Environment } from '../../lib/constants/environment';
 import { LogUtils, logger } from '../../lib/utils/log.utils';
 
 describe('LogUtils', () => {
-
-  before(() => {
-    setTimeout(0);
-  });
 
   describe('#constructor', () => {
     it('Should initialize the LogUtils object with the default options, just console', () => {
@@ -36,7 +34,7 @@ describe('LogUtils', () => {
           });
           expect(log.info).to.be.not.null;
         });
-    
+
     it(
         `Should just load the file transport with the default options`, 
         () => {
@@ -44,14 +42,48 @@ describe('LogUtils', () => {
           log.init({
             logOptions: {
               fileOptions: {
-                colorize: true,
-                filename: 'test',
                 level: 'debug',
+                colorize: true,
+                handleExceptions: true,
               },
             },
           });
-          log.info('test');
+          log.debug('test debug', {
+            data: 'test metadata',
+          });
+          log.info('test info');
+          log.warn('test warn');
+          log.error('test error');
           expect(log.info).to.be.not.null;
+        });
+
+    it(
+        `Should not load the file transport an error is throwed for trying to create a log file
+          in a directory that is not accessable.`, 
+        () => {
+          try {
+            const log = new LogUtils();
+            log.init({
+              logOptions: {
+                fileOptions: {
+                  dirname: '/log',
+                  level: 'debug',
+                },
+              },
+            });
+            expect(log).to.be.null;
+          } catch (e) {
+            expect(e).to.not.be.null;
+          }
+        });
+
+    it(
+        `Should be able to add a custom transport to the logger`, 
+        () => {
+          const consoleTransport = new (winston.transports.Console)();
+          logger.customizeTransports(consoleTransport);
+
+          expect(logger.info).to.be.not.null;
         });
   });  
 });

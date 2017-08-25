@@ -33,7 +33,7 @@
     "typescript": "^2.4.0"
   },
   "scripts": {
-    "clean": "rm -rf ./build ./coverage",
+    "clean": "rm -rf ./build ./coverage ./log",
     "lint": "node_modules/.bin/tslint lib/**/*.ts ./tests/**/*.spec.ts",
     "cp-package": "cp ./package.json ./build/core/",
     "compile": "node_modules/.bin/tsc",

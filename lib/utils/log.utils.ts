@@ -1,6 +1,7 @@
 import * as winston from 'winston';
 import * as moment from 'moment';
 import * as path from 'path';
+import * as fs from 'fs';
 
 import { Environment } from '../constants/environment';
 import { LogOptions } from '../interfaces/log-options';
@@ -43,6 +44,7 @@ export class LogUtils {
         (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)) {
       logOptions.consoleOptions = this.loadConsoleOptions(logOptions.consoleOptions);
       const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
+      consoleTransport.setMaxListeners(0);
       this.transports.push(consoleTransport);
     }
 
@@ -57,7 +59,9 @@ export class LogUtils {
       this.transports.push(fileTransport);
     }
 
-    this.instance = new (winston.Logger)({ transports: this.transports });
+    this.instance = new (winston.Logger)({ 
+      transports: this.transports,
+    });
   }
 
   private loadConsoleOptions(consoleOptions: winston.ConsoleTransportOptions): 
@@ -78,7 +82,7 @@ export class LogUtils {
     let level: string;
     let humanReadable: boolean;
     let prettyPrint: boolean;
-    let filename: string = PathUtils.appDirName + '-' + moment().format('YYYY-MM-DD') + '.log';
+    const filename: string = PathUtils.appDirName + '-' + moment().format('YYYY-MM-DD') + '.log';
     const dirname: string = path.join(PathUtils.appRoot, 'log');
 
     if (this.env === Environment.Production) {
@@ -92,13 +96,26 @@ export class LogUtils {
     }
 
     options.level = options.level || level;
-    filename = options.filename || filename;
+    options.filename = options.filename || filename;
     options.dirname = options.dirname || dirname;
+
+    try {
+      if (!fs.existsSync(options.dirname)) {
+        fs.mkdirSync(options.dirname);
+      }
+    } catch (e) {
+      const msg =  `An error happened while trying to access/create the directory 
+      for the log. Do you have permission to access?. Details: ${e}`;
+      throw new Error(msg);
+    }
+
     options.maxsize = options.maxsize || 1000000;
+    options.json = options.json || false;
     options.prettyPrint = options.prettyPrint || prettyPrint;
     options.formatter = options.formatter || this.defaultFormatter;
     options.humanReadableUnhandledException = options.humanReadableUnhandledException || 
       humanReadable;
+
     return options;
   }
 
