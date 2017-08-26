@@ -1,13 +1,17 @@
-import { all, patch, post, head, put, get, del, ErrorResponse, path, pathParam } from '../..';
+import { all, patch, post, head, put, get, del, ErrorResponse, path, pathParam, 
+         HttpDecoratorOptions } from '../..';
 
 @path('/mocked')
 class Mocked {
 
-  @get(':uuid', null, {
-    preflight: true,
-    corsOptions: {
-    },
-  })
+  @get(
+      ':uuid', { 
+        cors: {
+          preflight: true,
+          corsOptions: { },
+        },
+      },
+    )
   getMocked(@pathParam('uuid') uuid) {
     return uuid;
   }
@@ -17,43 +21,55 @@ class Mocked {
     return uuid;
   }
 
-  @post(null, null, {
-    corsOptions: {},
+  @post(null, {
+    cors: {
+      corsOptions: {},
+    },
   })
   postMocked() {
     return null;
   }
 
-  @put(null, null, {
-    corsOptions: {},
+  @put(null, {
+    cors: {
+      corsOptions: {},
+    },
   })  
   putMocked() {
     return null;
   }
 
-  @patch(null, null, {
-    corsOptions: {},
+  @patch(null, {
+    cors: {
+      corsOptions: {},
+    },
   })  
   patchMocked() {
     return null;
   }
 
-  @head(null, null, {
-    corsOptions: {},
+  @head(null, {
+    cors: {
+      corsOptions: {},
+    },
   })  
   headMocked() {
     return null;
   }
 
-  @all(null, null, {
-    corsOptions: {},
+  @all(null, {
+    cors: {
+      corsOptions: {},
+    },
   })  
   allMocked() {
     return null;
   }
 
-  @del(null, null, {
-    corsOptions: {
+  @del(null, {
+    cors: {
+      corsOptions: {
+      },
     },
   })
   removeMocked() {

@@ -1,11 +1,12 @@
+import { InterceptorDecoratorOptions } from '../interfaces/interceptor-decorator-options';
 import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 
 export function interceptor(paths: string | string[] = ['/'], 
-                            httpMethods: HttpRequestMethod | HttpRequestMethod[] 
-                            = [HttpRequestMethod.All], 
-                            order?: number) {
+                            options: InterceptorDecoratorOptions = {
+                              httpMethods: HttpRequestMethod.All,
+                            }) {
   return function (target: any) {
     const className: any = target.toString().match(/(function|class) ([^{(]*)/i)[2].trim();
 
@@ -17,12 +18,12 @@ export function interceptor(paths: string | string[] = ['/'],
     }
 
     let httpMethodsArr: HttpRequestMethod[] = [];
-    if (!Array.isArray(httpMethods)) {
-      httpMethodsArr.push(httpMethods);
+    if (!Array.isArray(options.httpMethods)) {
+      httpMethodsArr.push(options.httpMethods);
     } else {
-      httpMethodsArr = httpMethods;
+      httpMethodsArr = options.httpMethods;
     }
-    InterceptorLoader.addInterceptorConfig(pathsArr, order, className, httpMethodsArr);
+    InterceptorLoader.addInterceptorConfig(pathsArr, options.order, className, httpMethodsArr);
   };
 }
 

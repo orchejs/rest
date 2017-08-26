@@ -2,7 +2,7 @@ import { NextFunction } from 'express';
 import { headerParam, HttpRequestMethod, interceptor, 
          nextParam, processing, requestParam } from '../..';
 
-@interceptor('/', HttpRequestMethod.All)
+@interceptor('/')
 class SecurityAllInterceptor {
 
   @processing()

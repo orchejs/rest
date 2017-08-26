@@ -4,11 +4,14 @@ import { interceptor, processing, requestParam, responseParam,
          HttpRequestMethod } from '../../';
 
 @interceptor(
-  ['/orche/restricted'], 
-  [HttpRequestMethod.Get, HttpRequestMethod.Delete, HttpRequestMethod.Head, 
-    HttpRequestMethod.Options, HttpRequestMethod.Patch, HttpRequestMethod.Post, 
-    HttpRequestMethod.Put], 
-  0)
+  ['/orche/restricted'],
+  {
+    httpMethods: [
+      HttpRequestMethod.Get, HttpRequestMethod.Delete, HttpRequestMethod.Head, 
+      HttpRequestMethod.Options, HttpRequestMethod.Patch, HttpRequestMethod.Post, 
+      HttpRequestMethod.Put], 
+    order: 0,
+  })
 class SecurityArrayInterceptor {
 
   @processing()

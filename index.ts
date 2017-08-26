@@ -14,6 +14,8 @@ export * from './lib/interfaces/cors-config';
 export * from './lib/interfaces/cors-options';
 export * from './lib/interfaces/orche-config';
 export { OrcheResult } from './lib/interfaces/orche-result';
+export * from './lib/interfaces/http-decorator-options';
+export * from './lib/interfaces/interceptor-decorator-options';
 export { FileTransportOptions, ConsoleTransportOptions } from 'winston';
 
 // decorators

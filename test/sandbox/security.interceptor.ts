@@ -3,7 +3,10 @@ import { Request, Response } from 'express';
 import { interceptor, processing, requestParam, responseParam,
          HttpRequestMethod } from '../../';
 
-@interceptor('/orche/restricted', HttpRequestMethod.Get, 1)
+@interceptor('/orche/restricted', {
+  httpMethods: HttpRequestMethod.Get,
+  order: 1, 
+})
 class SecurityInterceptor {
 
   @processing()
