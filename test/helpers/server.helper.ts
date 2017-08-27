@@ -17,7 +17,7 @@ export class ServerHelper {
         path: '/orche',
         apiEngine: OrcheEngines.ExpressJS,
         port: 8888,
-        extensions: [
+        middlewares: [
           json(),
         ]};
 

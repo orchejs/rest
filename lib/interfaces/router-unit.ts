@@ -10,4 +10,5 @@ export interface RouterUnit {
   httpMethod?: HttpRequestMethod;
   contentType?: ContentType;
   cors?: CorsConfig;
+  middlewares?: Function[];
 }

@@ -50,58 +50,36 @@ export class ExpressRouter extends Router {
           router.options(unitPath, cors(corsConfig.corsOptions));
         }
 
+        const middlewares: any[] = routerUnit.middlewares;
+        if (corsConfig.corsOptions) {
+          middlewares.unshift(cors(corsConfig.corsOptions));
+        }
+        middlewares.push(method);
+
         switch (routerUnit.httpMethod) {
           case HttpRequestMethod.Get:
-            if (corsConfig.corsOptions) {
-              router.get(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.get(unitPath, method);
-            }
+            router.get(unitPath, middlewares);
             break;
           case HttpRequestMethod.Post:
-            if (corsConfig.corsOptions) {
-              router.post(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.post(unitPath, method);
-            }
+            router.post(unitPath, middlewares);
             break;
           case HttpRequestMethod.Put:
-            if (corsConfig.corsOptions) {
-              router.put(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.put(unitPath, method);
-            }
+            router.put(unitPath, middlewares);
             break;
           case HttpRequestMethod.Head:
-            if (corsConfig.corsOptions) {
-              router.head(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.head(unitPath, method);
-            }
+            router.head(unitPath, middlewares);
             break;
           case HttpRequestMethod.Delete:
-            if (corsConfig.corsOptions) {
-              router.delete(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.delete(unitPath, method);
-            }
+            router.delete(unitPath, middlewares);
             break;
           case HttpRequestMethod.All:
-            if (corsConfig.corsOptions) {
-              router.all(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.all(unitPath, method);
-            }
+            router.all(unitPath, middlewares);
             break;
           case HttpRequestMethod.Patch:
-            if (corsConfig.corsOptions) {
-              router.patch(unitPath, cors(corsConfig.corsOptions), method);
-            } else {
-              router.patch(unitPath, method);
-            }
+            router.patch(unitPath, middlewares);
             break;
           case HttpRequestMethod.Options:
-            router.options(unitPath, method);
+            router.options(unitPath, middlewares);
             break;
         }
       });

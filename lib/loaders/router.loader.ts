@@ -22,7 +22,7 @@ export class RouterLoader {
    */
   static addRouteUnit(path: string, method: Function, methodName: string, 
                       httpMethod: HttpRequestMethod, contentType?: ContentType, 
-                      cors?: CorsConfig) {
+                      cors?: CorsConfig, ...middlewares: Function[]) {
 
     const routerUnit: RouterUnit = {
       path,
@@ -31,6 +31,7 @@ export class RouterLoader {
       httpMethod,
       contentType,
       cors,
+      middlewares,
     };
 
     this.routerUnits.push(routerUnit);

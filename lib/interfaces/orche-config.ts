@@ -37,7 +37,7 @@ export interface OrcheConfig {
   /**
    * 
    */
-  extensions?: any[];
+  middlewares?: any[];
   /**
    * Engine settings.
    */

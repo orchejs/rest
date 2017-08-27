@@ -40,12 +40,12 @@ export class ExpressEngine extends Engine {
       // Add Express's settings
       this.setupSettings();
       // Add Express's extensions
-      this.config.extensions = this.config.extensions || [];
+      this.config.middlewares = this.config.middlewares || [];
 
       // Check if CORS should be setup and add it as an extension
       if (this.config.corsConfig) {
         const corsExtension = cors(this.config.corsConfig);
-        this.config.extensions.push(corsExtension);
+        this.config.middlewares.push(corsExtension);
       }
       this.setupExtensions();
 
@@ -99,7 +99,7 @@ export class ExpressEngine extends Engine {
   }
 
   protected setupExtensions(): void {
-    const extensions = this.config.extensions;
+    const extensions = this.config.middlewares;
     if (!extensions || extensions.length === 0) {
       return;
     }

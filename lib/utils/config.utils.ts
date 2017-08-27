@@ -51,7 +51,7 @@ export class ConfigUtils extends EventEmitter {
       PathUtils.appDirName;
     this.config.corsConfig = envCfg.corsConfig || localCfg.corsConfig || userConfig.corsConfig;
     this.config.debug = envCfg.debug || localCfg.debug || userConfig.debug || false;
-    this.config.extensions = envCfg.extensions || localCfg.extensions || userConfig.extensions;
+    this.config.middlewares = envCfg.middlewares || localCfg.middlewares || userConfig.middlewares;
     this.config.settings = envCfg.settings || localCfg.settings || userConfig.settings;
 
     this.emit('configLoaded', this.config);

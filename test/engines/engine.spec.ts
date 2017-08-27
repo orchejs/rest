@@ -130,7 +130,7 @@ class SpecEngine extends Engine {
       },
       {
         path: '/myapp',
-        extensions: [],
+        middlewares: [],
         settings: {},
         corsConfig: {
           origin: '*',
