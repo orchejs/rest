@@ -7,7 +7,7 @@ export class ParameterLoader {
 
   private static paramsConfig: ParamConfig[] = [];
 
-  static addParameterConfig(target: Object, methodName: string, param: ParamDetails,
+  static addParameterConfig(target: Object, methodName: string, paramDetails: ParamDetails,
                             paramIndex: number, paramType: ParamType) {
 
     let paramConfig: ParamConfig = this.paramsConfig.find(pConfig =>
@@ -22,7 +22,7 @@ export class ParameterLoader {
     }
 
     paramConfig.params.push({
-      paramName,
+      paramDetails,
       type: paramType,
       parameterIndex: paramIndex,
     });
