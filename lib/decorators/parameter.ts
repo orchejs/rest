@@ -1,3 +1,4 @@
+import { ParamDetails } from '../interfaces/param-details';
 import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/param-type';
 
@@ -23,16 +24,16 @@ export function nextParam() {
   };
 }
 
-export function queryParam(queryParamName: string) {
+export function queryParam(param: ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, queryParamName, parameterIndex,
+    ParameterLoader.addParameterConfig(target, propertyKey, param, parameterIndex,
                                        ParamType.QueryParam);
   };
 }
 
-export function pathParam(pathParamName: string) {
+export function pathParam(param: ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, pathParamName, parameterIndex,
+    ParameterLoader.addParameterConfig(target, propertyKey, param, parameterIndex,
                                        ParamType.PathParam);
   };
 }
@@ -44,16 +45,16 @@ export function requestParamMapper() {
   };
 }
 
-export function bodyParam() {
+export function bodyParam(param: ParamDetails = { name: null }) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
+    ParameterLoader.addParameterConfig(target, propertyKey, param, parameterIndex,
                                        ParamType.BodyParam);
   };
 }
 
-export function headerParam(attribute: string) {
+export function headerParam(param: ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(target, propertyKey, attribute, parameterIndex,
+    ParameterLoader.addParameterConfig(target, propertyKey, param, parameterIndex,
                                        ParamType.HeaderParam);
   };
 }
