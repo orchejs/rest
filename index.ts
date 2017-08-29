@@ -23,6 +23,7 @@ export * from './lib/decorators/http';
 export * from './lib/decorators/interceptor';
 export * from './lib/decorators/parameter';
 export * from './lib/decorators/path';
+export * from './lib/decorators/validator';
 
 // request
 export * from './lib/requests/express.requestmapper';
