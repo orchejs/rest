@@ -8,6 +8,7 @@
     "app-root-path": "^2.0.1",
     "file-matcher": "^1.1.0",
     "moment": "^2.18.1",
+    "reflect-metadata": "^0.1.10",
     "winston": "^2.3.1"
   },
   "devDependencies": {
