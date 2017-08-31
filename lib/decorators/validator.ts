@@ -1,11 +1,6 @@
-import 'reflect-metadata';
-
-const validateMetadataKey = Symbol('validate');
+import { ValidatorLoader } from '../loaders/validator.loader';
+import { ValidatorDetails } from '../interfaces/validator-details';
 
 export function validate(validator: ValidatorDetails) {
-  return Reflect.metadata(validateMetadataKey, validator);
-}
-
-export function getValidator(target: any, propertyKey: string) {
-  return Reflect.getMetadata(validateMetadataKey, target, propertyKey);
+  return ValidatorLoader.addValidator(validator);
 }
