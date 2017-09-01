@@ -41,7 +41,6 @@ export class ExpressInterceptor extends Interceptor {
   }
 
   public loadInterceptorUnit(): InterceptorConfig[] {
-
     const loadedProcessors: any = [];
     const interceptorConfigs: InterceptorConfig[] = InterceptorLoader.interceptorConfigs;
 

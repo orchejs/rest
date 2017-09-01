@@ -15,7 +15,10 @@ export class InterceptorLoader {
     const interceptorClassName: string = className || '';
     const interceptorHttpMethods: HttpRequestMethod[] = httpMethods || [];
 
-    const interceptorConfig: InterceptorConfig = {
+    let interceptorConfig: InterceptorConfig;
+    interceptorConfig = this.getInterceptorConfig();
+
+    interceptorConfig = {
       paths: interceptorPaths,
       order: interceptorOrder,
       className: interceptorClassName,
@@ -33,5 +36,27 @@ export class InterceptorLoader {
       methodName };
 
     this.interceptorUnit = interceptorUnit;
+  }
+
+  static createInterceptorConfig(path: string[], httpMethod: HttpRequestMethod[]): 
+    InterceptorConfig {
+    const iConfig = this.interceptorConfigs.find(
+      (iConfig) => {
+        const newPaths: string[] = [];
+        iConfig.paths.some((path) => {
+          
+        });
+      });
+  }
+
+  private static findPath(paths: string[], path)
+  private static findInterceptor(
+    iConfig: InterceptorConfig, 
+    path: string[], 
+    httpMethod: HttpRequestMethod[]): any {
+      iConfig.paths.some((path) => {
+        
+        return false;
+      });
   }
 }

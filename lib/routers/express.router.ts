@@ -14,6 +14,7 @@ import { ParamConfig } from '../interfaces/param-config';
 import { RouterConfig } from '../interfaces/router-config';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterLoader } from '../loaders/router.loader';
+import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { ParameterLoader } from '../loaders/parameter.loader';
 import { ErrorResponse } from '../responses/error.response';
 import { ExpressRequestMapper } from '../requests/express.requestmapper';
@@ -40,9 +41,10 @@ export class ExpressRouter extends Router {
       const routerUnits: RouterUnit[] = routerConfig.routerUnits;
 
       routerUnits.forEach((routerUnit) => {
-        const method: any = this.routeProcessor(routerConfig.className, routerUnit.method,
-                                                routerUnit.methodName, routerUnit.contentType);
-        
+        const routerMethod: any = this.routeProcessor(
+          routerConfig.className, routerUnit.method,
+          routerUnit.methodName, routerUnit.contentType);
+
         const unitPath: string = PathUtils.urlSanitation(routerUnit.path);
 
         const corsConfig: CorsConfig = routerUnit.cors || {};
@@ -54,7 +56,9 @@ export class ExpressRouter extends Router {
         if (corsConfig.corsOptions) {
           middlewares.unshift(cors(corsConfig.corsOptions));
         }
-        middlewares.push(method);
+        InterceptorLoader.
+
+        middlewares.push(routerMethod);
 
         switch (routerUnit.httpMethod) {
           case HttpRequestMethod.Get:
@@ -94,7 +98,7 @@ export class ExpressRouter extends Router {
     return routerStats;
   }
 
-  protected routeProcessor(target: string, method: Function, methodName: string, 
+  protected routeProcessor(target: string, method: Function, methodName: string,
                            contentType: ContentType): Function {
     return function () {
       const req: express.Request = arguments[0];
@@ -102,7 +106,7 @@ export class ExpressRouter extends Router {
       const next: express.NextFunction = arguments[2];
 
       let endpointArgs: any = [];
-      
+
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
       if (paramConfig && paramConfig.params && paramConfig.params.length > 0) {
         paramConfig.params.forEach((param, index) => {
@@ -117,10 +121,10 @@ export class ExpressRouter extends Router {
               endpointArgs[param.parameterIndex] = next;
               break;
             case ParamType.PathParam:
-              endpointArgs[param.parameterIndex] = req.params[param.paramName];
+              endpointArgs[param.parameterIndex] = req.params[param.paramDetails.name];
               break;
             case ParamType.QueryParam:
-              endpointArgs[param.parameterIndex] = req.query[param.paramName];
+              endpointArgs[param.parameterIndex] = req.query[param.paramDetails.name];
               break;
             case ParamType.RequestParamMapper:
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
@@ -130,7 +134,7 @@ export class ExpressRouter extends Router {
               endpointArgs[param.parameterIndex] = req.body;
               break;
             case ParamType.HeaderParam:
-              endpointArgs[param.parameterIndex] = req.headers[param.paramName];
+              endpointArgs[param.parameterIndex] = req.headers[param.paramDetails.name];
               break;
           }
         });
@@ -141,7 +145,7 @@ export class ExpressRouter extends Router {
       let result: any;
       try {
         result = method.apply(this, endpointArgs);
-        
+
         if (result && result.isResponseType) {
           res.contentType(contentType.response['value']);
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
