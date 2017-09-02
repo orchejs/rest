@@ -44,7 +44,6 @@ export class LogUtils {
         (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)) {
       logOptions.consoleOptions = this.loadConsoleOptions(logOptions.consoleOptions);
       const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
-      consoleTransport.setMaxListeners(0);
       this.transports.push(consoleTransport);
     }
 
