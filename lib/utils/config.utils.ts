@@ -14,7 +14,7 @@ export class ConfigUtils extends EventEmitter {
 
   constructor() {
     super();
-    this.setMaxListeners(0);
+    this.setMaxListeners(50);
     this.loadOrcheConfig();
   }
 
