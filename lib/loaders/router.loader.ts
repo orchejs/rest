@@ -20,10 +20,15 @@ export class RouterLoader {
    * @param corsOptions 
    * @param preflight 
    */
-  static addRouteUnit(path: string, method: Function, methodName: string, 
-                      httpMethod: HttpRequestMethod, contentType?: ContentType, 
-                      cors?: CorsConfig, ...middlewares: Function[]) {
-
+  static addRouteUnit(
+    path: string,
+    method: Function,
+    methodName: string,
+    httpMethod: HttpRequestMethod,
+    contentType?: ContentType,
+    cors?: CorsConfig,
+    ...middlewares: Function[]
+  ) {
     const routerUnit: RouterUnit = {
       path,
       methodName,
@@ -45,8 +50,6 @@ export class RouterLoader {
     };
 
     this.routerConfigs.push(routerConfig);
-
     this.routerUnits = [];
   }
-
 }

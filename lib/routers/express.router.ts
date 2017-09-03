@@ -56,8 +56,6 @@ export class ExpressRouter extends Router {
         if (corsConfig.corsOptions) {
           middlewares.unshift(cors(corsConfig.corsOptions));
         }
-        InterceptorLoader.
-
         middlewares.push(routerMethod);
 
         switch (routerUnit.httpMethod) {

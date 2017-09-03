@@ -130,10 +130,10 @@ export class ExpressInterceptor extends Interceptor {
               endpointArgs[param.parameterIndex] = next;
               break;
             case ParamType.PathParam:
-              endpointArgs[param.parameterIndex] = req.params[param.paramName];
+              endpointArgs[param.parameterIndex] = req.params[param.paramDetails.name];
               break;
             case ParamType.QueryParam:
-              endpointArgs[param.parameterIndex] = req.query[param.paramName];
+              endpointArgs[param.parameterIndex] = req.query[param.paramDetails.name];
               break;
             case ParamType.RequestParamMapper:
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
@@ -143,7 +143,7 @@ export class ExpressInterceptor extends Interceptor {
               endpointArgs[param.parameterIndex] = req.body;
               break;
             case ParamType.HeaderParam:
-              endpointArgs[param.parameterIndex] = req.headers[param.paramName];
+              endpointArgs[param.parameterIndex] = req.headers[param.paramDetails.name];
               break;
           }
         });

@@ -7,9 +7,13 @@ export class ParameterLoader {
 
   private static paramsConfig: ParamConfig[] = [];
 
-  static addParameterConfig(target: Object, methodName: string, paramDetails: ParamDetails,
-                            paramIndex: number, paramType: ParamType) {
-
+  static addParameterConfig(
+    target: Object, 
+    methodName: string, 
+    paramDetails: ParamDetails,
+    paramIndex: number, 
+    paramType: ParamType
+  ) {
     let paramConfig: ParamConfig = this.paramsConfig.find(pConfig =>
       pConfig.methodName === methodName && pConfig.className === target.constructor.name);
 

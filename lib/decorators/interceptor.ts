@@ -3,10 +3,11 @@ import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 
-export function interceptor(paths: string | string[] = ['/'], 
-                            options: InterceptorDecoratorOptions = {
-                              httpMethods: HttpRequestMethod.All,
-                            }) {
+export function interceptor(
+  paths: string | string[] = ['/'],
+  options: InterceptorDecoratorOptions = {
+    httpMethods: HttpRequestMethod.All,
+  }) {
   return function (target: any) {
     const className: any = target.toString().match(/(function|class) ([^{(]*)/i)[2].trim();
 
@@ -30,6 +31,6 @@ export function interceptor(paths: string | string[] = ['/'],
 export function processing() {
   return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-                                         propertyKey);
+      propertyKey);
   };
 }
