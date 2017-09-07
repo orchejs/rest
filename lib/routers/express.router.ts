@@ -129,6 +129,7 @@ export class ExpressRouter extends Router {
               endpointArgs[param.parameterIndex] = requestMapper;
               break;
             case ParamType.BodyParam:
+              // TODO tratar quando paramDetails.name for undefined
               endpointArgs[param.parameterIndex] = req.body;
               break;
             case ParamType.HeaderParam:

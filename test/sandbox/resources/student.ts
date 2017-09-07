@@ -1,4 +1,5 @@
-import { validate, NullValidator } from '../../..';
+import { validate } from '../../..';
+import { NullValidator } from '@orche/validators';
 
 export class Student {
   @validate({

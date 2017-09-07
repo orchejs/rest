@@ -37,12 +37,3 @@ export * from './lib/responses/generic.response';
 // utils
 export { appConfig } from './lib/utils/config.utils';
 export { logger } from './lib/utils/log.utils';
-
-// validators
-export * from './lib/validators/decimal.validator';
-export * from './lib/validators/not-empty.validator';
-export * from './lib/validators/not-null.validator';
-export * from './lib/validators/null.validator';
-export * from './lib/validators/pattern.validator';
-export * from './lib/validators/size.validator';
-export * from './lib/validators/validator';
