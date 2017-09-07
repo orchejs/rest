@@ -4,6 +4,8 @@ build
 coverage
 log
 .vscode
+*-lock.json
+*.lock
 
 *.iml
 
