@@ -26,15 +26,7 @@ export function nextParam() {
 
 export function queryParam(param: string | ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    let paramDetails: ParamDetails;
-    if (typeof param === 'string') {
-      paramDetails = {
-        name: param
-      };
-    } else {
-      paramDetails = param;
-    }
-    
+    const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.QueryParam);
   };
@@ -42,15 +34,7 @@ export function queryParam(param: string | ParamDetails) {
 
 export function pathParam(param: string | ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    let paramDetails: ParamDetails;
-    if (typeof param === 'string') {
-      paramDetails = {
-        name: param
-      };
-    } else {
-      paramDetails = param;
-    }
-
+    const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.PathParam);
   };
@@ -65,15 +49,7 @@ export function requestParamMapper() {
 
 export function bodyParam(param: string | ParamDetails = { name: null }) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    let paramDetails: ParamDetails;
-    if (typeof param === 'string') {
-      paramDetails = {
-        name: param
-      };
-    } else {
-      paramDetails = param;
-    }
-
+    const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.BodyParam);
   };
@@ -81,16 +57,20 @@ export function bodyParam(param: string | ParamDetails = { name: null }) {
 
 export function headerParam(param: string | ParamDetails) {
   return function (target: Object, propertyKey: string, parameterIndex: number) {
-    let paramDetails: ParamDetails;
-    if (typeof param === 'string') {
-      paramDetails = {
-        name: param
-      };
-    } else {
-      paramDetails = param;
-    }
-
+    const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.HeaderParam);
   };
+}
+
+function loadParam(param?: string | ParamDetails): ParamDetails {
+  let paramDetails: ParamDetails;
+  if (typeof param === 'string') {
+    paramDetails = {
+      name: param
+    };
+  } else {
+    paramDetails = param;
+  }
+  return paramDetails;
 }
