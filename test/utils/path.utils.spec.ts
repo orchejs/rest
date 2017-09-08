@@ -14,7 +14,7 @@ describe('PathUtils', () => {
   
   describe('appDirName', () => {
     it('Should return the project directory name', () => {
-      expect(PathUtils.appDirName).to.be.equal('core');
+      expect(PathUtils.appDirName).to.be.equal('rest');
     });
   });
 
