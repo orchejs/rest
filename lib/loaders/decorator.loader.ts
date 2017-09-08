@@ -2,9 +2,7 @@ import { FileMatcher, FindOptions } from 'file-matcher';
 
 import { PathUtils } from '../utils/path.utils';
 
-
 export class DecoratorLoader {
-
   /**
    * Loads the orche decorators, requiring this files, which
    * executes the decorators functions and registers all the paths, 
@@ -16,6 +14,15 @@ export class DecoratorLoader {
   loadDecorators(): Promise<string[]> {
     const fileMatcher = new FileMatcher();
 
+    const decoratorsRegex = new RegExp(
+      [
+        '((?=.[^]*__decorate)',
+        '(?=.[^]*path|interceptor))',
+        '|(@path|@interceptor)'
+      ].join(''),
+      'i'
+    );
+
     const criteria: FindOptions = {
       path: PathUtils.appRoot,
       fileFilter: {
@@ -25,11 +32,11 @@ export class DecoratorLoader {
           'node_modules/orche/lib/interceptors/**',
           '!decorator.loader*',
           '!node_modules',
-          '!typings',
+          '!typings'
         ],
-        content: /((?=.[^]*__decorate)(?=.[^]*path|interceptor))|(@path|@interceptor)/i,
+        content: decoratorsRegex
       },
-      recursiveSearch: true,
+      recursiveSearch: true
     };
 
     return new Promise(async (resolve, reject) => {
