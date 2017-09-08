@@ -1,20 +1,24 @@
-import { validate } from '../../..';
-import { NullValidator } from '@orche/validators';
+import { NotNullValidator, property } from '../../..';
+// import { NullValidator } from '@orche/validators';
 
 export class Student {
-  @validate({
-    validator: NullValidator
+  @property({
+    alias: 'name',
+    validator: {
+      validator: NotNullValidator
+    }
   })
   private _name: string;
 
   constructor(name?: string) {
-    this.name = name;
+    this._name = name;
   }
 
   get name(): string {
-    return this.name;
+    return this._name;
   }
+  
   set name(name: string) {
-    this.name = name;
+    this._name = name;
   }
 }
