@@ -1,3 +1,4 @@
+import { ClassUtils } from '../utils/class.utils';
 import { InterceptorDecoratorOptions } from '../interfaces/interceptor-decorator-options';
 import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { HttpRequestMethod } from '../constants/http-request-method';
@@ -9,7 +10,7 @@ export function interceptor(
     httpMethods: HttpRequestMethod.All,
   }) {
   return function (target: any) {
-    const className: any = target.toString().match(/(function|class) ([^{(]*)/i)[2].trim();
+    const className: string = ClassUtils.getClassName(target);
 
     let pathsArr: string[] = [];
     if (!Array.isArray(paths)) {
@@ -29,8 +30,10 @@ export function interceptor(
 }
 
 export function processing() {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-    InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target),
-      propertyKey);
+  return function (target: object, propertyKey: string, descriptor: PropertyDescriptor) {
+    InterceptorLoader.addInterceptorUnit(
+      descriptor.value.bind(target),
+      propertyKey
+    );
   };
 }
