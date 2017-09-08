@@ -8,7 +8,7 @@ export class ParameterLoader {
   private static paramsConfig: ParamConfig[] = [];
 
   static addParameterConfig(
-    target: Object, 
+    target: object, 
     methodName: string, 
     paramDetails: ParamDetails,
     paramIndex: number, 

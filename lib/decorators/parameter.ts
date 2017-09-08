@@ -1,39 +1,41 @@
+import { RegularParamDetails } from '../interfaces/regular-param-details';
+import { BodyParamDetails } from '../interfaces/body-param-details';
 import { ParamDetails } from '../interfaces/param-details';
 import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/param-type';
 
 
 export function requestParam() {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
                                        ParamType.RequestParam);
   };
 }
 
 export function responseParam() {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
                                        ParamType.ResponseParam);
   };
 }
 
 export function nextParam() {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
                                        ParamType.NextParam);
   };
 }
 
-export function queryParam(param: string | ParamDetails) {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+export function queryParam(param: string | RegularParamDetails) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.QueryParam);
   };
 }
 
-export function pathParam(param: string | ParamDetails) {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+export function pathParam(param: string | RegularParamDetails) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.PathParam);
@@ -41,36 +43,36 @@ export function pathParam(param: string | ParamDetails) {
 }
 
 export function requestParamMapper() {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(target, propertyKey, undefined, parameterIndex,
                                        ParamType.RequestParamMapper);
   };
 }
 
-export function bodyParam(param: string | ParamDetails = { name: null }) {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
-    const paramDetails: ParamDetails = loadParam(param);
+export function bodyParam(param?: BodyParamDetails) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
+    const paramDetails = param ? { details: param } : undefined;
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.BodyParam);
   };
 }
 
-export function headerParam(param: string | ParamDetails) {
-  return function (target: Object, propertyKey: string, parameterIndex: number) {
+export function headerParam(param: string | RegularParamDetails) {
+  return function (target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(target, propertyKey, paramDetails, parameterIndex,
                                        ParamType.HeaderParam);
   };
 }
 
-function loadParam(param?: string | ParamDetails): ParamDetails {
-  let paramDetails: ParamDetails;
+function loadParam(param?: string | RegularParamDetails): ParamDetails {
+  let regularParamDetails: RegularParamDetails;
   if (typeof param === 'string') {
-    paramDetails = {
+    regularParamDetails = {
       name: param
     };
   } else {
-    paramDetails = param;
+    regularParamDetails = param;
   }
-  return paramDetails;
+  return { details: regularParamDetails };
 }
