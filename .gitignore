@@ -6,6 +6,7 @@ log
 .vscode
 *-lock.json
 *.lock
+.DS_STORE
 
 *.iml
 
