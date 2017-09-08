@@ -67,7 +67,7 @@ export class ConfigUtils extends EventEmitter {
 
           if (fileContent) {
             fileContent = JSON.parse(fileContent);
-            envCfg = fileContent['apps'][configAppFileName];
+            envCfg = fileContent['apps'] ? fileContent['apps'][configAppFileName] : {};
             logger.debug(`Orche's environment config file loaded. 
               File: ${process.env.ORCHE_CONFIG}`);
           }
