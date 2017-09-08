@@ -8,7 +8,6 @@
     "app-root-path": "^2.0.1",
     "file-matcher": "^1.1.0",
     "moment": "^2.18.1",
-    "reflect-metadata": "^0.1.10",
     "winston": "^2.3.1"
   },
   "devDependencies": {
@@ -36,7 +35,7 @@
   "scripts": {
     "clean": "rm -rf ./build ./coverage ./log",
     "lint": "node_modules/.bin/tslint ./lib/**/*.ts ./test/**/*.ts",
-    "cp-package": "cp ./package.json ./build/core/",
+    "cp-package": "cp ./package.json ./build/rest/",
     "compile": "node_modules/.bin/tsc",
     "build": "npm run clean &&  npm run lint && npm run compile && npm run cp-package",
     "test": "node_modules/.bin/mocha",
@@ -58,12 +57,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/orchejs/core.git"
+    "url": "git+https://github.com/orchejs/rest.git"
   },
   "author": "Mauricio Gemelli Vigolo",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/orchejs/core/issues"
+    "url": "https://github.com/orchejs/rest/issues"
   },
-  "homepage": "https://github.com/orchejs/core#readme"
+  "homepage": "https://github.com/orchejs/rest#readme"
 }
