@@ -1,8 +1,12 @@
+import { BuildObjectResponse } from '../interfaces/build-object-response';
+import { BodyParamDetails } from '../interfaces/body-param-details';
+import { Properties } from '../properties/properties';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as moment from 'moment';
 
 import { Router } from './router';
+import { RegularParamDetails } from '../interfaces/regular-param-details';
 import { HttpRequestMethod } from '../constants/http-request-method';
 import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
@@ -21,7 +25,6 @@ import { ExpressRequestMapper } from '../requests/express.requestmapper';
 import { PathUtils } from '../utils/path.utils';
 
 export class ExpressRouter extends Router {
-
   constructor(app: express.Application) {
     super(app);
   }
@@ -29,7 +32,7 @@ export class ExpressRouter extends Router {
   public loadRoutes(path: string): LoadRouterStats {
     const routerStats: LoadRouterStats = {
       loadedRoutes: [],
-      initializationTime: 0,
+      initializationTime: 0
     };
 
     const initTime = moment();
@@ -42,8 +45,11 @@ export class ExpressRouter extends Router {
 
       routerUnits.forEach((routerUnit) => {
         const routerMethod: any = this.routeProcessor(
-          routerConfig.className, routerUnit.method,
-          routerUnit.methodName, routerUnit.contentType);
+          routerConfig.className,
+          routerUnit.method,
+          routerUnit.methodName,
+          routerUnit.contentType
+        );
 
         const unitPath: string = PathUtils.urlSanitation(routerUnit.path);
 
@@ -96,9 +102,13 @@ export class ExpressRouter extends Router {
     return routerStats;
   }
 
-  protected routeProcessor(target: string, method: Function, methodName: string,
-                           contentType: ContentType): Function {
-    return function () {
+  protected routeProcessor(
+    target: string,
+    method: Function,
+    methodName: string,
+    contentType: ContentType
+  ): Function {
+    return function() {
       const req: express.Request = arguments[0];
       const res: express.Response = arguments[1];
       const next: express.NextFunction = arguments[2];
@@ -107,7 +117,8 @@ export class ExpressRouter extends Router {
 
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
       if (paramConfig && paramConfig.params && paramConfig.params.length > 0) {
-        paramConfig.params.forEach((param, index) => {
+        paramConfig.params.forEach(async (param, index) => {
+          let details;
           switch (param.type) {
             case ParamType.RequestParam:
               endpointArgs[param.parameterIndex] = req;
@@ -119,21 +130,37 @@ export class ExpressRouter extends Router {
               endpointArgs[param.parameterIndex] = next;
               break;
             case ParamType.PathParam:
-              endpointArgs[param.parameterIndex] = req.params[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.params[details.name];
               break;
             case ParamType.QueryParam:
-              endpointArgs[param.parameterIndex] = req.query[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.query[details.name];
               break;
             case ParamType.RequestParamMapper:
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
               endpointArgs[param.parameterIndex] = requestMapper;
               break;
             case ParamType.BodyParam:
-              // TODO tratar quando paramDetails.name for undefined
-              endpointArgs[param.parameterIndex] = req.body;
+              let paramValue: any;
+              if (param && param.paramDetails) {
+                details = param.paramDetails.details as BodyParamDetails;
+                const loadResult: BuildObjectResponse = await Properties.loadPropertiesFromObject(
+                  req.body, 
+                  details
+                );
+                if (loadResult.validatorResponses.length > 0) {
+                  // TODO how to deal with this?
+                }
+                paramValue = loadResult.object;
+              } else {
+                paramValue = req.body;
+              }
+              endpointArgs[param.parameterIndex] = paramValue;
               break;
             case ParamType.HeaderParam:
-              endpointArgs[param.parameterIndex] = req.headers[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.headers[details.name];
               break;
           }
         });
@@ -154,7 +181,6 @@ export class ExpressRouter extends Router {
         } else {
           next();
         }
-
       } catch (e) {
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
         res.contentType(MimeType.json.toString());

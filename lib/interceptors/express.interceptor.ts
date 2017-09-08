@@ -1,7 +1,8 @@
-import { InterceptorUnit } from '../interfaces/interceptor-unit';
 import * as express from 'express';
 import * as moment from 'moment';
 
+import { InterceptorUnit } from '../interfaces/interceptor-unit';
+import { RegularParamDetails } from '../interfaces/regular-param-details';
 import { MimeType } from '../constants/mimetype';
 import { HttpRequestMethod } from '../constants/http-request-method';
 import { HttpResponseCode } from '../constants/http-response-code';
@@ -16,9 +17,7 @@ import { ParameterLoader } from '../loaders/parameter.loader';
 import { ExpressRequestMapper } from '../requests/express.requestmapper';
 import { ErrorResponse } from '../responses/error.response';
 
-
 export class ExpressInterceptor extends Interceptor {
-
   constructor(app: express.Application) {
     super(app);
   }
@@ -26,9 +25,9 @@ export class ExpressInterceptor extends Interceptor {
   public loadProcessors(): Promise<LoadInterceptorStats> {
     return new Promise(async (resolve, reject) => {
       const preStats: LoadInterceptorStats = {};
-      
+
       const initTime = moment();
-      
+
       const loadedProcessors: InterceptorConfig[] = await this.loadInterceptorUnit();
 
       const elapsedTime: number = initTime.diff(moment(), 'seconds');
@@ -47,10 +46,13 @@ export class ExpressInterceptor extends Interceptor {
     for (let index = 0; index < interceptorConfigs.length; index += 1) {
       const loaded: boolean = true;
       const interceptorConfig: InterceptorConfig = interceptorConfigs[index];
-      
+
       const processorUnit: InterceptorUnit = interceptorConfig.interceptorUnit;
-      const method = this.interceptorProcessor(interceptorConfig.className, processorUnit.method,
-                                               processorUnit.methodName);
+      const method = this.interceptorProcessor(
+        interceptorConfig.className,
+        processorUnit.method,
+        processorUnit.methodName
+      );
 
       interceptorConfig.paths.forEach((path) => {
         const loadedHttpMethods: HttpRequestMethod[] = [];
@@ -88,15 +90,16 @@ export class ExpressInterceptor extends Interceptor {
           return false;
         });
 
-        let loadedInterceptorConfig: any = loadedProcessors.
-          find(config => config.path === interceptorConfigPath);
+        let loadedInterceptorConfig: any = loadedProcessors.find(
+          config => config.path === interceptorConfigPath
+        );
 
         if (!loadedInterceptorConfig) {
           loadedInterceptorConfig = {
             path: interceptorConfigPath,
             order: interceptorConfig.order,
             httpMethods: loadedHttpMethods,
-            interceptorUnits: [],
+            interceptorUnits: []
           };
 
           loadedProcessors.push(loadedInterceptorConfig);
@@ -105,20 +108,21 @@ export class ExpressInterceptor extends Interceptor {
       });
     }
 
-    return loadedProcessors;    
+    return loadedProcessors;
   }
 
   protected interceptorProcessor(target: string, method: Function, methodName: string): Function {
-    return function () {
+    return function() {
       const req: express.Request = arguments[0];
       const res: express.Response = arguments[1];
       const next: express.NextFunction = arguments[2];
 
       let endpointArgs: any = [];
-      
+
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
       if (paramConfig && paramConfig.params && paramConfig.params.length > 0) {
         paramConfig.params.forEach((param, index) => {
+          let details;
           switch (param.type) {
             case ParamType.RequestParam:
               endpointArgs[param.parameterIndex] = req;
@@ -130,20 +134,24 @@ export class ExpressInterceptor extends Interceptor {
               endpointArgs[param.parameterIndex] = next;
               break;
             case ParamType.PathParam:
-              endpointArgs[param.parameterIndex] = req.params[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.params[details.name];
               break;
             case ParamType.QueryParam:
-              endpointArgs[param.parameterIndex] = req.query[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.query[details.name];
               break;
             case ParamType.RequestParamMapper:
               const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
               endpointArgs[param.parameterIndex] = requestMapper;
               break;
             case ParamType.BodyParam:
+              // TODO tratar quando paramDetails.name for undefined
               endpointArgs[param.parameterIndex] = req.body;
               break;
             case ParamType.HeaderParam:
-              endpointArgs[param.parameterIndex] = req.headers[param.paramDetails.name];
+              details = param.paramDetails.details as RegularParamDetails;
+              endpointArgs[param.parameterIndex] = req.headers[details.name];
               break;
           }
         });
@@ -154,7 +162,7 @@ export class ExpressInterceptor extends Interceptor {
       let result: any;
       try {
         result = method.apply(this, endpointArgs);
-        
+
         if (result && result.isResponseType) {
           res.contentType(MimeType.json.toString());
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
@@ -164,7 +172,6 @@ export class ExpressInterceptor extends Interceptor {
         } else {
           next();
         }
-
       } catch (e) {
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
         res.contentType(MimeType.json.toString());
