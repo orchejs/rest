@@ -1,28 +1,27 @@
-import { BuildObjectResponse } from '../interfaces/build-object-response';
-import { BodyParamDetails } from '../interfaces/body-param-details';
-import { Properties } from '../properties/properties';
 import * as express from 'express';
-import * as cors from 'cors';
 import * as moment from 'moment';
-
+import * as cors from 'cors';
 import { Router } from './router';
-import { RegularParamDetails } from '../interfaces/regular-param-details';
-import { HttpRequestMethod } from '../constants/http-request-method';
-import { HttpResponseCode } from '../constants/http-response-code';
-import { MimeType } from '../constants/mimetype';
-import { ParamType } from '../constants/param-type';
-import { ContentType } from '../interfaces/content-type';
 import { CorsConfig } from '../interfaces/cors-config';
+import { PropertyLoader } from '../loaders/property.loader';
+import { HttpResponseCode } from '../constants/http-response-code';
+import { HttpRequestMethod } from '../constants/http-request-method';
+import { MimeType } from '../constants/mimetype';
 import { LoadRouterStats } from '../interfaces/load-router-stats';
-import { ParamConfig } from '../interfaces/param-config';
-import { RouterConfig } from '../interfaces/router-config';
-import { RouterUnit } from '../interfaces/router-unit';
 import { RouterLoader } from '../loaders/router.loader';
-import { InterceptorLoader } from '../loaders/interceptor.loader';
-import { ParameterLoader } from '../loaders/parameter.loader';
-import { ErrorResponse } from '../responses/error.response';
-import { ExpressRequestMapper } from '../requests/express.requestmapper';
+import { RouterConfig } from '../interfaces/router-config';
 import { PathUtils } from '../utils/path.utils';
+import { RouterUnit } from '../interfaces/router-unit';
+import { ContentType } from '../interfaces/content-type';
+import { ValidatorError } from '../interfaces/validator-error';
+import { ParamConfig } from '../interfaces/param-config';
+import { ParameterLoader } from '../loaders/parameter.loader';
+import { ParamType } from '../constants/param-type';
+import { RegularParamDetails } from '../interfaces/regular-param-details';
+import { ExpressRequestMapper } from '../requests/express.request-mapper';
+import { BodyParamDetails } from '../interfaces/body-param-details';
+import { BuildObjectResponse } from '../interfaces/build-object-response';
+import { ErrorResponse } from '../responses/error.response';
 
 export class ExpressRouter extends Router {
   constructor(app: express.Application) {
@@ -43,7 +42,7 @@ export class ExpressRouter extends Router {
       const router: express.Router = express.Router();
       const routerUnits: RouterUnit[] = routerConfig.routerUnits;
 
-      routerUnits.forEach((routerUnit) => {
+      routerUnits.forEach(routerUnit => {
         const routerMethod: any = this.routeProcessor(
           routerConfig.className,
           routerUnit.method,
@@ -107,12 +106,13 @@ export class ExpressRouter extends Router {
     method: Function,
     methodName: string,
     contentType: ContentType
-  ): Function {
+  ): any {
     return function() {
       const req: express.Request = arguments[0];
       const res: express.Response = arguments[1];
       const next: express.NextFunction = arguments[2];
 
+      const validatorErrors: ValidatorError[] = [];
       let endpointArgs: any = [];
 
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(target, methodName);
@@ -145,12 +145,14 @@ export class ExpressRouter extends Router {
               let paramValue: any;
               if (param && param.paramDetails) {
                 details = param.paramDetails.details as BodyParamDetails;
-                const loadResult: BuildObjectResponse = await Properties.loadPropertiesFromObject(
-                  req.body, 
-                  details
-                );
-                if (loadResult.validatorResponses.length > 0) {
-                  // TODO how to deal with this?
+                const loadResult: BuildObjectResponse = 
+                  await PropertyLoader.loadPropertiesFromObject(
+                    req.body,
+                    details
+                  );
+                if (loadResult.validatorErrors.length > 0) {
+                  validatorErrors.concat(loadResult.validatorErrors);
+                  return;
                 }
                 paramValue = loadResult.object;
               } else {
@@ -172,7 +174,9 @@ export class ExpressRouter extends Router {
       try {
         result = method.apply(this, endpointArgs);
 
-        if (result && result.isResponseType) {
+        if (res.headersSent) {
+          return;
+        } else if (result && result.isResponseType) {
           res.contentType(contentType.response['value']);
           res.status(result.getHttpStatus()).send(result.toObjectLiteral());
         } else if (result) {
@@ -182,6 +186,9 @@ export class ExpressRouter extends Router {
           next();
         }
       } catch (e) {
+        if (res.headersSent) {
+          return;
+        }
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
         res.contentType(MimeType.json.toString());
         res.status(result.getHttpStatus()).send(result.toObjectLiteral());

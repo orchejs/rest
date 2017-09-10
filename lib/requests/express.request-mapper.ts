@@ -1,9 +1,8 @@
 import { PathUtils } from '../utils/path.utils';
 import { Request } from 'express';
-import { RequestMapper } from './requestmapper';
+import { RequestMapper } from './request-mapper';
 
 export class ExpressRequestMapper extends RequestMapper {
-
   constructor(request: Request) {
     super(request);
   }
@@ -28,5 +27,4 @@ export class ExpressRequestMapper extends RequestMapper {
       }
     }
   }
-  
 }

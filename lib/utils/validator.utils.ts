@@ -1,28 +1,24 @@
-import { ValidatorResponse } from '../interfaces/validator-response';
+import { ValidatorError } from '../interfaces/validator-error';
 import { ValidatorDetails } from '../interfaces/validator-details';
-import { ValidatorLoader } from '../loaders/validator.loader';
 
-export class ValidatorRunner {
-  
-  /**
-   * 
-   * @return validation response with a boolean status and error details if existent. 
-   */
+export class ValidatorUtils {
   static validateObject(
     value: any,
     propertyKey: string,
     validatorDetails: ValidatorDetails
-  ): Promise<ValidatorResponse> {
+  ): Promise<ValidatorError> {
     return new Promise(async (resolve, reject) => {
-      let validatorResponse: ValidatorResponse = { success: true };
+      let validatorResponse: ValidatorError = undefined;
       if (!validatorDetails || !validatorDetails.validator) {
         Promise.resolve(validatorResponse);
         return;
       }
 
-      const validator = new (validatorDetails.validator)();
+      const validator = new validatorDetails.validator();
       validatorResponse = await validator.validate(validatorDetails.parameters);
-      validatorResponse.property = propertyKey;
+      if (validatorResponse) {
+        validatorResponse.property = propertyKey;
+      }
       resolve(validatorResponse);
     });
   }

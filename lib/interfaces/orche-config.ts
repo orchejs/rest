@@ -1,6 +1,6 @@
 import { Environment } from '../constants/environment';
 import { CorsOptions } from './cors-options';
-import { OrcheEngines } from '../constants/orche-engines';
+import { OrcheEngine } from '../constants/orche-engine';
 import { LogOptions } from './log-options';
 
 export interface OrcheConfig {
@@ -17,7 +17,7 @@ export interface OrcheConfig {
    * - non resolved issues in a specific framework
    * - in this way, changing the api engine is a peace of cake :D
    */
-  apiEngine?: OrcheEngines;
+  apiEngine?: OrcheEngine;
   /**
    * The app name. It serves for config resolution.
    * Default value: module name
@@ -64,8 +64,4 @@ export interface OrcheConfig {
    * TODO: Add monitor api to the project to get some statistics about the usage.
    */
   // monitorRequests?: boolean;
-  /**
-   * TODO: Add hateoas in future version
-   */
-  // hateoas?: boolean;
 }

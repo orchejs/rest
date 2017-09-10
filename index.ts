@@ -24,11 +24,11 @@ export * from './lib/decorators/http';
 export * from './lib/decorators/interceptor';
 export * from './lib/decorators/parameter';
 export * from './lib/decorators/path';
-export * from './lib/decorators/validator';
+export * from './lib/decorators/property';
 
 // request
 export * from './lib/requests/express.requestmapper';
-export * from './lib/requests/requestmapper';
+export * from './lib/requests/request-mapper';
 
 // responses
 export * from './lib/responses/error.response';
@@ -37,3 +37,6 @@ export * from './lib/responses/generic.response';
 // utils
 export { appConfig } from './lib/utils/config.utils';
 export { logger } from './lib/utils/log.utils';
+
+// validators
+export { NotNullValidator } from './lib/validators/globals/not-null.validator';

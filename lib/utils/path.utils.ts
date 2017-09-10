@@ -1,16 +1,17 @@
-import { SortType } from '../constants/sorttype';
+import { SortType } from '../constants/sort-type';
 import { SortField } from '../interfaces/sort-field';
 import * as path from 'path';
 import * as appRootPath from 'app-root-path';
 
-import { OrcheNames } from '../constants/orche-names';
+import { OrchePrivate } from '../constants/orche-private';
 
 export class PathUtils {
-
   static appRoot: string = appRootPath.path;
   static appDirName: string = path.basename(appRootPath.path);
-  static localConfigFile: string = path.resolve(appRootPath.path, './'
-    .concat(OrcheNames.configFile));
+  static localConfigFile: string = path.resolve(
+    appRootPath.path,
+    './'.concat(OrchePrivate.configFile)
+  );
 
   /**
    * Sanitizes the url, in other words, this function includes the beginning slash
@@ -33,7 +34,7 @@ export class PathUtils {
     }
     // Ending url sanitation
     if (finalUrl.match(/\/$/)) {
-      finalUrl = finalUrl.substr(0, (finalUrl.length - 1));
+      finalUrl = finalUrl.substr(0, finalUrl.length - 1);
     }
 
     return finalUrl;
@@ -55,9 +56,9 @@ export class PathUtils {
     let result: any;
     if (value.indexOf(',') > -1) {
       const values = value.split(',');
-      
+
       result = [];
-      values.forEach((val) => {
+      values.forEach(val => {
         result.push(this.prepareValue(val));
       });
 
@@ -78,21 +79,22 @@ export class PathUtils {
     const length = value.length - 1;
     const asc = value.indexOf('+');
     if (asc === 0 || asc === length) {
-      const val = value.replace(/(\+|\-)/g,'');
+      const val = value.replace(/(\+|\-)/g, '');
       return {
         name: val,
-        type: SortType.Asc };
+        type: SortType.Asc
+      };
     }
-    
+
     const desc = value.indexOf('-');
     if (desc === 0 || desc === length) {
-      const val = value.replace(/(\-)/,'');
+      const val = value.replace(/(\-)/, '');
       return {
         name: val,
-        type: SortType.Desc };
+        type: SortType.Desc
+      };
     }
 
     return value;
   }
-
 }

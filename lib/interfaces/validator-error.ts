@@ -1,5 +1,4 @@
-export interface ValidatorResponse {
-  success: boolean;
+export interface ValidatorError {
   message?: string;
   details?: string;
   property?: string;

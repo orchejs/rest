@@ -2,19 +2,21 @@ import { GenericResponse } from '../responses/generic.response';
 import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 
-
 export class PagedResponse extends GenericResponse {
-
   protected size: number;
   protected page: number;
   protected totalElements: number;
   protected totalPages?: number;
 
-
-  constructor(data: any, size: number, page: number, totalElements: number, 
-              httpStatus?: HttpResponseCode) {
+  constructor(
+    data: any,
+    size: number,
+    page: number,
+    totalElements: number,
+    httpStatus?: HttpResponseCode
+  ) {
     super(data, httpStatus);
-    
+
     this.size = size;
     this.page = page;
     this.totalElements = totalElements;
@@ -36,7 +38,7 @@ export class PagedResponse extends GenericResponse {
       size: this.size,
       page: this.page,
       totalElements: this.totalElements,
-      totalPages: this.totalPages };
-  }  
-
+      totalPages: this.totalPages
+    };
+  }
 }

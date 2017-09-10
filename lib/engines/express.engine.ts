@@ -18,17 +18,15 @@ import { ExpressRouter } from '../routers/express.router';
 import { PathUtils } from '../utils/path.utils';
 import { ConfigUtils } from '../utils/config.utils';
 
-
 export class ExpressEngine extends Engine {
-
   constructor(userConfig?: OrcheConfig) {
     super(
       {
-        dependency: 'express', 
-        from: '4.0.0', 
-        to: '4.20.0',
+        dependency: 'express',
+        from: '4.0.0',
+        to: '4.20.0'
       },
-      userConfig,
+      userConfig
     );
   }
 
@@ -49,11 +47,6 @@ export class ExpressEngine extends Engine {
       }
       this.setupExtensions();
 
-      // Interceptors initialization
-      const expressInterceptor: ExpressInterceptor = new ExpressInterceptor(this.app);
-      // Loading preprocessing interceptors
-      const interceptorStats: LoadInterceptorStats = await expressInterceptor.loadProcessors();
-
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
       const routerStats: LoadRouterStats = expressRouter.loadRoutes(this.config.path);
@@ -66,7 +59,7 @@ export class ExpressEngine extends Engine {
 
         const result: OrcheResult = {
           server: this.server,
-          stats: loadStats,
+          stats: loadStats
         };
 
         resolve(result);
@@ -104,7 +97,7 @@ export class ExpressEngine extends Engine {
       return;
     }
 
-    extensions.forEach((extension) => {
+    extensions.forEach(extension => {
       this.app.use(extension);
     });
   }

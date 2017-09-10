@@ -40,15 +40,15 @@ export class ConfigUtils extends EventEmitter {
      * 2 - LOCAL's orche file configuration
      * 3 - code orche config
      */
-    this.config.apiEngine = envCfg.apiEngine || localCfg.apiEngine || userConfig.apiEngine ||
-      OrcheEngines.ExpressJS;
+    this.config.apiEngine =
+      envCfg.apiEngine || localCfg.apiEngine || userConfig.apiEngine || OrcheEngines.ExpressJS;
 
     const path = envCfg.path || localCfg.path || userConfig.path;
     this.config.path = PathUtils.urlSanitation(path);
 
     this.config.port = envCfg.port || localCfg.port || userConfig.port || 3000;
-    this.config.appName = envCfg.appName || localCfg.appName || userConfig.appName || 
-      PathUtils.appDirName;
+    this.config.appName =
+      envCfg.appName || localCfg.appName || userConfig.appName || PathUtils.appDirName;
     this.config.corsConfig = envCfg.corsConfig || localCfg.corsConfig || userConfig.corsConfig;
     this.config.debug = envCfg.debug || localCfg.debug || userConfig.debug || false;
     this.config.middlewares = envCfg.middlewares || localCfg.middlewares || userConfig.middlewares;
@@ -83,7 +83,7 @@ export class ConfigUtils extends EventEmitter {
     return envCfg;
   }
 
-  private loadLocalConfigFile(): OrcheConfig {  
+  private loadLocalConfigFile(): OrcheConfig {
     let localCfg: OrcheConfig = {};
     const localConfigFile = fs.existsSync(PathUtils.localConfigFile);
     if (localConfigFile) {
@@ -105,6 +105,6 @@ export class ConfigUtils extends EventEmitter {
 export const configUtils: ConfigUtils = new ConfigUtils();
 
 export let appConfig = configUtils.config;
-configUtils.on('configLoaded', (config) => {
+configUtils.on('configLoaded', config => {
   appConfig = config;
 });

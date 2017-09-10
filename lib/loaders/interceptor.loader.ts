@@ -1,10 +1,8 @@
-import { PathUtils } from '../utils/path.utils';
 import { InterceptorConfig } from '../interfaces/interceptor-config';
 import { InterceptorUnit } from '../interfaces/interceptor-unit';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 export class InterceptorLoader {
-
   static interceptorConfigs: InterceptorConfig[] = [];
   static interceptorUnit: InterceptorUnit;
 
@@ -26,7 +24,7 @@ export class InterceptorLoader {
       order: interceptorOrder,
       className: interceptorClassName,
       httpMethods: interceptorHttpMethods,
-      interceptorUnit: this.interceptorUnit,
+      interceptorUnit: this.interceptorUnit
     };
 
     this.interceptorConfigs.push(interceptorConfig);

@@ -2,7 +2,6 @@ import { ContentType } from '../interfaces/content-type';
 import { LoadRouterStats } from '../interfaces/load-router-stats';
 
 export abstract class Router {
-
   protected app: any;
 
   constructor(app: any) {
@@ -15,5 +14,6 @@ export abstract class Router {
     target: string,
     method: Function,
     methodName: string,
-    contentType: ContentType): Function;
+    contentType: ContentType
+  ): Function;
 }

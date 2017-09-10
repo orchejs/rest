@@ -1,6 +1,5 @@
 export abstract class RequestMapper {
-
-  [queryParams : string]: any;
+  [queryParams: string]: any;
 
   constructor(request: any) {
     this.pathParams = {};
@@ -11,5 +10,4 @@ export abstract class RequestMapper {
   protected abstract loadPathParams(request: any): void;
 
   protected abstract loadQueryParams(request: any): void;
-
 }

@@ -30,9 +30,10 @@ export class PackageUtils {
     return dependency;
   }
 
-  public checkDependencyVersion(dependencyName: string, versionToCheck: string): 'eq' | 'lt'
-    | 'gt' {
-
+  public checkDependencyVersion(
+    dependencyName: string,
+    versionToCheck: string
+  ): 'eq' | 'lt' | 'gt' {
     const version = this.getDependencyVersion(dependencyName);
 
     if (!version) {
@@ -71,9 +72,11 @@ export class PackageUtils {
     return result;
   }
 
-  public isDependencyVersionCompatible(dependencyName: string, fromVersion: string, toVersion:
-    string): boolean {
-
+  public isDependencyVersionCompatible(
+    dependencyName: string,
+    fromVersion: string,
+    toVersion: string
+  ): boolean {
     const fromResult = this.checkDependencyVersion(dependencyName, fromVersion);
 
     if (fromResult === 'gt') {
@@ -88,5 +91,4 @@ export class PackageUtils {
 
     return true;
   }
-
 }

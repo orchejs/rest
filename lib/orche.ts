@@ -1,7 +1,7 @@
 import { OrcheConfig } from './interfaces/orche-config';
 import { OrcheResult } from './interfaces/orche-result';
 import { DecoratorLoader } from './loaders/decorator.loader';
-import { OrcheEngines } from './constants/orche-engines';
+import { OrcheEngine } from './constants/orche-engine';
 import { ExpressEngine } from './engines/express.engine';
 
 export class Orche {

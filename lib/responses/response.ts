@@ -1,9 +1,7 @@
 import { HttpResponseCode } from '../constants/http-response-code';
 import { MimeType } from '../constants/mimetype';
 
-
 export abstract class Response {
-
   readonly isResponseType: boolean = true;
   protected httpStatus: HttpResponseCode;
 
@@ -39,5 +37,4 @@ export abstract class Response {
    * @return {ResponseTemplate}
    */
   abstract toObjectLiteral(): any;
-
 }
