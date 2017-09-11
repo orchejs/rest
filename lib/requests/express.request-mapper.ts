@@ -1,4 +1,4 @@
-import { PathUtils } from '../utils/path.utils';
+import { UrlUtils } from '../utils/url.utils';
 import { Request } from 'express';
 import { RequestMapper } from './request-mapper';
 
@@ -23,7 +23,7 @@ export class ExpressRequestMapper extends RequestMapper {
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         const paramValue: any = params[key];
-        this[key] = PathUtils.getPathValue(paramValue);
+        this[key] = UrlUtils.getPathValue(paramValue);
       }
     }
   }

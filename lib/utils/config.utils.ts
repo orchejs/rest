@@ -2,9 +2,10 @@ import { EventEmitter } from 'events';
 import * as fs from 'fs';
 
 import { PathUtils } from './path.utils';
+import { UrlUtils } from './url.utils';
 import { logger } from './log.utils';
 import { OrcheConfig } from '../interfaces/orche-config';
-import { OrcheEngines } from '../constants/orche-engines';
+import { OrcheEngine } from '../constants/orche-engine';
 
 export class ConfigUtils extends EventEmitter {
   /**
@@ -41,10 +42,10 @@ export class ConfigUtils extends EventEmitter {
      * 3 - code orche config
      */
     this.config.apiEngine =
-      envCfg.apiEngine || localCfg.apiEngine || userConfig.apiEngine || OrcheEngines.ExpressJS;
+      envCfg.apiEngine || localCfg.apiEngine || userConfig.apiEngine || OrcheEngine.ExpressJS;
 
     const path = envCfg.path || localCfg.path || userConfig.path;
-    this.config.path = PathUtils.urlSanitation(path);
+    this.config.path = UrlUtils.urlSanitation(path);
 
     this.config.port = envCfg.port || localCfg.port || userConfig.port || 3000;
     this.config.appName =

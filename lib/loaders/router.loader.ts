@@ -8,6 +8,17 @@ export class RouterLoader {
   static routerConfigs: RouterConfig[] = [];
   static routerUnits: RouterUnit[] = [];
 
+  static addRouterConfig(className: string, path: string) {
+    const routerConfig: RouterConfig = {
+      path,
+      className,
+      routerUnits: this.routerUnits
+    };
+
+    this.routerConfigs.push(routerConfig);
+    this.routerUnits = [];
+  }
+
   static addRouteUnit(
     path: string,
     method: Function,
@@ -28,16 +39,5 @@ export class RouterLoader {
     };
 
     this.routerUnits.push(routerUnit);
-  }
-
-  static addRouterConfig(className: string, path: string) {
-    const routerConfig: RouterConfig = {
-      path,
-      className,
-      routerUnits: this.routerUnits
-    };
-
-    this.routerConfigs.push(routerConfig);
-    this.routerUnits = [];
   }
 }

@@ -1,5 +1,4 @@
 import { ValidatorUtils } from '../utils/validator.utils';
-import { BodyParamDetails } from '../interfaces/body-param-details';
 import { PropertyUnit } from '../interfaces/property-unit';
 import { PropertyDetails } from '../interfaces/property-details';
 import { PropertyConfig } from '../interfaces/property-config';
@@ -48,12 +47,12 @@ export class PropertyLoader {
     value: any,
     param: BodyParamDetails
   ): Promise<BuildObjectResponse> {
-    const clazz: object = param.convertTO;
+    const clazz: object = param.type as object;
     if (!clazz) {
       // TODO what is the proper behaviour to this situation
       return;
     }
-    const className = ClassUtils.getClassName(param.convertTO);
+    const className = ClassUtils.getClassName(clazz);
     const propertyUnits: PropertyUnit[] = PropertyLoader.getProperties(className);
 
     return this.buildObject(value, clazz, propertyUnits);

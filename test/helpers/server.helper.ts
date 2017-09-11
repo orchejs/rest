@@ -1,30 +1,27 @@
+import { Server } from 'http';
 import { json } from 'body-parser';
 import * as cors from 'cors';
 
-import {
-  Orche, OrcheConfig, OrcheEngines, OrcheResult, 
-} from '../../';
+import { Orche, OrcheConfig, OrcheEngine, OrcheResult } from '../../';
 
 export class ServerHelper {
-
-  private static result: OrcheResult;
+  private static orcheResult: OrcheResult;
 
   static async initBasicServer(): Promise<OrcheResult> {
-    if (!this.result) {
+    if (!this.orcheResult) {
       const orche = new Orche();
 
       const config: OrcheConfig = {
         path: '/orche',
-        apiEngine: OrcheEngines.ExpressJS,
+        apiEngine: OrcheEngine.ExpressJS,
         port: 8888,
-        middlewares: [
-          json(),
-        ]};
+        middlewares: [json()]
+      };
 
-      this.result = await orche.init(config);
+      this.orcheResult = await orche.init(config);
     }
 
-    return Promise.resolve(this.result);
+    return Promise.resolve(this.orcheResult);
   }
 
 }

@@ -1,5 +1,7 @@
-import { RegularParamDetails } from '../interfaces/regular-param-details';
-import { BodyParamDetails } from '../interfaces/body-param-details';
+import { ValidatorDetails } from '../interfaces/validator-details';
+import * as Reflect from 'reflect-metadata';
+import { type } from 'os';
+import { ParamInfo } from '../interfaces/param-info';
 import { ParamDetails } from '../interfaces/param-details';
 import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/param-type';
@@ -40,7 +42,7 @@ export function nextParam() {
   };
 }
 
-export function queryParam(param: string | RegularParamDetails) {
+export function queryParam(param: string, validators?: ValidatorDetails[]) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(
@@ -53,8 +55,8 @@ export function queryParam(param: string | RegularParamDetails) {
   };
 }
 
-export function pathParam(param: string | RegularParamDetails) {
-  return function(target: object, propertyKey: string, parameterIndex: number) {
+export function pathParam(param: string, validators?: ValidatorDetails[]) {
+  return function(target: object, propertyKey: string, parameterIndex: number, ...args: any[]) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(
       target,
@@ -78,7 +80,7 @@ export function requestParamMapper() {
   };
 }
 
-export function bodyParam(param?: BodyParamDetails) {
+export function bodyParam(param?: string, validators?: ValidatorDetails[]) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = param ? { details: param } : undefined;
     ParameterLoader.addParameterConfig(
@@ -91,7 +93,7 @@ export function bodyParam(param?: BodyParamDetails) {
   };
 }
 
-export function headerParam(param: string | RegularParamDetails) {
+export function headerParam(param: string, validators?: ValidatorDetails) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails: ParamDetails = loadParam(param);
     ParameterLoader.addParameterConfig(
@@ -104,14 +106,15 @@ export function headerParam(param: string | RegularParamDetails) {
   };
 }
 
-function loadParam(param?: string | RegularParamDetails): ParamDetails {
-  let regularParamDetails: RegularParamDetails;
-  if (typeof param === 'string') {
-    regularParamDetails = {
-      name: param
-    };
-  } else {
-    regularParamDetails = param;
-  }
-  return { details: regularParamDetails };
+function loadParam(
+  target: object,
+  key: string,
+  param?: string,
+  validators?: ValidatorDetails[]
+): ParamDetails {
+  let details: ParamDetails;
+
+  const type = Reflect.getMetadata('design:type', target, key);
+
+  return details;
 }

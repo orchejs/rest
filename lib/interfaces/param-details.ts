@@ -1,5 +1,7 @@
-import { BodyParamDetails } from './body-param-details';
-import { RegularParamDetails } from './regular-param-details';
+import { ValidatorDetails } from './validator-details';
+
 export interface ParamDetails {
-  details: BodyParamDetails | RegularParamDetails;
+  name: string;
+  type?: any;
+  validators?: ValidatorDetails[];
 }

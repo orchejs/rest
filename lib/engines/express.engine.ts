@@ -8,14 +8,10 @@ import { OrcheConfig } from '../interfaces/orche-config';
 import { OrcheResult } from '../interfaces/orche-result';
 import { ExpressSettings } from '../interfaces/express-settings';
 import { LoadRouterStats } from '../interfaces/load-router-stats';
-import { LoadInterceptorStats } from '../interfaces/load-interceptor-stats';
 import { LoadStats } from '../interfaces/load-stats';
 import { RouterUnit } from '../interfaces/router-unit';
 import { RouterConfig } from '../interfaces/router-config';
-import { InterceptorConfig } from '../interfaces/interceptor-config';
-import { ExpressInterceptor } from '../interceptors/express.interceptor';
 import { ExpressRouter } from '../routers/express.router';
-import { PathUtils } from '../utils/path.utils';
 import { ConfigUtils } from '../utils/config.utils';
 
 export class ExpressEngine extends Engine {
@@ -49,12 +45,11 @@ export class ExpressEngine extends Engine {
 
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
-      const routerStats: LoadRouterStats = expressRouter.loadRoutes(this.config.path);
+      const routerStats: LoadRouterStats = expressRouter.loadRouters(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
         const loadStats: LoadStats = {};
-        loadStats.interceptorStats = interceptorStats;
         loadStats.routerStats = routerStats;
 
         const result: OrcheResult = {
