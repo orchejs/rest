@@ -1,34 +1,33 @@
 import { ParamDetails } from '../interfaces/param-details';
 import { ParamConfig } from '../interfaces/param-config';
-import { ParamUnit } from '../interfaces/param-unit';
 import { ParamType } from '../constants/param-type';
 
 export class ParameterLoader {
-
   private static paramsConfig: ParamConfig[] = [];
 
   static addParameterConfig(
-    target: object, 
-    methodName: string, 
+    target: object,
+    methodName: string,
     paramDetails: ParamDetails,
-    paramIndex: number, 
+    paramIndex: number,
     paramType: ParamType
   ) {
-    let paramConfig: ParamConfig = this.paramsConfig.find(pConfig =>
-      pConfig.methodName === methodName && pConfig.className === target.constructor.name);
+    let paramConfig: ParamConfig = this.paramsConfig.find(
+      pConfig => pConfig.methodName === methodName && pConfig.className === target.constructor.name
+    );
 
     if (!paramConfig) {
       paramConfig = {
         methodName,
         params: [],
-        className: target.constructor.name,
+        className: target.constructor.name
       };
     }
 
     paramConfig.params.push({
       paramDetails,
       type: paramType,
-      parameterIndex: paramIndex,
+      parameterIndex: paramIndex
     });
 
     paramConfig.params.sort((a, b) => a.parameterIndex - b.parameterIndex);
@@ -40,8 +39,9 @@ export class ParameterLoader {
     let paramConfig: ParamConfig;
 
     if (this.paramsConfig) {
-      paramConfig = this.paramsConfig.find(pConfig =>
-        pConfig.methodName === methodName && pConfig.className === className);
+      paramConfig = this.paramsConfig.find(
+        pConfig => pConfig.methodName === methodName && pConfig.className === className
+      );
     }
 
     return paramConfig;

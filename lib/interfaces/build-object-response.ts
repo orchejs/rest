@@ -1,6 +1,6 @@
-import { ValidatorResponse } from './validator-response';
+import { ValidatorError } from './validator-error';
 
 export interface BuildObjectResponse {
   object: any;
-  validatorResponses?: ValidatorResponse[];
+  validatorErrors?: ValidatorError[];
 }

@@ -1,7 +1,6 @@
 import { ValidatorDetails } from './validator-details';
 
-export interface ParamDetails {
+export interface ParamInfo {
   name: string;
-  type?: any;
   validators?: ValidatorDetails[];
 }

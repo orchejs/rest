@@ -1,39 +1,19 @@
 import { FileMatcher, FindOptions } from 'file-matcher';
-
 import { PathUtils } from '../utils/path.utils';
 
 export class DecoratorLoader {
-  /**
-   * Loads the orche decorators, requiring this files, which
-   * executes the decorators functions and registers all the paths, 
-   * interceptors and errors classes.
-   *
-   * @returns { Promise<any> }
-   * Returns the list of files that were found and required.
-   */
   loadDecorators(): Promise<string[]> {
     const fileMatcher = new FileMatcher();
 
     const decoratorsRegex = new RegExp(
-      [
-        '((?=.[^]*__decorate)',
-        '(?=.[^]*path|interceptor))',
-        '|(@path|@interceptor)'
-      ].join(''),
+      ['((?=.[^]*__decorate)', '(?=.[^]*route|interceptor))', '|(@route|@interceptor)'].join(''),
       'i'
     );
 
     const criteria: FindOptions = {
       path: PathUtils.appRoot,
       fileFilter: {
-        fileNamePattern: [
-          '**/*.js',
-          '**/*.ts',
-          'node_modules/orche/lib/interceptors/**',
-          '!decorator.loader*',
-          '!node_modules',
-          '!typings'
-        ],
+        fileNamePattern: ['**/*.js', '**/*.ts', '!decorator.loader*', '!node_modules', '!typings'],
         content: decoratorsRegex
       },
       recursiveSearch: true

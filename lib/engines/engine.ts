@@ -1,14 +1,11 @@
 import { OrcheConfig } from '../interfaces/orche-config';
 import { OrcheResult } from '../interfaces/orche-result';
-import { LoadStats } from '../interfaces/load-stats';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
-import { configUtils, appConfig } from '../utils/config.utils';
+import { configUtils } from '../utils/config.utils';
 import { logger } from '../utils/log.utils';
 
-
 export abstract class Engine {
-
   protected app: any;
   protected server: any;
   protected config: OrcheConfig;
@@ -23,7 +20,7 @@ export abstract class Engine {
 
     configUtils.loadOrcheConfig(userConfig);
     this.config = configUtils.config;
-    
+
     logger.init(this.config);
   }
 
@@ -33,12 +30,11 @@ export abstract class Engine {
     return pUtils.isDependencyVersionCompatible(
       compatVersions.dependency,
       compatVersions.from,
-      compatVersions.to);
+      compatVersions.to
+    );
   }
-
 
   public abstract loadServer(): Promise<OrcheResult>;
   protected abstract setupSettings(): void;
   protected abstract setupExtensions(): void;
-
 }

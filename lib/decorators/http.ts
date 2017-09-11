@@ -5,11 +5,7 @@ import { ContentType } from '../interfaces/content-type';
 import { RouterLoader } from '../loaders/router.loader';
 
 export function all(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -29,11 +25,7 @@ export function all(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function get(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = { response: MimeType.json };
@@ -51,11 +43,7 @@ export function get(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function post(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -75,11 +63,7 @@ export function post(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function put(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -99,11 +83,7 @@ export function put(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function del(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -123,11 +103,7 @@ export function del(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function patch(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -147,11 +123,7 @@ export function patch(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function options(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = {
@@ -171,11 +143,7 @@ export function options(path: string = '', options: HttpDecoratorOptions = {}) {
 }
 
 export function head(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     let ct: ContentType = options.contentType;
     if (!ct) {
       ct = { response: MimeType.json };

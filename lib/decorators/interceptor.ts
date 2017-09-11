@@ -3,13 +3,11 @@ import { InterceptorDecoratorOptions } from '../interfaces/interceptor-decorator
 import { InterceptorLoader } from '../loaders/interceptor.loader';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
-
 export function interceptor(
   paths: string | string[] = ['/'],
-  options: InterceptorDecoratorOptions = {
-    httpMethods: HttpRequestMethod.All,
-  }) {
-  return function (target: any) {
+  options: InterceptorDecoratorOptions = { httpMethods: HttpRequestMethod.All }
+) {
+  return function(target: any) {
     const className: string = ClassUtils.getClassName(target);
 
     let pathsArr: string[] = [];
@@ -30,10 +28,7 @@ export function interceptor(
 }
 
 export function processing() {
-  return function (target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    InterceptorLoader.addInterceptorUnit(
-      descriptor.value.bind(target),
-      propertyKey
-    );
+  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
+    InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target), propertyKey);
   };
 }

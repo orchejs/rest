@@ -9,7 +9,6 @@ import { OrcheConfig } from '../interfaces/orche-config';
 import { PathUtils } from './path.utils';
 
 export class LogUtils {
-
   private instance: any;
   private env: Environment;
   private transports: winston.TransportInstance[];
@@ -40,10 +39,12 @@ export class LogUtils {
      *  - if consoleOptions is defined
      *  - if fileOptions was not informed and it's not production
      */
-    if ((this.env !== Environment.Production || appConfig.debug) && 
-        (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)) {
+    if (
+      (this.env !== Environment.Production || appConfig.debug) &&
+      (appConfig.debug || logOptions.consoleOptions || !logOptions.fileOptions)
+    ) {
       logOptions.consoleOptions = this.loadConsoleOptions(logOptions.consoleOptions);
-      const consoleTransport = new (winston.transports.Console)(logOptions.consoleOptions);
+      const consoleTransport = new winston.transports.Console(logOptions.consoleOptions);
       this.transports.push(consoleTransport);
     }
 
@@ -52,19 +53,20 @@ export class LogUtils {
      *  - the app is running in production
      *  - if fileOptions is defined
      */
-    if ((this.env === Environment.Production) || logOptions.fileOptions) {
+    if (this.env === Environment.Production || logOptions.fileOptions) {
       logOptions.fileOptions = this.loadFileOptions(logOptions.fileOptions);
-      const fileTransport = new (winston.transports.File)(logOptions.fileOptions);
+      const fileTransport = new winston.transports.File(logOptions.fileOptions);
       this.transports.push(fileTransport);
     }
 
-    this.instance = new (winston.Logger)({ 
-      transports: this.transports,
+    this.instance = new winston.Logger({
+      transports: this.transports
     });
   }
 
-  private loadConsoleOptions(consoleOptions: winston.ConsoleTransportOptions): 
-    winston.ConsoleTransportOptions {
+  private loadConsoleOptions(
+    consoleOptions: winston.ConsoleTransportOptions
+  ): winston.ConsoleTransportOptions {
     const options: winston.ConsoleTransportOptions = consoleOptions || {};
     options.level = options.level || 'info';
     options.prettyPrint = options.prettyPrint || true;
@@ -74,10 +76,9 @@ export class LogUtils {
     return options;
   }
 
-  private loadFileOptions(fileOptions: winston.FileTransportOptions):
-    winston.FileTransportOptions {
+  private loadFileOptions(fileOptions: winston.FileTransportOptions): winston.FileTransportOptions {
     const options: winston.FileTransportOptions = fileOptions || {};
-    
+
     let level: string;
     let humanReadable: boolean;
     let prettyPrint: boolean;
@@ -103,7 +104,7 @@ export class LogUtils {
         fs.mkdirSync(options.dirname);
       }
     } catch (e) {
-      const msg =  `An error happened while trying to access/create the directory 
+      const msg = `An error happened while trying to access/create the directory 
       for the log. Do you have permission to access?. Details: ${e}`;
       throw new Error(msg);
     }
@@ -112,17 +113,23 @@ export class LogUtils {
     options.json = options.json || false;
     options.prettyPrint = options.prettyPrint || prettyPrint;
     options.formatter = options.formatter || this.defaultFormatter;
-    options.humanReadableUnhandledException = options.humanReadableUnhandledException || 
-      humanReadable;
+    options.humanReadableUnhandledException =
+      options.humanReadableUnhandledException || humanReadable;
 
     return options;
   }
 
   private defaultFormatter(options): string {
-    return moment().format('YYYY-MM-DD HH:mm:sss') + ' - ' + options.level.toUpperCase() 
-      + ' - ' + (options.message ? options.message : '') + 
-      (options.meta && Object.keys(options.meta).length ? '\n\t' 
-        + JSON.stringify(options.meta) : '');
+    return (
+      moment().format('YYYY-MM-DD HH:mm:sss') +
+      ' - ' +
+      options.level.toUpperCase() +
+      ' - ' +
+      (options.message ? options.message : '') +
+      (options.meta && Object.keys(options.meta).length
+        ? '\n\t' + JSON.stringify(options.meta)
+        : '')
+    );
   }
 
   info(msg: string, metadata?: any) {
@@ -150,7 +157,7 @@ export class LogUtils {
     }
 
     this.transports = transports;
-    this.instance = new (winston.Logger)({ transports: this.transports });
+    this.instance = new winston.Logger({ transports: this.transports });
   }
 }
 

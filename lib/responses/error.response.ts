@@ -1,12 +1,9 @@
 import { HttpResponseCode } from '../constants/http-response-code';
 import { GenericResponse } from './generic.response';
 
-
 export class ErrorResponse extends GenericResponse {
-
   protected message?: string;
   protected detail?: any;
-
 
   constructor(message?: string, detail?: any, httpStatus?: HttpResponseCode) {
     super(httpStatus);
@@ -23,6 +20,7 @@ export class ErrorResponse extends GenericResponse {
   toObjectLiteral(): any {
     return {
       message: this.message,
-      detail: this.detail };
+      detail: this.detail
+    };
   }
 }

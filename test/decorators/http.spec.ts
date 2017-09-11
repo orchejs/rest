@@ -1,65 +1,24 @@
+import { setTimeout } from 'timers';
 import { expect } from 'chai';
-import { Request } from 'express';
-import { json } from 'body-parser';
-import { RequestHelper } from '../helpers/request.helper';
-import { ServerHelper } from '../helpers/server.helper';
+import { route, get, pathParam } from '../../';
+import { RequestHelper, ServerHelper } from '../helpers';
 
-import { Orche, OrcheConfig, OrcheEngines, OrcheResult } from '../../';
+@route()
+class Students {
+  @get(':uuid')
+  getStudent(@pathParam('uuid') uuid): any {
+    return { uuid, name: 'Tobias' };
+  }
+}
 
-
-describe('HTTP Decorators Tests', () => {
-
-  let result: OrcheResult;
-
-  before(async function () {
+describe('HTTP Decorator tests', () => {
+  before(async function() {
     this.timeout(0);
-    result = await ServerHelper.initBasicServer();
+    await ServerHelper.initBasicServer();
   });
 
-  it('Should initialize routes', () => {
-    expect(result.stats.routerStats.loadedRoutes.length).to.be.gt(0);
+  it('Should GET student infos', async () => {
+    const result = await RequestHelper.get('/orche/students/123');
+    expect(result).to.be.equal('{"uuid":123,"name":"Tobias"}');
   });
-
-  it('Should make an http GET to /orche/utilities and receive \'ping\'', async () => {
-    const result: string = await RequestHelper.get('/orche/utilities');
-    expect(result).to.be.equal('{"msg":"ping"}');
-  });
-
-  it('Should make an http GET to /orche/utilities/with-throw and get an error msg', async () => {
-    const result: string = await RequestHelper.get('/orche/utilities/with-throw');
-    expect(result).to.be.equal('{"message":"GET with throw exception!","detail":null}');
-  });
-
-  it('Should make an http POST to /orche/utilities and receive \'ping {ip}\'', async () => {
-    const result: string = await RequestHelper.post('/orche/utilities',
-                                                    { ip: '192.168.0.21' });
-    expect(result).to.be.equal('{"msg":"pinging 192.168.0.21"}');
-  });
-
-  it('Should make an http PUT to /orche/utilities and receive \'ping {ip}\'', async () => {
-    const result: string = await RequestHelper.put('/orche/utilities',
-                                                   { ip: '192.168.0.21' });
-    expect(result).to.be.equal('{"msg":"pinging 192.168.0.21"}');
-  });
-
-  it('Should make an http DELETE to /orche/utilities/{ip}', async () => {
-    const result: string = await RequestHelper.delete('/orche/utilities/192.168.0.21');
-    expect(result).to.be.equal('{"msg":"delete ip: 192.168.0.21"}');
-  });
-
-  it('Should make an http PATCH to /orche/utilities and receive \'ping {ip}\'', async () => {
-    const result: string = await RequestHelper.patch('/orche/utilities',
-                                                     { ip: '192.168.0.21' });
-    expect(result).to.be.equal('{"msg":"pinging 192.168.0.21"}');
-  });
-
-  it('Should make an http OPTIONS to /orche/utilities', async () => {
-    const result: string = await RequestHelper.options('/orche/utilities');
-    expect(result).to.be.equal('');
-  });
-
-  it('Should make an http HEAD to /orche/utilities', async () => {
-    const result: string = await RequestHelper.head('/orche/utilities');
-    expect(result).to.be.equal('');
-  });    
 });

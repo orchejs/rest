@@ -12,7 +12,7 @@ export function property(details: string | PropertyDetails) {
     } else {
       propertyDetails = details;
     }
-    
+
     PropertyLoader.addProperty(target, propertyKey, propertyDetails);
   };
 }

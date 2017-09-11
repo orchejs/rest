@@ -1,6 +1,7 @@
 export type CustomOrigin = (
   requestOrigin: string,
-  callback: (err: Error | null, allow?: boolean) => void) => void;
+  callback: (err: Error | null, allow?: boolean) => void
+) => void;
 
 export interface CorsOptions {
   origin?: boolean | string | RegExp | string[] | RegExp[] | CustomOrigin;
