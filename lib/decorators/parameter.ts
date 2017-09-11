@@ -1,5 +1,5 @@
+import 'reflect-metadata';
 import { ValidatorDetails } from '../interfaces/validator-details';
-import * as Reflect from 'reflect-metadata';
 import { type } from 'os';
 import { ParamInfo } from '../interfaces/param-info';
 import { ParamDetails } from '../interfaces/param-details';
@@ -44,7 +44,7 @@ export function nextParam() {
 
 export function queryParam(param: string, validators?: ValidatorDetails[]) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails: ParamDetails = loadParam(param);
+    const paramDetails = loadParam(target, propertyKey, param);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -57,7 +57,7 @@ export function queryParam(param: string, validators?: ValidatorDetails[]) {
 
 export function pathParam(param: string, validators?: ValidatorDetails[]) {
   return function(target: object, propertyKey: string, parameterIndex: number, ...args: any[]) {
-    const paramDetails: ParamDetails = loadParam(param);
+    const paramDetails = loadParam(target, propertyKey, param);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -82,7 +82,7 @@ export function requestParamMapper() {
 
 export function bodyParam(param?: string, validators?: ValidatorDetails[]) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails = param ? { details: param } : undefined;
+    const paramDetails = loadParam(target, propertyKey, param);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -95,7 +95,7 @@ export function bodyParam(param?: string, validators?: ValidatorDetails[]) {
 
 export function headerParam(param: string, validators?: ValidatorDetails) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails: ParamDetails = loadParam(param);
+    const paramDetails = loadParam(target, propertyKey, param);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -115,6 +115,11 @@ function loadParam(
   let details: ParamDetails;
 
   const type = Reflect.getMetadata('design:type', target, key);
+  details = {
+    type,
+    validators,
+    name: param
+  };
 
   return details;
 }

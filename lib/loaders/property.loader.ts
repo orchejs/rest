@@ -1,11 +1,13 @@
-import { ValidatorUtils } from '../utils/validator.utils';
-import { PropertyUnit } from '../interfaces/property-unit';
-import { PropertyDetails } from '../interfaces/property-details';
-import { PropertyConfig } from '../interfaces/property-config';
-import { ClassUtils } from '../utils/class.utils';
-import { BuildObjectResponse } from '../interfaces/build-object-response';
-import { ValidatorError } from '../interfaces/validator-error';
-import { ValidatorDetails } from '../interfaces/validator-details';
+import {
+  ParamDetails,
+  PropertyUnit,
+  PropertyDetails,
+  PropertyConfig,
+  BuildObjectResponse,
+  ValidatorError,
+  ValidatorDetails
+} from '../interfaces';
+import { ValidatorUtils, ClassUtils } from '../utils';
 
 export class PropertyLoader {
   private static propertyConfigs: PropertyConfig[] = [];
@@ -43,10 +45,7 @@ export class PropertyLoader {
     return propertyConfig.units;
   }
 
-  static loadPropertiesFromObject(
-    value: any,
-    param: BodyParamDetails
-  ): Promise<BuildObjectResponse> {
+  static loadPropertiesFromObject(value: any, param: ParamDetails): Promise<BuildObjectResponse> {
     const clazz: object = param.type as object;
     if (!clazz) {
       // TODO what is the proper behaviour to this situation

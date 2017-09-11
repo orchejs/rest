@@ -93,7 +93,7 @@ export abstract class Router {
     className: string,
     methodName: string,
     addParameter: Function,
-    args: any[]
+    args: any
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const validatorErrors: ValidatorError[] = [];

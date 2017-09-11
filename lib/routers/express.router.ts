@@ -5,7 +5,6 @@ import {
   CorsConfig,
   ParamUnit,
   ParamInfo,
-  BodyParamDetails,
   BuildObjectResponse
 } from '../interfaces';
 import * as express from 'express';
@@ -117,7 +116,7 @@ export class ExpressRouter extends Router {
   protected addParameter(
     param: ParamUnit,
     validatorErrors: ValidatorError[],
-    args: any[]
+    args: any
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let details;
@@ -137,11 +136,11 @@ export class ExpressRouter extends Router {
             endpointArgs[param.parameterIndex] = next;
             break;
           case ParamType.PathParam:
-            details = param.paramDetails.details as ParamInfo;
+            details = param.paramDetails;
             endpointArgs[param.parameterIndex] = req.params[details.name];
             break;
           case ParamType.QueryParam:
-            details = param.paramDetails.details as ParamInfo;
+            details = param.paramDetails;
             endpointArgs[param.parameterIndex] = req.query[details.name];
             break;
           case ParamType.RequestParamMapper:
@@ -151,7 +150,7 @@ export class ExpressRouter extends Router {
           case ParamType.BodyParam:
             let paramValue: any;
             if (param && param.paramDetails) {
-              details = param.paramDetails.details as BodyParamDetails;
+              details = param.paramDetails;
               const loadResult: BuildObjectResponse = await PropertyLoader.loadPropertiesFromObject(
                 req.body,
                 details
@@ -167,7 +166,7 @@ export class ExpressRouter extends Router {
             endpointArgs[param.parameterIndex] = paramValue;
             break;
           case ParamType.HeaderParam:
-            details = param.paramDetails.details as ParamInfo;
+            details = param.paramDetails;
             endpointArgs[param.parameterIndex] = req.headers[details.name];
             break;
         }
