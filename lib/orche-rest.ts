@@ -4,7 +4,7 @@ import { DecoratorLoader } from './loaders/decorator.loader';
 import { OrcheEngine } from './constants/orche-engine';
 import { ExpressEngine } from './engines/express.engine';
 
-export class Orche {
+export class OrcheRest {
 
   async init(config: OrcheConfig): Promise<OrcheResult> {
     const decoratorLoader = new DecoratorLoader();

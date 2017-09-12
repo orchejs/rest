@@ -1,6 +1,6 @@
 
 // main
-export * from './lib/orche';
+export * from './lib/orche-rest';
 export * from './lib/constants';
 export * from './lib/interfaces';
 export * from './lib/decorators';
