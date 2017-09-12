@@ -119,7 +119,7 @@ function loadParam(
     details = {
       validators: options.validators,
       name: param,
-      formatter: options.format,
+      format: options.format,
       type: paramTypes[paramIndex]
     };
   }

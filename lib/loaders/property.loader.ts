@@ -48,12 +48,10 @@ export class PropertyLoader {
   static loadPropertiesFromObject(value: any, param: ParamDetails): Promise<BuildObjectResponse> {
     const clazz: object = param.type as object;
     if (!clazz) {
-      // TODO what is the proper behaviour to this situation
       return;
     }
     const className = ClassUtils.getClassName(clazz);
     const propertyUnits: PropertyUnit[] = PropertyLoader.getProperties(className);
-
     return this.buildObject(value, clazz, propertyUnits);
   }
 

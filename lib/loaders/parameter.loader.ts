@@ -1,6 +1,6 @@
-import { ParamDetails } from '../interfaces/param-details';
-import { ParamConfig } from '../interfaces/param-config';
-import { ParamType } from '../constants/param-type';
+import { ValidatorUtils } from '../utils';
+import { ParamType } from '../constants';
+import { ParamDetails, ParamConfig, ValidatorDetails } from '../interfaces';
 
 export class ParameterLoader {
   private static paramsConfig: ParamConfig[] = [];
