@@ -1,5 +1,4 @@
-import { ConverterUtils } from '../utils/converter.utils';
-import { ValidatorUtils } from '../utils';
+import { ValidatorUtils, ConverterUtils } from '../utils';
 import { ValidatorError } from '../interfaces/validator-error';
 import {
   BuildObjectResponse,
@@ -112,14 +111,11 @@ export class ExpressRouter extends Router {
     return executor;
   }
 
-  protected getParamValue(
-    param: ParamUnit,
-    validatorErrors: ValidatorError[],
-    args: any
-  ): Promise<any> {
+  protected getParamValue(param: ParamUnit, args: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let details: ParamDetails;
       let paramValue: any;
+      let validatorErrors: ValidatorError[] = [];
 
       const req: express.Request = args[0];
       const res: express.Response = args[1];
@@ -138,6 +134,11 @@ export class ExpressRouter extends Router {
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
+            validatorErrors = await ValidatorUtils.validateObject(
+              paramValue,
+              details.name,
+              details.validators
+            );
             break;
           case ParamType.QueryParam:
             details = param.paramDetails;
@@ -155,8 +156,7 @@ export class ExpressRouter extends Router {
                 details
               );
               if (loadResult.validatorErrors.length > 0) {
-                validatorErrors.concat(loadResult.validatorErrors);
-                return;
+                validatorErrors = loadResult.validatorErrors;
               }
               paramValue = loadResult.object;
             } else {
@@ -168,7 +168,10 @@ export class ExpressRouter extends Router {
             paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
             break;
         }
-        resolve(paramValue);
+        resolve({
+          validatorErrors,
+          value: paramValue
+        });
       } catch (err) {
         reject(err);
       }
@@ -178,5 +181,5 @@ export class ExpressRouter extends Router {
   protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
     const uri: string = appPath + routerPath;
     this.app.use(uri, router);
-  }  
+  }
 }

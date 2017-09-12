@@ -43,7 +43,6 @@ export abstract class Router {
 
   protected abstract getParamValue(
     param: ParamUnit,
-    validatorErrors: ValidatorError[],
     ...args: any[]
   ): Promise<any>;
 
