@@ -24,7 +24,7 @@ export class DecoratorLoader {
         const files: string[] = await fileMatcher.find(criteria);
 
         if (!files || files.length === 0) {
-          reject('No Path, Interceptor or Error decorators found!');
+          reject('No route, interceptor decorators found!');
         }
 
         for (let idx = 0; idx < files.length; idx += 1) {
