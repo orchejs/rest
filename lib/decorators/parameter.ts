@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { ValidatorDetails } from '../interfaces/validator-details';
 import { type } from 'os';
-import { ParamInfo } from '../interfaces/param-info';
+import { ParamOptions } from '../interfaces/param-options';
 import { ParamDetails } from '../interfaces/param-details';
 import { ParameterLoader } from '../loaders/parameter.loader';
 import { ParamType } from '../constants/param-type';
@@ -42,9 +42,9 @@ export function nextParam() {
   };
 }
 
-export function queryParam(param: string, validators?: ValidatorDetails[]) {
+export function queryParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails = loadParam(target, propertyKey, param);
+    const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -55,9 +55,9 @@ export function queryParam(param: string, validators?: ValidatorDetails[]) {
   };
 }
 
-export function pathParam(param: string, validators?: ValidatorDetails[]) {
-  return function(target: object, propertyKey: string, parameterIndex: number, ...args: any[]) {
-    const paramDetails = loadParam(target, propertyKey, param);
+export function pathParam(param: string, options: ParamOptions = {}) {
+  return function(target: object, propertyKey: string, parameterIndex: number) {
+    const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -80,9 +80,9 @@ export function requestParamMapper() {
   };
 }
 
-export function bodyParam(param?: string, validators?: ValidatorDetails[]) {
+export function bodyParam(options?: ParamOptions) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails = loadParam(target, propertyKey, param);
+    const paramDetails = loadParam(target, propertyKey, undefined, parameterIndex, options);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -93,9 +93,9 @@ export function bodyParam(param?: string, validators?: ValidatorDetails[]) {
   };
 }
 
-export function headerParam(param: string, validators?: ValidatorDetails) {
+export function headerParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
-    const paramDetails = loadParam(target, propertyKey, param);
+    const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
       target,
       propertyKey,
@@ -110,16 +110,18 @@ function loadParam(
   target: object,
   key: string,
   param?: string,
-  validators?: ValidatorDetails[]
+  paramIndex?: number,
+  options?: ParamOptions
 ): ParamDetails {
   let details: ParamDetails;
-
-  const type = Reflect.getMetadata('design:type', target, key);
-  details = {
-    type,
-    validators,
-    name: param
-  };
-
+  if (options) {
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
+    details = {
+      validators: options.validators,
+      name: param,
+      formatter: options.format,
+      type: paramTypes[paramIndex]
+    };
+  }
   return details;
 }

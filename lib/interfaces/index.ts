@@ -15,7 +15,7 @@ export * from './orche-config';
 export * from './orche-result';
 export * from './param-config';
 export * from './param-details';
-export * from './param-info';
+export * from './param-options';
 export * from './param-unit';
 export * from './property-config';
 export * from './property-details';
