@@ -5,3 +5,4 @@ export * from './package.utils';
 export * from './path.utils';
 export * from './url.utils';
 export * from './validator.utils';
+export * from './converter.utils';

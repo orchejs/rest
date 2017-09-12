@@ -1,5 +1,5 @@
-import { ValidatorError } from '../interfaces/validator-error';
-import { ValidatorDetails } from '../interfaces/validator-details';
+import { ValidatorError, ValidatorDetails } from '../interfaces';
+import { logger } from './';
 
 export class ValidatorUtils {
   static validateObject(
@@ -15,7 +15,17 @@ export class ValidatorUtils {
       }
 
       const validator = new validatorDetails.validator();
-      validatorResponse = await validator.validate(validatorDetails.parameters);
+      try {
+        validatorResponse = await validator.validate(validatorDetails.parameters);
+      } catch (error) {
+        const msg = 'An error happened during validation.';
+        logger.error(msg, {
+          value,
+          propertyKey,
+          exception: error
+        });
+        reject(msg);
+      }
       if (validatorResponse) {
         validatorResponse.property = propertyKey;
       }
