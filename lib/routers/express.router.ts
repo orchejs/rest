@@ -1,17 +1,21 @@
+import { ConverterUtils } from '../utils/converter.utils';
+import { ValidatorUtils } from '../utils';
 import { ValidatorError } from '../interfaces/validator-error';
 import {
-  RouterUnit,
+  BuildObjectResponse,
   ContentType,
   CorsConfig,
+  ParamDetails,
+  ParamOptions,
   ParamUnit,
-  ParamInfo,
-  BuildObjectResponse
+  RouterUnit,
+  ValidatorDetails
 } from '../interfaces';
 import * as express from 'express';
 import * as cors from 'cors';
 import { ExpressRequestMapper } from '../requests';
 import { ErrorResponse } from '../responses';
-import { PropertyLoader } from '../loaders';
+import { ParameterLoader, PropertyLoader } from '../loaders';
 import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
 import { Router } from './router';
 
@@ -69,7 +73,7 @@ export class ExpressRouter extends Router {
     contentType: ContentType
   ): Function {
     const loadParams = this.loadParams;
-    const addParameter = this.addParameter;
+    const getParamValue = this.getParamValue;
     const executor = async function() {
       const req: express.Request = arguments[0];
       const res: express.Response = arguments[1];
@@ -77,7 +81,7 @@ export class ExpressRouter extends Router {
 
       let endpointArgs: any = [];
       try {
-        endpointArgs = await loadParams(target, methodName, addParameter, arguments);        
+        endpointArgs = await loadParams(target, methodName, getParamValue, arguments);
       } catch (error) {
         // TODO deal validation error!
       }
@@ -108,47 +112,42 @@ export class ExpressRouter extends Router {
     return executor;
   }
 
-  protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
-    const uri: string = appPath + routerPath;
-    this.app.use(uri, router);
-  }
-
-  protected addParameter(
+  protected getParamValue(
     param: ParamUnit,
     validatorErrors: ValidatorError[],
     args: any
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let details;
-      const endpointArgs: any[] = [];
+      let details: ParamDetails;
+      let paramValue: any;
+
       const req: express.Request = args[0];
       const res: express.Response = args[1];
       const next: express.NextFunction = args[2];
       try {
         switch (param.type) {
           case ParamType.RequestParam:
-            endpointArgs[param.parameterIndex] = req;
+            paramValue = req;
             break;
           case ParamType.ResponseParam:
-            endpointArgs[param.parameterIndex] = res;
+            paramValue = res;
             break;
           case ParamType.NextParam:
-            endpointArgs[param.parameterIndex] = next;
+            paramValue = next;
             break;
           case ParamType.PathParam:
             details = param.paramDetails;
-            endpointArgs[param.parameterIndex] = req.params[details.name];
+            paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
             break;
           case ParamType.QueryParam:
             details = param.paramDetails;
-            endpointArgs[param.parameterIndex] = req.query[details.name];
+            paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
             break;
           case ParamType.RequestParamMapper:
             const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
-            endpointArgs[param.parameterIndex] = requestMapper;
+            paramValue = requestMapper;
             break;
           case ParamType.BodyParam:
-            let paramValue: any;
             if (param && param.paramDetails) {
               details = param.paramDetails;
               const loadResult: BuildObjectResponse = await PropertyLoader.loadPropertiesFromObject(
@@ -163,18 +162,21 @@ export class ExpressRouter extends Router {
             } else {
               paramValue = req.body;
             }
-            endpointArgs[param.parameterIndex] = paramValue;
             break;
           case ParamType.HeaderParam:
             details = param.paramDetails;
-            endpointArgs[param.parameterIndex] = req.headers[details.name];
+            paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
             break;
         }
-  
-        resolve(endpointArgs);
+        resolve(paramValue);
       } catch (err) {
         reject(err);
       }
     });
   }
+
+  protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
+    const uri: string = appPath + routerPath;
+    this.app.use(uri, router);
+  }  
 }

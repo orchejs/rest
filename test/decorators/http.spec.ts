@@ -1,12 +1,12 @@
 import { setTimeout } from 'timers';
 import { expect } from 'chai';
-import { route, get, pathParam } from '../../';
+import { route, get, pathParam, queryParam } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
 
 @route()
-class Students {
+export class Students {
   @get(':uuid')
-  getStudent(@pathParam('uuid') uuid): any {
+  getStudent(@pathParam('uuid') uuid: number): any {
     return { uuid, name: 'Tobias' };
   }
 }
@@ -18,7 +18,7 @@ describe('HTTP Decorator tests', () => {
   });
 
   it('Should GET student infos', async () => {
-    const result = await RequestHelper.get('/orche/students/123');
+    const result = await RequestHelper.get('/orche/students/123?date={teste:tudo}');
     expect(result).to.be.equal('{"uuid":123,"name":"Tobias"}');
   });
 });

@@ -41,7 +41,7 @@ export abstract class Router {
     contentType: ContentType
   ): Function;
 
-  protected abstract addParameter(
+  protected abstract getParamValue(
     param: ParamUnit,
     validatorErrors: ValidatorError[],
     ...args: any[]
@@ -92,7 +92,7 @@ export abstract class Router {
   protected loadParams(
     className: string,
     methodName: string,
-    addParameter: Function,
+    getParamValue: Function,
     args: any
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -104,8 +104,8 @@ export abstract class Router {
         const params: ParamUnit[] = paramConfig.params;
         for (const param of params) {
           try {
-            const newArgs = await addParameter(param, validatorErrors, args);
-            endpointArgs = endpointArgs.concat(newArgs);
+            const paramValue = await getParamValue(param, validatorErrors, args);
+            endpointArgs[param.parameterIndex] = paramValue;
           } catch (e) {
             const msg = 'An error happened during parameter load.';
             logger.error(msg, { details: e });
