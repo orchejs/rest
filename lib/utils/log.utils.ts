@@ -3,10 +3,9 @@ import * as moment from 'moment';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { Environment } from '../constants/environment';
-import { LogOptions } from '../interfaces/log-options';
-import { OrcheConfig } from '../interfaces/orche-config';
-import { PathUtils } from './path.utils';
+import { PathUtils } from './';
+import { Environment } from '../constants';
+import { LogOptions, OrcheRestConfig } from '../interfaces';
 
 export class LogUtils {
   private instance: any;
@@ -18,7 +17,7 @@ export class LogUtils {
     this.init();
   }
 
-  public init(appConfig: OrcheConfig = {}): void {
+  public init(appConfig: OrcheRestConfig = {}): void {
     const logOptions: LogOptions = appConfig.logOptions || {};
     this.env = appConfig.environment || Environment.Development;
 

@@ -4,14 +4,14 @@ import * as fs from 'fs';
 import { PathUtils } from './path.utils';
 import { UrlUtils } from './url.utils';
 import { logger } from './log.utils';
-import { OrcheConfig } from '../interfaces/orche-config';
-import { OrcheEngine } from '../constants/orche-engine';
+import { OrcheRestConfig } from '../interfaces';
+import { OrcheEngine } from '../constants';
 
 export class ConfigUtils extends EventEmitter {
   /**
    * App config file
    */
-  config: OrcheConfig;
+  config: OrcheRestConfig;
 
   constructor() {
     super();
@@ -26,14 +26,14 @@ export class ConfigUtils extends EventEmitter {
    * 3 - App .orcherc
    * load .orcherc local or SYSTEM VARIABLE
    */
-  loadOrcheConfig(userConfig: OrcheConfig = {}): void {
+  loadOrcheConfig(userConfig: OrcheRestConfig = {}): void {
     this.config = {};
     const configAppFileName = userConfig.appName || PathUtils.appDirName;
 
     // Loads the environment orche config file contents
-    const envCfg: OrcheConfig = this.loadEnvConfigFile(configAppFileName);
+    const envCfg: OrcheRestConfig = this.loadEnvConfigFile(configAppFileName);
     // Load's the local orche config file contents
-    const localCfg: OrcheConfig = this.loadLocalConfigFile();
+    const localCfg: OrcheRestConfig = this.loadLocalConfigFile();
 
     /*
      * Config's merge, following this priority:
@@ -58,8 +58,8 @@ export class ConfigUtils extends EventEmitter {
     this.emit('configLoaded', this.config);
   }
 
-  private loadEnvConfigFile(configAppFileName: string): OrcheConfig {
-    let envCfg: OrcheConfig = {};
+  private loadEnvConfigFile(configAppFileName: string): OrcheRestConfig {
+    let envCfg: OrcheRestConfig = {};
     if (process.env.ORCHE_CONFIG && process.env.ORCHE_CONFIG !== '') {
       const envConfigFile = fs.existsSync(process.env.ORCHE_CONFIG);
       if (envConfigFile) {
@@ -84,8 +84,8 @@ export class ConfigUtils extends EventEmitter {
     return envCfg;
   }
 
-  private loadLocalConfigFile(): OrcheConfig {
-    let localCfg: OrcheConfig = {};
+  private loadLocalConfigFile(): OrcheRestConfig {
+    let localCfg: OrcheRestConfig = {};
     const localConfigFile = fs.existsSync(PathUtils.localConfigFile);
     if (localConfigFile) {
       try {

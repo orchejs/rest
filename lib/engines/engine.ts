@@ -1,5 +1,4 @@
-import { OrcheConfig } from '../interfaces/orche-config';
-import { OrcheResult } from '../interfaces/orche-result';
+import { OrcheRestConfig, OrcheRestResult } from '../interfaces';
 import { CompatVersions } from '../interfaces/compat-versions';
 import { PackageUtils } from '../utils/package.utils';
 import { configUtils } from '../utils/config.utils';
@@ -8,9 +7,9 @@ import { logger } from '../utils/log.utils';
 export abstract class Engine {
   protected app: any;
   protected server: any;
-  protected config: OrcheConfig;
+  protected config: OrcheRestConfig;
 
-  constructor(compatVersions: CompatVersions, userConfig?: OrcheConfig) {
+  constructor(compatVersions: CompatVersions, userConfig?: OrcheRestConfig) {
     const isCompatible = this.isEngineVersionSupported(compatVersions);
 
     if (!isCompatible) {
@@ -34,7 +33,7 @@ export abstract class Engine {
     );
   }
 
-  public abstract loadServer(): Promise<OrcheResult>;
+  public abstract loadServer(): Promise<OrcheRestResult>;
   protected abstract setupSettings(): void;
   protected abstract setupExtensions(): void;
 }

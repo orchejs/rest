@@ -3,7 +3,7 @@ import { CorsOptions } from './cors-options';
 import { OrcheEngine } from '../constants/orche-engine';
 import { LogOptions } from './log-options';
 
-export interface OrcheConfig {
+export interface OrcheRestConfig {
   /**
    * Choose an API Engine. Orche currently supports:
    * - expressjs

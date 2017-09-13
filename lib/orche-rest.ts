@@ -1,12 +1,10 @@
-import { OrcheConfig } from './interfaces/orche-config';
-import { OrcheResult } from './interfaces/orche-result';
-import { DecoratorLoader } from './loaders/decorator.loader';
-import { OrcheEngine } from './constants/orche-engine';
-import { ExpressEngine } from './engines/express.engine';
+import { OrcheRestConfig, OrcheRestResult } from './interfaces';
+import { OrcheEngine } from './constants';
+import { DecoratorLoader } from './loaders';
+import { ExpressEngine } from './engines';
 
 export class OrcheRest {
-
-  async init(config: OrcheConfig): Promise<OrcheResult> {
+  async init(config: OrcheRestConfig): Promise<OrcheRestResult> {
     const decoratorLoader = new DecoratorLoader();
     await decoratorLoader.loadDecorators();
 
@@ -23,8 +21,8 @@ export class OrcheRest {
       default:
         engine = new ExpressEngine(config);
         break;
-    }        
-    
+    }
+
     return engine.loadServer();
   }
 }
