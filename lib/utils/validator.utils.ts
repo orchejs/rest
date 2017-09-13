@@ -5,13 +5,13 @@ export class ValidatorUtils {
   static runValidations(
     value: any,
     name: string,
-    ...validators: ValidatorDetails[]
+    validators: ValidatorDetails[]
   ): Promise<ValidatorError[]> {
     return new Promise(async (resolve, reject) => {
       const validatorErrors: ValidatorError[] = [];
 
       if (!validators || validators.length === 0) {
-        Promise.resolve(validatorErrors);
+        resolve(validatorErrors);
         return;
       }
 

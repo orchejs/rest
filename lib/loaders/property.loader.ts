@@ -61,7 +61,7 @@ export class PropertyLoader {
     propertyUnits: PropertyUnit[]
   ): Promise<BuildObjectResponse> {
     let response: BuildObjectResponse;
-    const validatorErrors: ValidatorError[] = [];
+    let validatorErrors: ValidatorError[] = [];
 
     return new Promise((resolve, reject) => {
       try {
@@ -75,16 +75,16 @@ export class PropertyLoader {
           const propValue = value[details.alias] || value[unit.propertyKey];
           object[unit.propertyKey] = propValue;
 
-          const validatorDetails: ValidatorDetails = details.validator;
+          const validatorDetails: ValidatorDetails[] = details.validators;
           if (validatorDetails) {
-            const valResponse: ValidatorError = await ValidatorUtils.validateObject(
+            const errors: ValidatorError[] = await ValidatorUtils.runValidations(
               propValue,
               unit.propertyKey,
               validatorDetails
             );
 
-            if (valResponse) {
-              validatorErrors.push(valResponse);
+            if (errors) {
+              validatorErrors = validatorErrors.concat(errors);
             }
           }
         });

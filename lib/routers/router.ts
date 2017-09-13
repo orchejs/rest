@@ -43,8 +43,11 @@ export abstract class Router {
 
   protected abstract getParamValue(
     param: ParamUnit,
-    ...args: any[]
-  ): Promise<any>;
+    args: any
+  ): Promise<{
+    validatorErrors: ValidatorError[];
+    value: any;
+  }>;
 
   public loadRouters(appPath: string): LoadRouterStats {
     const routerStats: LoadRouterStats = {
@@ -95,7 +98,7 @@ export abstract class Router {
     args: any
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const validatorErrors: ValidatorError[] = [];
+      let validatorErrors: ValidatorError[] = [];
       let endpointArgs: any = [];
 
       const paramConfig: ParamConfig = ParameterLoader.getParameterConfig(className, methodName);
@@ -103,19 +106,22 @@ export abstract class Router {
         const params: ParamUnit[] = paramConfig.params;
         for (const param of params) {
           try {
-            const paramValue = await getParamValue(param, validatorErrors, args);
-            endpointArgs[param.parameterIndex] = paramValue;
+            const valueResult = await getParamValue(param, args);
+            if (valueResult.validatorErrors.length > 0) {
+              validatorErrors = validatorErrors.concat(valueResult.validatorErrors);
+              return;
+            }
+            endpointArgs[param.parameterIndex] = valueResult.value;
           } catch (e) {
             const msg = 'An error happened during parameter load.';
             logger.error(msg, { details: e });
             reject(msg);
             return;
-          }          
+          }
         }
       } else {
         endpointArgs = args;
       }
-
       if (validatorErrors.length > 0) {
         reject(validatorErrors);
       } else {

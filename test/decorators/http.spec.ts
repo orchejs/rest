@@ -1,4 +1,3 @@
-import { setTimeout } from 'timers';
 import { expect } from 'chai';
 import { route, get, pathParam, queryParam } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
@@ -18,7 +17,7 @@ describe('HTTP Decorator tests', () => {
   });
 
   it('Should GET student infos', async () => {
-    const result = await RequestHelper.get('/orche/students/123?date={teste:tudo}');
+    const result = await RequestHelper.get('/orche/students/123');
     expect(result).to.be.equal('{"uuid":123,"name":"Tobias"}');
   });
 });

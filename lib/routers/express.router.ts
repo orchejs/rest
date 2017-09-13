@@ -1,5 +1,6 @@
-import { ValidatorUtils, ConverterUtils } from '../utils';
-import { ValidatorError } from '../interfaces/validator-error';
+import * as cors from 'cors';
+import * as express from 'express';
+import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
 import {
   BuildObjectResponse,
   ContentType,
@@ -8,19 +9,27 @@ import {
   ParamOptions,
   ParamUnit,
   RouterUnit,
-  ValidatorDetails
+  ValidatorDetails,
+  ValidatorError
 } from '../interfaces';
-import * as express from 'express';
-import * as cors from 'cors';
+import { ParameterLoader, PropertyLoader } from '../loaders';
 import { ExpressRequestMapper } from '../requests';
 import { ErrorResponse } from '../responses';
-import { ParameterLoader, PropertyLoader } from '../loaders';
-import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
 import { Router } from './router';
+import { ValidatorUtils, ConverterUtils } from '../utils';
 
 export class ExpressRouter extends Router {
+  constructor(app: any) {
+    super(app);
+  }
+
   protected createRouter(): any {
     return express.Router();
+  }
+
+  protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
+    const uri: string = appPath + routerPath;
+    this.app.use(uri, router);
   }
 
   protected addRoute(
@@ -82,6 +91,7 @@ export class ExpressRouter extends Router {
       try {
         endpointArgs = await loadParams(target, methodName, getParamValue, arguments);
       } catch (error) {
+        console.log('aqui', error);
         // TODO deal validation error!
       }
 
@@ -111,7 +121,13 @@ export class ExpressRouter extends Router {
     return executor;
   }
 
-  protected getParamValue(param: ParamUnit, args: any): Promise<any> {
+  protected getParamValue(
+    param: ParamUnit,
+    args: any
+  ): Promise<{
+    validatorErrors: ValidatorError[];
+    value: any;
+  }> {
     return new Promise(async (resolve, reject) => {
       let details: ParamDetails;
       let paramValue: any;
@@ -134,7 +150,7 @@ export class ExpressRouter extends Router {
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
-            validatorErrors = await ValidatorUtils.validateObject(
+            validatorErrors = await ValidatorUtils.runValidations(
               paramValue,
               details.name,
               details.validators
@@ -143,6 +159,11 @@ export class ExpressRouter extends Router {
           case ParamType.QueryParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
+            validatorErrors = await ValidatorUtils.runValidations(
+              paramValue,
+              details.name,
+              details.validators
+            );
             break;
           case ParamType.RequestParamMapper:
             const requestMapper: ExpressRequestMapper = new ExpressRequestMapper(req);
@@ -166,6 +187,11 @@ export class ExpressRouter extends Router {
           case ParamType.HeaderParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
+            validatorErrors = await ValidatorUtils.runValidations(
+              paramValue,
+              details.name,
+              details.validators
+            );
             break;
         }
         resolve({
@@ -176,10 +202,5 @@ export class ExpressRouter extends Router {
         reject(err);
       }
     });
-  }
-
-  protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
-    const uri: string = appPath + routerPath;
-    this.app.use(uri, router);
   }
 }
