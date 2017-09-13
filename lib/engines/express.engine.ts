@@ -4,8 +4,8 @@ import * as http from 'http';
 import { Engine } from './';
 import {
   CompatVersions,
-  OrcheConfig,
-  OrcheResult,
+  OrcheRestConfig,
+  OrcheRestResult,
   ExpressSettings,
   LoadStats,
   RouterUnit,
@@ -15,7 +15,7 @@ import { ExpressRouter } from '../routers';
 import { ConfigUtils } from '../utils';
 
 export class ExpressEngine extends Engine {
-  constructor(userConfig?: OrcheConfig) {
+  constructor(userConfig?: OrcheRestConfig) {
     super(
       {
         dependency: 'express',
@@ -26,7 +26,7 @@ export class ExpressEngine extends Engine {
     );
   }
 
-  public loadServer(): Promise<OrcheResult> {
+  public loadServer(): Promise<OrcheRestResult> {
     return new Promise(async (resolve, reject) => {
       // Express initialization and setup
       this.app = express();
@@ -49,7 +49,7 @@ export class ExpressEngine extends Engine {
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
-        const result: OrcheResult = {
+        const result: OrcheRestResult = {
           server: this.server,
           stats: loadStats
         };
