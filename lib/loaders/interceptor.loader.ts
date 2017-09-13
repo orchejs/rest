@@ -7,12 +7,12 @@ export class InterceptorLoader {
   static interceptorUnit: InterceptorUnit;
 
   static addInterceptorConfig(
-    paths?: string[],
+    path?: string,
     order?: number,
     className?: string,
     httpMethods?: HttpRequestMethod[]
   ) {
-    const interceptorPaths: string[] = paths || ['/'];
+    const interceptorPath: string = path || '/';
     const interceptorOrder: number = order || this.interceptorConfigs.length + 1;
     const interceptorClassName: string = className || '';
     const interceptorHttpMethods: HttpRequestMethod[] = httpMethods || [];
@@ -20,7 +20,7 @@ export class InterceptorLoader {
     let interceptorConfig: InterceptorConfig;
 
     interceptorConfig = {
-      paths: interceptorPaths,
+      path: interceptorPath,
       order: interceptorOrder,
       className: interceptorClassName,
       httpMethods: interceptorHttpMethods,

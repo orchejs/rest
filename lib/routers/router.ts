@@ -3,7 +3,7 @@ import {
   RouterUnit,
   RouterConfig,
   ContentType,
-  LoadRouterStats,
+  LoadStats,
   ValidatorError,
   ParamConfig,
   ParamUnit
@@ -11,7 +11,7 @@ import {
 import * as moment from 'moment';
 import { HttpRequestMethod, ParamType } from '../constants';
 import { UrlUtils, logger } from '../utils';
-import { RouterLoader, ParameterLoader } from '../loaders';
+import { RouterLoader, InterceptorLoader, ParameterLoader } from '../loaders';
 
 export abstract class Router {
   protected app: any;
@@ -49,19 +49,42 @@ export abstract class Router {
     value: any;
   }>;
 
-  public loadRouters(appPath: string): LoadRouterStats {
-    const routerStats: LoadRouterStats = {
+  public loadRouters(appPath: string): LoadStats {
+    const routerStats: LoadStats = {
       loadedRoutes: [],
+      loadedInterceptors: [],
       initializationTime: 0
     };
 
     const initTime = moment();
-    const routerConfigs = RouterLoader.routerConfigs;
 
+    // interceptor routes register
+    const interceptorConfigs = InterceptorLoader.interceptorConfigs;
+    interceptorConfigs.forEach(config => {
+      const routerUnits: RouterUnit[] = [];
+      if (config.httpMethods && config.httpMethods.length > 0) {
+        for (const httpMethod of config.httpMethods) {
+          routerUnits.push({
+            httpMethod,
+            method: config.interceptorUnit.method,
+            methodName: config.interceptorUnit.methodName
+          });
+        }
+      } else {
+        routerUnits.push({
+          method: config.interceptorUnit.method,
+          methodName: config.interceptorUnit.methodName,
+          httpMethod: HttpRequestMethod.All
+        });
+      }
+      this.addRouterToAppBlock(config.path, config.className, routerUnits, appPath);
+      routerStats.loadedInterceptors.push(config);
+    });
+
+    // endpoints register
+    const routerConfigs = RouterLoader.routerConfigs;
     routerConfigs.forEach(config => {
-      const routerPath = UrlUtils.urlSanitation(config.path);
-      const router: any = this.buildRouter(config.className, config.routerUnits);
-      this.addRouterToApp(appPath, routerPath, router);
+      this.addRouterToAppBlock(config.path, config.className, config.routerUnits, appPath);
       routerStats.loadedRoutes.push(config);
     });
 
@@ -82,7 +105,7 @@ export abstract class Router {
 
       const routePath: string = UrlUtils.urlSanitation(unit.path);
 
-      const middlewares: any[] = unit.middlewares;
+      const middlewares: any[] = unit.middlewares || [];
       middlewares.push(routerMethod);
 
       this.addRoute(router, routePath, unit.cors, middlewares, unit.httpMethod);
@@ -128,5 +151,16 @@ export abstract class Router {
         resolve(endpointArgs);
       }
     });
+  }
+
+  private addRouterToAppBlock(
+    path: string,
+    className: string,
+    routerUnits: RouterUnit[],
+    appPath: string
+  ): void {
+    const routerPath = UrlUtils.urlSanitation(path);
+    const router: any = this.buildRouter(className, routerUnits);
+    this.addRouterToApp(appPath, routerPath, router);
   }
 }

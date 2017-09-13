@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { route, get, pathParam, queryParam } from '../../';
+import { route, get, pathParam, queryParam, interceptor, processing, requestParam } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
 
 @route()

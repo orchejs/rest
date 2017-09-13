@@ -1,18 +1,18 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
-
-import { Engine } from './engine';
-import { CompatVersions } from '../interfaces/compat-versions';
-import { OrcheConfig } from '../interfaces/orche-config';
-import { OrcheResult } from '../interfaces/orche-result';
-import { ExpressSettings } from '../interfaces/express-settings';
-import { LoadRouterStats } from '../interfaces/load-router-stats';
-import { LoadStats } from '../interfaces/load-stats';
-import { RouterUnit } from '../interfaces/router-unit';
-import { RouterConfig } from '../interfaces/router-config';
-import { ExpressRouter } from '../routers/express.router';
-import { ConfigUtils } from '../utils/config.utils';
+import { Engine } from './';
+import {
+  CompatVersions,
+  OrcheConfig,
+  OrcheResult,
+  ExpressSettings,
+  LoadStats,
+  RouterUnit,
+  RouterConfig
+} from '../interfaces';
+import { ExpressRouter } from '../routers';
+import { ConfigUtils } from '../utils';
 
 export class ExpressEngine extends Engine {
   constructor(userConfig?: OrcheConfig) {
@@ -45,13 +45,10 @@ export class ExpressEngine extends Engine {
 
       // Routes initialization
       const expressRouter: ExpressRouter = new ExpressRouter(this.app);
-      const routerStats: LoadRouterStats = expressRouter.loadRouters(this.config.path);
+      const loadStats: LoadStats = expressRouter.loadRouters(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
-        const loadStats: LoadStats = {};
-        loadStats.routerStats = routerStats;
-
         const result: OrcheResult = {
           server: this.server,
           stats: loadStats

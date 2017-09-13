@@ -1,5 +1,7 @@
-import { LoadRouterStats } from './load-router-stats';
+import { RouterConfig, InterceptorConfig } from './';
 
 export interface LoadStats {
-  routerStats?: LoadRouterStats;
+  loadedRoutes?: RouterConfig[];
+  loadedInterceptors?: InterceptorConfig[];
+  initializationTime?: number;
 }

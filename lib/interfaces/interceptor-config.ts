@@ -1,8 +1,8 @@
-import { InterceptorUnit } from './interceptor-unit';
-import { HttpRequestMethod } from '../constants/http-request-method';
+import { InterceptorUnit } from './';
+import { HttpRequestMethod } from '../constants';
 
 export interface InterceptorConfig {
-  paths?: string[];
+  path: string;
   order?: number;
   className?: string;
   httpMethods?: HttpRequestMethod[];
