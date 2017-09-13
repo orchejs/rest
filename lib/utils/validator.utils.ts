@@ -2,9 +2,9 @@ import { ValidatorError, ValidatorDetails } from '../interfaces';
 import { logger } from './';
 
 export class ValidatorUtils {
-  static validateObject(
+  static runValidations(
     value: any,
-    propertyKey: string,
+    name: string,
     ...validators: ValidatorDetails[]
   ): Promise<ValidatorError[]> {
     return new Promise(async (resolve, reject) => {
@@ -19,25 +19,28 @@ export class ValidatorUtils {
         if (!validatorDetails.validator) {
           continue;
         }
-  
+        
         const validator = new validatorDetails.validator();
+        let validatorError: ValidatorError;
         try {
-          validatorResponse = await validator.validate(validatorDetails.parameters);
+          validatorError = await validator.validate(validatorDetails.parameters);
         } catch (error) {
           const msg = 'An error happened during validation.';
           logger.error(msg, {
             value,
-            propertyKey,
+            name,
             exception: error
           });
           reject(msg);
         }
-        if (validatorResponse) {
-          validatorResponse.property = propertyKey;
+        if (validatorError) {
+          validatorError.name = name;
+          validatorError.message = validatorDetails.customMessage || validatorError.message;
+          validatorErrors.push(validatorError);
         }        
       }
 
-      resolve(validatorResponse);
+      resolve(validatorErrors);
     });
   }
 }

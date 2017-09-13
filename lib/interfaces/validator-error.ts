@@ -1,6 +1,6 @@
 export interface ValidatorError {
-  message?: string;
+  message: string;
+  name: string;
   details?: string;
-  property?: string;
   value?: any;
 }
