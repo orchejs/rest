@@ -22,33 +22,6 @@ export abstract class Router {
     this.routers = [];
   }
 
-  protected abstract createRouter(): any;
-
-  protected abstract addRouterToApp(appPath: string, routerPath: string, router: any): void;
-
-  protected abstract addRoute(
-    router: any,
-    path: string,
-    corsConfig: CorsConfig,
-    middlewares: any[],
-    httpMethod: HttpRequestMethod
-  ): void;
-
-  protected abstract routeExecution(
-    target: string,
-    method: Function,
-    methodName: string,
-    contentType: ContentType
-  ): Function;
-
-  protected abstract getParamValue(
-    param: ParamUnit,
-    args: any
-  ): Promise<{
-    validatorErrors: ValidatorError[];
-    value: any;
-  }>;
-
   public loadRouters(appPath: string): LoadStats {
     const routerStats: LoadStats = {
       loadedRoutes: [],
@@ -77,20 +50,27 @@ export abstract class Router {
           httpMethod: HttpRequestMethod.All
         });
       }
-      this.addRouterToAppBlock(config.path, config.className, routerUnits, appPath);
+      this.addRouterToApp(config.path, config.className, routerUnits, appPath);
       routerStats.loadedInterceptors.push(config);
     });
 
     // endpoints register
     const routerConfigs = RouterLoader.routerConfigs;
     routerConfigs.forEach(config => {
-      this.addRouterToAppBlock(config.path, config.className, config.routerUnits, appPath);
+      this.addRouterToApp(config.path, config.className, config.routerUnits, appPath);
       routerStats.loadedRoutes.push(config);
     });
 
     routerStats.initializationTime = initTime.diff(moment(), 'seconds');
     return routerStats;
   }
+
+  protected abstract addRouterToApp(
+    path: string,
+    className: string,
+    routerUnits: RouterUnit[],
+    appPath: string
+  ): void;
 
   protected buildRouter(className: string, routerUnits: RouterUnit[]): any {
     const router: any = this.createRouter();
@@ -113,6 +93,15 @@ export abstract class Router {
 
     return router;
   }
+
+  protected abstract createRouter(): any;
+
+  protected abstract routeExecution(
+    target: string,
+    method: Function,
+    methodName: string,
+    contentType: ContentType
+  ): Function;
 
   protected loadParams(
     className: string,
@@ -153,14 +142,19 @@ export abstract class Router {
     });
   }
 
-  private addRouterToAppBlock(
+  protected abstract getParamValue(
+    param: ParamUnit,
+    args: any
+  ): Promise<{
+    validatorErrors: ValidatorError[];
+    value: any;
+  }>;
+
+  protected abstract addRoute(
+    router: any,
     path: string,
-    className: string,
-    routerUnits: RouterUnit[],
-    appPath: string
-  ): void {
-    const routerPath = UrlUtils.urlSanitation(path);
-    const router: any = this.buildRouter(className, routerUnits);
-    this.addRouterToApp(appPath, routerPath, router);
-  }
+    corsConfig: CorsConfig,
+    middlewares: any[],
+    httpMethod: HttpRequestMethod
+  ): void;
 }

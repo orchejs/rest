@@ -36,8 +36,8 @@ export class RestifyEngine extends Engine {
       this.setupExtensions();
 
       // Routes initialization
-      const expressRouter: RestifyRouter = new RestifyRouter(this.app);
-      const loadStats: LoadStats = expressRouter.loadRouters(this.config.path);
+      const restifyRouter: RestifyRouter = new RestifyRouter(this.app);
+      const loadStats: LoadStats = restifyRouter.loadRouters(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
@@ -52,10 +52,10 @@ export class RestifyEngine extends Engine {
   }
 
   protected setupSettings(): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   protected setupExtensions(): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 }

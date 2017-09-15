@@ -13,7 +13,7 @@ export class ServerHelper {
 
       const config: OrcheRestConfig = {
         path: '/orche',
-        apiEngine: OrcheEngine.ExpressJS,
+        apiEngine: OrcheEngine.Restify,
         port: 8888,
         middlewares: [json()]
       };

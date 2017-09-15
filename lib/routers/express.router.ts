@@ -1,6 +1,3 @@
-import * as cors from 'cors';
-import * as express from 'express';
-import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
 import {
   BuildObjectResponse,
   ContentType,
@@ -12,66 +9,34 @@ import {
   ValidatorDetails,
   ValidatorError
 } from '../interfaces';
+import * as cors from 'cors';
+import * as express from 'express';
+import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
 import { ParameterLoader, PropertyLoader } from '../loaders';
 import { ExpressRequestMapper } from '../requests';
 import { ErrorResponse } from '../responses';
 import { Router } from './router';
-import { ValidatorUtils, ConverterUtils } from '../utils';
+import { ValidatorUtils, ConverterUtils, UrlUtils } from '../utils';
 
 export class ExpressRouter extends Router {
   constructor(app: any) {
     super(app);
   }
 
-  protected createRouter(): any {
-    return express.Router();
-  }
-
-  protected addRouterToApp(appPath: string, routerPath: string, router: any): void {
+  protected addRouterToApp(
+    path: string,
+    className: string,
+    routerUnits: RouterUnit[],
+    appPath: string
+  ): void {
+    const routerPath = UrlUtils.urlSanitation(path);
+    const router: any = this.buildRouter(className, routerUnits);
     const uri: string = appPath + routerPath;
     this.app.use(uri, router);
   }
 
-  protected addRoute(
-    router: any,
-    path: string,
-    corsConfig: CorsConfig = {},
-    middlewares: any[],
-    httpMethod: HttpRequestMethod
-  ): any {
-    if (corsConfig.preflight) {
-      router.options(path, cors(corsConfig.corsOptions));
-    }
-
-    if (corsConfig.corsOptions) {
-      middlewares.unshift(cors(corsConfig.corsOptions));
-    }
-    switch (httpMethod) {
-      case HttpRequestMethod.Get:
-        router.get(path, middlewares);
-        break;
-      case HttpRequestMethod.Post:
-        router.post(path, middlewares);
-        break;
-      case HttpRequestMethod.Put:
-        router.put(path, middlewares);
-        break;
-      case HttpRequestMethod.Head:
-        router.head(path, middlewares);
-        break;
-      case HttpRequestMethod.Delete:
-        router.delete(path, middlewares);
-        break;
-      case HttpRequestMethod.All:
-        router.all(path, middlewares);
-        break;
-      case HttpRequestMethod.Patch:
-        router.patch(path, middlewares);
-        break;
-      case HttpRequestMethod.Options:
-        router.options(path, middlewares);
-        break;
-    }
+  protected createRouter(): any {
+    return express.Router();
   }
 
   protected routeExecution(
@@ -119,6 +84,48 @@ export class ExpressRouter extends Router {
       }
     };
     return executor;
+  }
+
+  protected addRoute(
+    router: any,
+    path: string,
+    corsConfig: CorsConfig = {},
+    middlewares: any[],
+    httpMethod: HttpRequestMethod
+  ): any {
+    if (corsConfig.preflight) {
+      router.options(path, cors(corsConfig.corsOptions));
+    }
+
+    if (corsConfig.corsOptions) {
+      middlewares.unshift(cors(corsConfig.corsOptions));
+    }
+    switch (httpMethod) {
+      case HttpRequestMethod.Get:
+        router.get(path, middlewares);
+        break;
+      case HttpRequestMethod.Post:
+        router.post(path, middlewares);
+        break;
+      case HttpRequestMethod.Put:
+        router.put(path, middlewares);
+        break;
+      case HttpRequestMethod.Head:
+        router.head(path, middlewares);
+        break;
+      case HttpRequestMethod.Delete:
+        router.delete(path, middlewares);
+        break;
+      case HttpRequestMethod.All:
+        router.all(path, middlewares);
+        break;
+      case HttpRequestMethod.Patch:
+        router.patch(path, middlewares);
+        break;
+      case HttpRequestMethod.Options:
+        router.options(path, middlewares);
+        break;
+    }
   }
 
   protected getParamValue(

@@ -1,6 +1,17 @@
+import { HttpRequestMethod } from '../../lib/constants';
 import { expect } from 'chai';
 import { route, get, pathParam, queryParam, interceptor, processing, requestParam } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
+
+@interceptor('/orche/students/:uuid', {
+  httpMethods: HttpRequestMethod.Get
+})
+export class Admission {
+  @processing()
+  checkAdmission(@pathParam('uuid') uuid: number) {
+    console.log('Teste');
+  }
+}
 
 @route()
 export class Students {
