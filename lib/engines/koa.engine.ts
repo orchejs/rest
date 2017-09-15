@@ -6,9 +6,9 @@ export class KoaEngine extends Engine {
   constructor(userConfig?: OrcheRestConfig) {
     super(
       {
-        dependency: 'hapi',
-        from: '16.0.0',
-        to: '16.6.0'
+        dependency: 'koa',
+        from: '',
+        to: ''
       },
       userConfig
     );
@@ -17,7 +17,7 @@ export class KoaEngine extends Engine {
   public loadServer(): Promise<OrcheRestResult> {
     return new Promise(async (resolve, reject) => {
       // Hapi's initialization and setup
-      this.app = new hapi.Server();
+      // this.app = new hapi.Server();
 
       // Add Express's settings
       this.setupSettings();
@@ -32,17 +32,17 @@ export class KoaEngine extends Engine {
       this.setupExtensions();
 
       // Routes initialization
-      const hapiRouter: HapiRouter = new HapiRouter(this.app);
-      const loadStats: LoadStats = hapiRouter.loadRouters(this.config.path);
+      // const hapiRouter: HapiRouter = new HapiRouter(this.app);
+      // const loadStats: LoadStats = hapiRouter.loadRouters(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
         // TODO add a logging library to the project
-        const result: OrcheRestResult = {
-          server: this.server,
-          stats: loadStats
-        };
+        // const result: OrcheRestResult = {
+        //  server: this.server,
+        //  stats: loadStats
+        // };
 
-        resolve(result);
+        // resolve(result);
       });
     });
   }
