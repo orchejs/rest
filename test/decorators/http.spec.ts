@@ -1,9 +1,10 @@
+import { nextParam } from '../../lib/decorators';
 import { HttpRequestMethod } from '../../lib/constants';
 import { expect } from 'chai';
 import { route, get, pathParam, queryParam, interceptor, processing, requestParam } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
 
-@interceptor('/orche/students/:uuid', {
+@interceptor('/student/:uuid', {
   httpMethods: HttpRequestMethod.Get
 })
 export class Admission {
@@ -16,8 +17,13 @@ export class Admission {
 @route()
 export class Students {
   @get(':uuid')
+  getStudentId(@queryParam('name') name: string) {
+    console.log('2');
+  }
+
+  @get(':uuid')
   getStudent(@pathParam('uuid') uuid: number): any {
-    return { uuid, name: 'Tobias' };
+    console.log(uuid);
   }
 }
 
