@@ -19,13 +19,13 @@ export class RestifyEngine extends Engine {
 
   public loadServer(): Promise<OrcheRestResult> {
     return new Promise(async (resolve, reject) => {
-      // Add Express's settings
+      // Add settings
       this.setupSettings();
 
       // Restify initialization and setup
       this.app = restify.createServer(this.restifySettings);
 
-      // Add Express's extensions
+      // Add extensions
       this.config.middlewares = this.config.middlewares || [];
 
       // Check if CORS should be setup and add it as an extension
