@@ -3,6 +3,7 @@
 *.lock
 *.log
 *.iml
+.orcherc
 
 node_modules
 dist
