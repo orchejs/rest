@@ -1,5 +1,11 @@
-import { InterceptorConfig } from '../interfaces/interceptor-config';
-import { InterceptorUnit } from '../interfaces/interceptor-unit';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import { InterceptorConfig, InterceptorUnit } from '../interfaces';
 import { HttpRequestMethod } from '../constants/http-request-method';
 
 export class InterceptorLoader {
@@ -8,7 +14,7 @@ export class InterceptorLoader {
 
   static addInterceptorConfig(
     path?: string,
-    order?: number,
+    order: number = this.interceptorConfigs.length + 1,
     className?: string,
     httpMethods?: HttpRequestMethod[]
   ) {

@@ -1,14 +1,21 @@
-import { ClassUtils } from '../utils/class.utils';
-import { InterceptorDecoratorOptions } from '../interfaces/interceptor-decorator-options';
-import { InterceptorLoader } from '../loaders/interceptor.loader';
-import { HttpRequestMethod } from '../constants/http-request-method';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import { ClassUtils } from '@orchejs/common';
+import { InterceptorDecoratorOptions } from '../interfaces';
+import { InterceptorLoader } from '../loaders';
+import { HttpRequestMethod } from '../constants';
 
-export function interceptor(
+export function Interceptor(
   path: string = '/',
   options: InterceptorDecoratorOptions = { httpMethods: HttpRequestMethod.All }
 ) {
   return function(target: any) {
-    const className: string = ClassUtils.getClassName(target);
+    const className = ClassUtils.getClassName(target);
 
     let httpMethodsArr: HttpRequestMethod[] = [];
     if (!Array.isArray(options.httpMethods)) {

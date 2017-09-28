@@ -1,20 +1,18 @@
-import {
-  ContentType,
-  CorsConfig,
-  ParamUnit,
-  ValidatorError,
-  RouterUnit,
-  ParamDetails,
-  BuildObjectResponse
-} from '../interfaces';
-import * as path from 'path';
-import * as restify from 'restify';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { Router } from './';
+import * as restify from 'restify';
+import { BuildObjectResponse, PropertyLoader, UrlUtils, ConverterUtils } from '@orchejs/common';
+import { ValidatorError } from '@orchejs/validators';
 import { RestifyRequestMapper } from '../requests';
 import { ErrorResponse } from '../responses';
-import { PropertyLoader } from '../loaders';
 import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
-import { UrlUtils, ConverterUtils, ValidatorUtils } from '../utils';
+import { ContentType, CorsConfig, ParamUnit, RouterUnit, ParamDetails } from '../interfaces';
 
 export class RestifyRouter extends Router {
   constructor(app: any) {
@@ -58,7 +56,6 @@ export class RestifyRouter extends Router {
       try {
         endpointArgs = await loadParams(target, methodName, getParamValue, arguments);
       } catch (error) {
-        console.log('aqui', error);
         // TODO deal validation error!
       }
 
@@ -156,19 +153,19 @@ export class RestifyRouter extends Router {
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await this.validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
           case ParamType.QueryParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await this.validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
           case ParamType.RequestParamMapper:
@@ -180,7 +177,7 @@ export class RestifyRouter extends Router {
               details = param.paramDetails;
               const loadResult: BuildObjectResponse = await PropertyLoader.loadPropertiesFromObject(
                 req.body,
-                details
+                details.type
               );
               if (loadResult.validatorErrors.length > 0) {
                 validatorErrors = loadResult.validatorErrors;
@@ -193,10 +190,10 @@ export class RestifyRouter extends Router {
           case ParamType.HeaderParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await this.validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
         }

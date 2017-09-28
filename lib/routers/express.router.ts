@@ -1,22 +1,27 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import * as cors from 'cors';
+import * as express from 'express';
+import { BuildObjectResponse, PropertyLoader, ConverterUtils, UrlUtils } from '@orchejs/common';
+import { ValidatorDetails, ValidatorError, ValidatorRunner } from '@orchejs/validators';
+import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
+import { ParameterLoader } from '../loaders';
+import { ExpressRequestMapper } from '../requests';
+import { ErrorResponse } from '../responses';
+import { Router } from './router';
 import {
-  BuildObjectResponse,
   ContentType,
   CorsConfig,
   ParamDetails,
   ParamOptions,
   ParamUnit,
-  RouterUnit,
-  ValidatorDetails,
-  ValidatorError
+  RouterUnit
 } from '../interfaces';
-import * as cors from 'cors';
-import * as express from 'express';
-import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
-import { ParameterLoader, PropertyLoader } from '../loaders';
-import { ExpressRequestMapper } from '../requests';
-import { ErrorResponse } from '../responses';
-import { Router } from './router';
-import { ValidatorUtils, ConverterUtils, UrlUtils } from '../utils';
 
 export class ExpressRouter extends Router {
   constructor(app: any) {
@@ -139,6 +144,7 @@ export class ExpressRouter extends Router {
       let details: ParamDetails;
       let paramValue: any;
       let validatorErrors: ValidatorError[] = [];
+      const validatorRunner = new ValidatorRunner();
 
       const req: express.Request = args[0];
       const res: express.Response = args[1];
@@ -157,19 +163,19 @@ export class ExpressRouter extends Router {
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
           case ParamType.QueryParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
           case ParamType.RequestParamMapper:
@@ -181,7 +187,7 @@ export class ExpressRouter extends Router {
               details = param.paramDetails;
               const loadResult: BuildObjectResponse = await PropertyLoader.loadPropertiesFromObject(
                 req.body,
-                details
+                details.type
               );
               if (loadResult.validatorErrors.length > 0) {
                 validatorErrors = loadResult.validatorErrors;
@@ -194,10 +200,10 @@ export class ExpressRouter extends Router {
           case ParamType.HeaderParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
-            validatorErrors = await ValidatorUtils.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators
+              details.validators!
             );
             break;
         }

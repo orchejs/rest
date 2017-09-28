@@ -1,12 +1,17 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import 'reflect-metadata';
-import { ValidatorDetails } from '../interfaces/validator-details';
-import { type } from 'os';
-import { ParamOptions } from '../interfaces/param-options';
-import { ParamDetails } from '../interfaces/param-details';
-import { ParameterLoader } from '../loaders/parameter.loader';
-import { ParamType } from '../constants/param-type';
+import { ValidatorDetails } from '@orchejs/validators';
+import { ParamOptions, ParamDetails } from '../interfaces';
+import { ParameterLoader } from '../loaders';
+import { ParamType } from '../constants';
 
-export function requestParam() {
+export function RequestParam() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -18,7 +23,7 @@ export function requestParam() {
   };
 }
 
-export function responseParam() {
+export function ResponseParam() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -30,7 +35,7 @@ export function responseParam() {
   };
 }
 
-export function nextParam() {
+export function NextParam() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -42,7 +47,7 @@ export function nextParam() {
   };
 }
 
-export function queryParam(param: string, options: ParamOptions = {}) {
+export function QueryParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -55,7 +60,7 @@ export function queryParam(param: string, options: ParamOptions = {}) {
   };
 }
 
-export function pathParam(param: string, options: ParamOptions = {}) {
+export function PathParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -68,7 +73,7 @@ export function pathParam(param: string, options: ParamOptions = {}) {
   };
 }
 
-export function requestParamMapper() {
+export function RequestParamMapper() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -80,7 +85,7 @@ export function requestParamMapper() {
   };
 }
 
-export function bodyParam(options?: ParamOptions) {
+export function BodyParam(options?: ParamOptions) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, undefined, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -93,7 +98,7 @@ export function bodyParam(options?: ParamOptions) {
   };
 }
 
-export function headerParam(param: string, options: ParamOptions = {}) {
+export function HeaderParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -109,19 +114,17 @@ export function headerParam(param: string, options: ParamOptions = {}) {
 function loadParam(
   target: object,
   key: string,
-  param?: string,
-  paramIndex?: number,
-  options?: ParamOptions
+  param: string,
+  paramIndex: number,
+  options: ParamOptions = {}
 ): ParamDetails {
   let details: ParamDetails;
-  if (options) {
-    const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
-    details = {
-      validators: options.validators,
-      name: param,
-      format: options.format,
-      type: paramTypes[paramIndex]
-    };
-  }
+  const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
+  details = {
+    validators: options.validators,
+    name: param,
+    format: options.format,
+    type: paramTypes[paramIndex]
+  };
   return details;
 }

@@ -1,16 +1,23 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import {
   CorsConfig,
   RouterUnit,
   RouterConfig,
   ContentType,
   LoadStats,
-  ValidatorError,
   ParamConfig,
   ParamUnit
 } from '../interfaces';
 import * as moment from 'moment';
+import { ValidatorError } from '@orchejs/validators';
+import { logger, UrlUtils } from '@orchejs/common';
 import { HttpRequestMethod, ParamType } from '../constants';
-import { UrlUtils, logger } from '../utils';
 import { RouterLoader, InterceptorLoader, ParameterLoader } from '../loaders';
 
 export abstract class Router {
@@ -22,7 +29,7 @@ export abstract class Router {
     this.routers = [];
   }
 
-  public loadRouters(appPath: string): LoadStats {
+  public loadRouters(appPath: string = ''): LoadStats {
     const routerStats: LoadStats = {
       loadedRoutes: [],
       loadedInterceptors: [],

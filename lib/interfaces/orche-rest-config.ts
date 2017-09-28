@@ -1,8 +1,18 @@
-import { Environment } from '../constants/environment';
-import { CorsOptions } from './cors-options';
-import { OrcheEngine } from '../constants/orche-engine';
-import { LogOptions } from './log-options';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import { Environment, LogOptions } from '@orchejs/common';
+import { CorsOptions } from './';
+import { OrcheEngine } from '../constants';
 
+/**
+ * @description
+ * Orche REST initialization config options.
+ */
 export interface OrcheRestConfig {
   /**
    * Choose an API Engine. Orche currently supports:
@@ -30,12 +40,11 @@ export interface OrcheRestConfig {
   path?: string;
   /**
    * The port that the application will be served.
-   *
    * Default value: 3000
    */
   port?: number;
   /**
-   * 
+   * Extensions / middlewares to be added to the application.
    */
   middlewares?: any[];
   /**
@@ -48,20 +57,26 @@ export interface OrcheRestConfig {
   corsConfig?: CorsOptions;
   /**
    * If true the orche library will output some values like loaded path's.
-   *
    * Default value: false
    */
   debug?: boolean;
   /**
-   * 
+   * Setting the environment. Default value is development.
+   * To get better results and performance, don't forget to set this
+   * value to production mode, when deploying to production.
    */
   environment?: Environment;
   /**
-   * 
+   * Options to load the application log. The default log is console.
    */
   logOptions?: LogOptions;
   /**
-   * TODO: Add monitor api to the project to get some statistics about the usage.
+   * This is the directory that the server will look for router decorators.
+   * The default value is the app root directory.
+   */
+  baseDir?: string;
+  /**
+   * TODO: Add monitor api to the project to get usage statistics.
    */
   // monitorRequests?: boolean;
 }

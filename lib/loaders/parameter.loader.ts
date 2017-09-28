@@ -1,6 +1,13 @@
-import { ValidatorUtils } from '../utils';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import { ValidatorRunner, ValidatorDetails } from '@orchejs/validators';
 import { ParamType } from '../constants';
-import { ParamDetails, ParamConfig, ValidatorDetails } from '../interfaces';
+import { ParamDetails, ParamConfig } from '../interfaces';
 
 export class ParameterLoader {
   private static paramsConfig: ParamConfig[] = [];

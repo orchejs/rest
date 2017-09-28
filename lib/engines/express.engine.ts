@@ -1,13 +1,22 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+import { RouterLoader } from '../loaders/router.loader';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
+import { CompatVersions, logger } from '@orchejs/common';
 import { Engine } from './';
 import {
-  CompatVersions,
   OrcheRestConfig,
   OrcheRestResult,
   ExpressSettings,
   LoadStats,
+  LoadedRoute,
   RouterUnit,
   RouterConfig
 } from '../interfaces';
@@ -28,11 +37,11 @@ export class ExpressEngine extends Engine {
 
   public loadServer(): Promise<OrcheRestResult> {
     return new Promise(async (resolve, reject) => {
-      // Express initialization and setup
       this.app = express();
 
       // Add Express's settings
       this.setupSettings();
+
       // Add Express's extensions
       this.config.middlewares = this.config.middlewares || [];
 
@@ -48,7 +57,22 @@ export class ExpressEngine extends Engine {
       const loadStats: LoadStats = expressRouter.loadRouters(this.config.path);
 
       this.server = this.app.listen(this.config.port, () => {
-        // TODO add a logging library to the project
+        if (this.config.debug) {
+          const loadedRoutes: LoadedRoute[] = RouterLoader.formatLoadedRoutes(
+            this.config.path,
+            loadStats.loadedRoutes
+          );
+
+          logger.info(`Server running on port: ${this.config.port}\n\n`);
+          logger.info('------');
+          logger.info(`Number of endpoints loaded: ${loadedRoutes.length} \n`);
+          logger.info('Loaded endpoints');
+          logger.info('------');
+          for (const loadedRoute of loadedRoutes) {
+            logger.info(`-> Route: ${loadedRoute.path} | Method: ${loadedRoute.httpMethod}`);
+          }
+        }
+
         const result: OrcheRestResult = {
           server: this.server,
           stats: loadStats
@@ -61,7 +85,6 @@ export class ExpressEngine extends Engine {
 
   protected setupSettings(): void {
     const settings = this.config.settings || {};
-
     this.app.set('case sensitive routing', settings['caseSentiveRouting'] || undefined);
     this.app.set('env', settings['env'] || 'development');
     this.app.set('etag', settings['etag'] || 'weak');
@@ -75,7 +98,6 @@ export class ExpressEngine extends Engine {
     this.app.set('views', settings['views'] || process.cwd() + '/views');
     this.app.set('view engine', settings['viewEngine'] || undefined);
     this.app.set('x-powered-by', settings['xPoweredBy'] || false);
-
     if (settings['env'] === 'production') {
       this.app.set('view cache', settings['viewCache'] || true);
     } else {

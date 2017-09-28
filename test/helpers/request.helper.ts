@@ -5,7 +5,7 @@ import { HttpRequestMethod, MimeType } from '../../';
 
 export class RequestHelper {
 
-  static post(path, data: any, contentType?: MimeType, port?: number,
+  static post(path: string, data: any, contentType?: MimeType, port?: number,
               host?: string, protocol?: string): Promise<any> {
 
     let dataToSend: string = '';
@@ -22,7 +22,7 @@ export class RequestHelper {
     });
   }
 
-  static put(path, data: any, contentType?: MimeType, port?: number,
+  static put(path: string, data: any, contentType?: MimeType, port?: number,
              host?: string, protocol?: string): any {
     let dataToSend: string = '';
     if (data) {
@@ -38,7 +38,7 @@ export class RequestHelper {
     });
   }
 
-  static patch(path, data: any, contentType?: MimeType, port?: number,
+  static patch(path: string, data: any, contentType?: MimeType, port?: number,
                host?: string, protocol?: string): any {
     let dataToSend: string = '';
     if (data) {
@@ -54,7 +54,7 @@ export class RequestHelper {
     });
   }  
 
-  static get(path, contentType?: MimeType, port?: number,
+  static get(path: string, contentType?: MimeType, port?: number,
              host?: string, protocol?: string): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Get, contentType,
@@ -63,7 +63,7 @@ export class RequestHelper {
     });
   }
 
-  static head(path, contentType?: MimeType, port?: number,
+  static head(path: string, contentType?: MimeType, port?: number,
               host?: string, protocol?: string): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Head, contentType,
@@ -72,7 +72,7 @@ export class RequestHelper {
     });
   }
   
-  static options(path, contentType?: MimeType, port?: number,
+  static options(path: string, contentType?: MimeType, port?: number,
                  host?: string, protocol?: string): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Options, contentType,
@@ -81,7 +81,7 @@ export class RequestHelper {
     });
   }    
 
-  static delete(path, contentType?: MimeType, port?: number,
+  static delete(path: string, contentType?: MimeType, port?: number,
                 host?: string, protocol?: string): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Delete, contentType,
@@ -90,7 +90,7 @@ export class RequestHelper {
     });
   }
 
-  private static makeRequest(path, httpMethod: HttpRequestMethod,
+  private static makeRequest(path: string, httpMethod: HttpRequestMethod,
                              contentType: MimeType = MimeType.json, port: number = 8888,
                              host: string = 'localhost', protocol: string = 'http:', headers: any,
                              resolve: any, reject: any): ClientRequest {

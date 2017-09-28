@@ -1,29 +1,21 @@
-import { nextParam } from '../../lib/decorators';
-import { HttpRequestMethod } from '../../lib/constants';
 import { expect } from 'chai';
-import { route, get, pathParam, queryParam, interceptor, processing, requestParam } from '../../';
+import { Route, Get, PathParam, RequestParam, GenericResponse, HttpResponseCode } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
 
-@interceptor('/student/:uuid', {
-  httpMethods: HttpRequestMethod.Get
-})
-export class Admission {
-  @processing()
-  checkAdmission(@pathParam('uuid') uuid: number) {
-    console.log('Teste');
+export class Student {
+  uuid: string;
+
+  constructor(uuid?: string) {
+    this.uuid = uuid;
   }
 }
 
-@route()
-export class Students {
-  @get(':uuid')
-  getStudentId(@queryParam('name') name: string) {
-    console.log('2');
-  }
-
-  @get(':uuid')
-  getStudent(@pathParam('uuid') uuid: number): any {
-    console.log(uuid);
+@Route('students')
+export class StudentRS {
+  @Get(':uuid')
+  getStudentId(@PathParam('uuid') uuid: string): Student {
+    const student: Student = new Student(uuid);
+    return student;
   }
 }
 
@@ -35,6 +27,6 @@ describe('HTTP Decorator tests', () => {
 
   it('Should GET student infos', async () => {
     const result = await RequestHelper.get('/orche/students/123');
-    expect(result).to.be.equal('{"uuid":123,"name":"Tobias"}');
+    expect(result).to.be.equal('{"uuid":"123"}');
   });
 });

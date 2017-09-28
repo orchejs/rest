@@ -1,18 +1,21 @@
-import { HttpDecoratorOptions } from '../interfaces/http-decorator-options';
-import { HttpRequestMethod } from '../constants/http-request-method';
-import { MimeType } from '../constants/mimetype';
-import { ContentType } from '../interfaces/content-type';
-import { RouterLoader } from '../loaders/router.loader';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 
-export function all(path: string = '', options: HttpDecoratorOptions = {}) {
+import { HttpDecoratorOptions, ContentType } from '../interfaces';
+import { HttpRequestMethod, MimeType } from '../constants';
+import { RouterLoader } from '../loaders';
+
+export function All(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -24,12 +27,11 @@ export function all(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function get(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Get(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = { response: MimeType.json };
-    }
+    const ct: ContentType = options.contentType || {
+      response: MimeType.json
+    };
     const method: Function = descriptor.value;
     RouterLoader.addRouteUnit(
       path,
@@ -42,15 +44,12 @@ export function get(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function post(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Post(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -62,15 +61,12 @@ export function post(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function put(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Put(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -82,15 +78,12 @@ export function put(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function del(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Delete(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -102,15 +95,12 @@ export function del(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function patch(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Patch(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -122,15 +112,12 @@ export function patch(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function options(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Options(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = {
-        request: MimeType.json,
-        response: MimeType.json
-      };
-    }
+    const ct: ContentType = options.contentType || {
+      request: MimeType.json,
+      response: MimeType.json
+    };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),
@@ -142,12 +129,9 @@ export function options(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function head(path: string = '', options: HttpDecoratorOptions = {}) {
+export function Head(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    let ct: ContentType = options.contentType;
-    if (!ct) {
-      ct = { response: MimeType.json };
-    }
+    const ct: ContentType = options.contentType || { response: MimeType.json };
     RouterLoader.addRouteUnit(
       path,
       descriptor.value.bind(target),

@@ -1,5 +1,10 @@
-export * from './decorator.loader';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 export * from './interceptor.loader';
 export * from './parameter.loader';
-export * from './property.loader';
 export * from './router.loader';

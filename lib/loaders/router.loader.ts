@@ -1,8 +1,13 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { HttpRequestMethod } from '../constants/http-request-method';
-import { RouterConfig } from '../interfaces/router-config';
-import { RouterUnit } from '../interfaces/router-unit';
-import { ContentType } from '../interfaces/content-type';
-import { CorsConfig } from '../interfaces/cors-config';
+import { RouterConfig, RouterUnit, ContentType, CorsConfig, LoadedRoute } from '../interfaces';
+import { UrlUtils } from '@orchejs/common';
 
 export class RouterLoader {
   static routerConfigs: RouterConfig[] = [];
@@ -39,5 +44,21 @@ export class RouterLoader {
     };
 
     this.routerUnits.push(routerUnit);
+  }
+
+  static formatLoadedRoutes(appPath: string, routerConfigs: RouterConfig[] = []): LoadedRoute[] {
+    const loadedRoutes: LoadedRoute[] = [];
+    const rootPath = UrlUtils.urlSanitation(appPath);
+    for (const routerConfig of routerConfigs) {
+      const routerPath = UrlUtils.urlSanitation(routerConfig.path);
+      routerConfig.routerUnits.forEach(unit => {
+        const unitPath = UrlUtils.urlSanitation(unit.path);
+        loadedRoutes.push({
+          path: rootPath + routerPath + unitPath,
+          httpMethod: HttpRequestMethod[unit.httpMethod]
+        });
+      });
+    }
+    return loadedRoutes;
   }
 }

@@ -1,8 +1,13 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { OrcheRestConfig, OrcheRestResult } from '../interfaces';
-import { CompatVersions } from '../interfaces/compat-versions';
-import { PackageUtils } from '../utils/package.utils';
-import { configUtils } from '../utils/config.utils';
-import { logger } from '../utils/log.utils';
+import { CompatVersions, PackageUtils, logger } from '@orchejs/common';
+import { configUtils } from '../utils';
 
 export abstract class Engine {
   protected app: any;
@@ -20,7 +25,7 @@ export abstract class Engine {
     configUtils.loadOrcheConfig(userConfig);
     this.config = configUtils.config;
 
-    logger.init(this.config);
+    logger.init(this.config.logOptions, this.config.environment, this.config.debug);
   }
 
   private isEngineVersionSupported(compatVersions: CompatVersions): boolean {

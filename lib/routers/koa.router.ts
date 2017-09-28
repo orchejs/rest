@@ -1,6 +1,13 @@
-import * as path from 'path';
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { Router } from './';
-import { ContentType, CorsConfig, ParamUnit, ValidatorError } from '../interfaces';
+import { ContentType, CorsConfig, ParamUnit } from '../interfaces';
+import { ValidatorError } from '@orchejs/validators';
 import { HttpRequestMethod } from '../constants';
 
 export class KoaRouter extends Router {
@@ -34,7 +41,7 @@ export class KoaRouter extends Router {
   ): Function {
     throw new Error('Method not implemented.');
   }
-  
+
   protected getParamValue(
     param: ParamUnit,
     args: any

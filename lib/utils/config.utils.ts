@@ -1,16 +1,18 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { EventEmitter } from 'events';
 import * as fs from 'fs';
 
-import { PathUtils } from './path.utils';
-import { UrlUtils } from './url.utils';
-import { logger } from './log.utils';
+import { PathUtils, UrlUtils, logger } from '@orchejs/common';
 import { OrcheRestConfig } from '../interfaces';
 import { OrcheEngine } from '../constants';
 
 export class ConfigUtils extends EventEmitter {
-  /**
-   * App config file
-   */
   config: OrcheRestConfig;
 
   constructor() {
@@ -64,7 +66,7 @@ export class ConfigUtils extends EventEmitter {
       const envConfigFile = fs.existsSync(process.env.ORCHE_CONFIG);
       if (envConfigFile) {
         try {
-          let fileContent = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
+          let fileContent: any = fs.readFileSync(process.env.ORCHE_CONFIG, 'utf8');
 
           if (fileContent) {
             fileContent = JSON.parse(fileContent);
@@ -104,8 +106,8 @@ export class ConfigUtils extends EventEmitter {
 }
 
 export const configUtils: ConfigUtils = new ConfigUtils();
-
 export let appConfig = configUtils.config;
-configUtils.on('configLoaded', config => {
+
+configUtils.on('configLoaded', (config: OrcheRestConfig) => {
   appConfig = config;
 });
