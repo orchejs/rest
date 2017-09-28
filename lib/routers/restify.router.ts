@@ -8,7 +8,7 @@
 import { Router } from './';
 import * as restify from 'restify';
 import { BuildObjectResponse, PropertyLoader, UrlUtils, ConverterUtils } from '@orchejs/common';
-import { ValidatorError } from '@orchejs/validators';
+import { ValidatorError, ValidatorRunner } from '@orchejs/validators';
 import { RestifyRequestMapper } from '../requests';
 import { ErrorResponse } from '../responses';
 import { HttpRequestMethod, HttpResponseCode, MimeType, ParamType } from '../constants';
@@ -135,6 +135,7 @@ export class RestifyRouter extends Router {
       let details: ParamDetails;
       let paramValue: any;
       let validatorErrors: ValidatorError[] = [];
+      const validatorRunner = new ValidatorRunner();
 
       const req: restify.Request = args[0];
       const res: restify.Response = args[1];
@@ -153,7 +154,7 @@ export class RestifyRouter extends Router {
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
-            validatorErrors = await this.validatorRunner.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
               details.validators!
@@ -162,7 +163,7 @@ export class RestifyRouter extends Router {
           case ParamType.QueryParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
-            validatorErrors = await this.validatorRunner.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
               details.validators!
@@ -190,7 +191,7 @@ export class RestifyRouter extends Router {
           case ParamType.HeaderParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
-            validatorErrors = await this.validatorRunner.runValidations(
+            validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
               details.validators!
