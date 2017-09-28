@@ -1,18 +1,17 @@
 {
-  "name": "@orche/rest",
+  "name": "@orchejs/rest",
   "version": "0.1.0",
   "description": "Orche - REST module",
   "main": "index.js",
+  "typings": "index.d.ts",
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "dependencies": {
-    "app-root-path": "^2.0.1",
-    "file-matcher": "^1.1.0",
-    "moment": "^2.18.1",
-    "reflect-metadata": "^0.1.10",
-    "winston": "^2.3.1"
+    "@orchejs/common": "^0.1.0",
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
-    "@types/winston": "^2.3.4",
-    "@types/app-root-path": "^1.2.4",
     "@types/body-parser": "^1.16.4",
     "@types/chai": "^4.0.0",
     "@types/cors": "^2.8.1",
@@ -24,6 +23,7 @@
     "body-parser": "^1.17.2",
     "chai": "^4.0.2",
     "cors": "^2.8.3",
+    "coveralls": "^2.13.2",
     "express": "^4.15.3",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
@@ -34,27 +34,13 @@
     "typescript": "^2.4.0"
   },
   "scripts": {
-    "clean": "rm -rf ./build ./coverage ./log",
+    "clean": "rm -rf ./build ./coverage .nyc_output",
     "lint": "node_modules/.bin/tslint ./lib/**/*.ts ./test/**/*.ts",
-    "cp-package": "cp ./package.json ./build/rest/",
-    "compile": "node_modules/.bin/tsc",
-    "build": "npm run clean &&  npm run lint && npm run compile && npm run cp-package",
     "test": "node_modules/.bin/mocha",
-    "coverage": "node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha",
-    "clean-coverage": "npm run clean & npm run coverage",
-    "travis": ""
-  },
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "exclude": [
-      "**/*.d.ts",
-      "**test/**"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
+    "tsc": "node_modules/.bin/tsc --project tsconfig.json",
+    "post-compile": "cp package.json README.md ./build/rest",
+    "build": "npm run clean && npm run test && npm run tsc && npm run post-compile",
+    "coverage": "npm run clean && node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -64,7 +50,7 @@
     "name": "Mauricio Gemelli Vigolo",
     "email": "@mauriciovigolo"
   },
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/orchejs/rest/issues"
   },

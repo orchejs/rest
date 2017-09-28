@@ -1,0 +1,19 @@
+{
+  "extension": [
+      ".ts"
+  ],
+  "require": [
+      "ts-node/register"
+  ],
+  "include": [
+      "lib/**/*.ts"
+  ],
+  "exclude": [
+      "**/*.d.ts",
+      "lib/interfaces/**/*.ts"
+  ],
+  "reporter": [
+      "html"
+  ],
+  "all": true
+}
