@@ -1,4 +1,14 @@
 /**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
+
+/**
+ * @class
+ * @description
  * List of content types commonly used. The complete list can be found in
  * http://www.iana.org/assignments/media-types/media-types.xhtml -
  * IANA - List of all oficial MIME Types.
@@ -8,7 +18,6 @@
  * with the corresponding mime type.
  */
 export class MimeType {
-  
   private value: string;
 
   constructor(value: string) {

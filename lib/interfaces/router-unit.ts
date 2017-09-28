@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { CorsOptions } from './cors-options';
 import { HttpRequestMethod } from '../constants/http-request-method';
 import { ContentType } from '../interfaces/content-type';
