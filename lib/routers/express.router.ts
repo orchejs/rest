@@ -166,7 +166,7 @@ export class ExpressRouter extends Router {
             validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators!
+              details.validators
             );
             break;
           case ParamType.QueryParam:
@@ -175,7 +175,7 @@ export class ExpressRouter extends Router {
             validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
-              details.validators!
+              details.validators
             );
             break;
           case ParamType.RequestParamMapper:
@@ -183,19 +183,7 @@ export class ExpressRouter extends Router {
             paramValue = requestMapper;
             break;
           case ParamType.BodyParam:
-            if (param && param.paramDetails) {
-              details = param.paramDetails;
-              const loadResult: BuildObjectResponse = await PropertyLoader.loadPropertiesFromObject(
-                req.body,
-                details.type
-              );
-              if (loadResult.validatorErrors.length > 0) {
-                validatorErrors = loadResult.validatorErrors;
-              }
-              paramValue = loadResult.object;
-            } else {
-              paramValue = req.body;
-            }
+            paramValue = req.body;
             break;
           case ParamType.HeaderParam:
             details = param.paramDetails;
