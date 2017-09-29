@@ -27,7 +27,7 @@ export function Interceptor(
   };
 }
 
-export function processing() {
+export function Processing() {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target), propertyKey);
   };
