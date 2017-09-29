@@ -1,3 +1,4 @@
+import { debug } from 'util';
 import { Server } from 'http';
 import { json } from 'body-parser';
 import * as cors from 'cors';
@@ -13,7 +14,7 @@ export class ServerHelper {
 
       const config: OrcheRestConfig = {
         path: '/orche',
-        apiEngine: OrcheEngine.Restify,
+        apiEngine: OrcheEngine.ExpressJS,
         port: 8888,
         middlewares: [json()]
       };
