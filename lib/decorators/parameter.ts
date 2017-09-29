@@ -124,7 +124,7 @@ function loadParam(
     validators: options.validators,
     name: param,
     format: options.format,
-    type: paramTypes[paramIndex].name
+    type: paramTypes[paramIndex]
   };
   return details;
 }
