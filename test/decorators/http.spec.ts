@@ -13,8 +13,8 @@ export class Student {
 @Route('students')
 export class StudentRS {
   @Get(':uuid')
-  getStudentId(@PathParam('uuid') uuid: string): Student {
-    const student: Student = new Student(uuid);
+  getStudentId(@PathParam('uuid') uuid: number): Student {
+    const student: Student = new Student(String(uuid));
     return student;
   }
 }
