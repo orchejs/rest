@@ -162,7 +162,11 @@ export class ExpressRouter extends Router {
             break;
           case ParamType.PathParam:
             details = param.paramDetails;
-            paramValue = ConverterUtils.convertToType(req.params[details.name], details.type);
+            paramValue = ConverterUtils.convertToType(
+              req.params[details.name],
+              details.type.name,
+              details.format
+            );
             validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
@@ -171,7 +175,11 @@ export class ExpressRouter extends Router {
             break;
           case ParamType.QueryParam:
             details = param.paramDetails;
-            paramValue = ConverterUtils.convertToType(req.query[details.name], details.type);
+            paramValue = ConverterUtils.convertToType(
+              req.query[details.name],
+              details.type.name,
+              details.format
+            );
             validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
@@ -187,7 +195,11 @@ export class ExpressRouter extends Router {
             break;
           case ParamType.HeaderParam:
             details = param.paramDetails;
-            paramValue = ConverterUtils.convertToType(req.headers[details.name], details.type);
+            paramValue = ConverterUtils.convertToType(
+              req.headers[details.name],
+              details.type.name,
+              details.format
+            );
             validatorErrors = await validatorRunner.runValidations(
               paramValue,
               details.name,
