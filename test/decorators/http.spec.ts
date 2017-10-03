@@ -5,6 +5,7 @@ import {
   NextParam,
   BodyParam,
   Post,
+  Put,
   Get,
   PathParam,
   QueryParam,
@@ -50,10 +51,10 @@ const students: Student[] = [
 
 @Route('students')
 export class StudentRs {
-  @All('/*')
+  @All()
   checkHeader(
-    @HeaderParam('content-type') contentType: string, 
-    @NextParam() next: any, 
+    @HeaderParam('content-type') contentType: string,
+    @NextParam() next: any,
     @RequestParam() req: any
   ) {
     if (!contentType) {
@@ -63,13 +64,26 @@ export class StudentRs {
   }
 
   @Post()
-  createStudent(@BodyParam({
-    validators: [{ validator: NotNullValidator }]
-  }) student: Student): Student {
+  createStudent(
+    @BodyParam({
+      validators: [{ validator: NotNullValidator }]
+    })
+    student: Student
+  ): Student {
     student._id = '59d27001fc13ae43960001123';
     students.push(student);
     return student;
   }
+
+  @Put(':uuid')
+  updateStudent(
+    @PathParam('uuid') uuid: string,
+    @BodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+  ): Student {
+    const stu = students.find(st => st._id === uuid);
+    stu.name = student.name;
+    return stu;
+  }  
 
   @Get(':uuid')
   getStudent(@PathParam('uuid') uuid: string): Student {
@@ -93,19 +107,24 @@ describe('HTTP Decorator tests', () => {
   });
 
   it('Should POST a new student', async () => {
-    const result = await RequestHelper.post('/orche/students', { name:'John English' });
-    expect(result.uuid).to.be.not.undefined;
+    const result = await RequestHelper.post('/orche/students', { name: 'John English' });
+    expect(result._id).to.be.not.undefined;
+  });
+
+  it('Should PUT to modify a student', async () => {
+    const result = await RequestHelper.put('/orche/students/59d27001fc13ae439600012c', {
+      name: 'Adam Kiossel'
+    });
+    expect(result.name).to.be.equal('Adam Kiossel');
   });
 
   it('Should GET a student', async () => {
     const result = await RequestHelper.get('/orche/students/59d27001fc13ae439600012c');
-    expect(result.name).to.be.equal('Adham Kiossel');
+    expect(result.name).to.be.equal('Adam Kiossel');
   });
 
   it('Should GET a list of students with name hu and  ', async () => {
     const result = await RequestHelper.get('/orche/students?name=hu&&minAge=18');
     expect(result).length.gte(2);
   });
-
-
 });
