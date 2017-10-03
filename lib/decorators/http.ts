@@ -10,7 +10,7 @@ import { HttpDecoratorOptions, ContentType } from '../interfaces';
 import { HttpRequestMethod, MimeType } from '../constants';
 import { RouterLoader } from '../loaders';
 
-export function All(path: string = '', options: HttpDecoratorOptions = {}) {
+export function All(path: string = '/*', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
