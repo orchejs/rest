@@ -121,6 +121,11 @@ export class RequestHelper {
       });
 
       res.on('end', () => {
+        if (
+          res.headers['content-type'] && 
+          res.headers['content-type'].indexOf('application/json') > -1) {
+          rawData = JSON.parse(rawData);
+        }
         resolve(rawData);
       });
     });
