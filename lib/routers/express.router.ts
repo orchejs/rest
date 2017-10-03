@@ -191,7 +191,13 @@ export class ExpressRouter extends Router {
             paramValue = requestMapper;
             break;
           case ParamType.BodyParam:
+            details = param.paramDetails;
             paramValue = req.body;
+            validatorErrors = await validatorRunner.runValidations(
+              paramValue,
+              details.name,
+              details.validators
+            );            
             break;
           case ParamType.HeaderParam:
             details = param.paramDetails;
