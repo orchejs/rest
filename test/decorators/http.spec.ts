@@ -1,14 +1,20 @@
 import { expect } from 'chai';
 import {
   Route,
+  All,
+  NextParam,
+  BodyParam,
+  Post,
   Get,
   PathParam,
   QueryParam,
   RequestParam,
+  HeaderParam,
   GenericResponse,
   HttpResponseCode
 } from '../../';
 import { RequestHelper, ServerHelper } from '../helpers';
+import { NotNullValidator } from '@orchejs/validators';
 
 export class Student {
   _id: string;
@@ -43,7 +49,28 @@ const students: Student[] = [
 ];
 
 @Route('students')
-export class StudentRS {
+export class StudentRs {
+  @All('/*')
+  checkHeader(
+    @HeaderParam('content-type') contentType: string, 
+    @NextParam() next: any, 
+    @RequestParam() req: any
+  ) {
+    if (!contentType) {
+      req.headers['content-type'] = 'application/json';
+    }
+    next();
+  }
+
+  @Post()
+  createStudent(@BodyParam({
+    validators: [{ validator: NotNullValidator }]
+  }) student: Student): Student {
+    student._id = '59d27001fc13ae43960001123';
+    students.push(student);
+    return student;
+  }
+
   @Get(':uuid')
   getStudent(@PathParam('uuid') uuid: string): Student {
     const student = students.find(st => st._id === uuid);
@@ -51,8 +78,11 @@ export class StudentRS {
   }
 
   @Get()
-  getStudents(@QueryParam('name') name: string, @QueryParam('age') age: number): Student[] {
-    return students;
+  getStudents(@QueryParam('name') name: string, @QueryParam('minAge') minAge: number): Student[] {
+    const filteredStudents = students.filter(
+      stu => stu.age >= minAge && stu.name.toLowerCase().indexOf(name.toLowerCase()) > -1
+    );
+    return filteredStudents;
   }
 }
 
@@ -62,14 +92,20 @@ describe('HTTP Decorator tests', () => {
     await ServerHelper.initBasicServer();
   });
 
+  it('Should POST a new student', async () => {
+    const result = await RequestHelper.post('/orche/students', { name:'John English' });
+    expect(result.uuid).to.be.not.undefined;
+  });
+
   it('Should GET a student', async () => {
     const result = await RequestHelper.get('/orche/students/59d27001fc13ae439600012c');
-    const expectedValue = JSON.stringify({
-      _id: '59d27001fc13ae439600012c',
-      name: 'Adham Kiossel',
-      age: 16,
-      email: 'akiossel0@netscape.com'
-    });
-    expect(result).to.be.equal(expectedValue);
+    expect(result.name).to.be.equal('Adham Kiossel');
   });
+
+  it('Should GET a list of students with name hu and  ', async () => {
+    const result = await RequestHelper.get('/orche/students?name=hu&&minAge=18');
+    expect(result).length.gte(2);
+  });
+
+
 });
