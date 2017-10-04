@@ -1,3 +1,4 @@
+import { HttpRequestMethod } from '../../lib/constants/index';
 import { 
   Interceptor, 
   Process, 
@@ -6,19 +7,34 @@ import {
   ErrorResponse, 
   HttpResponseCode,
   Route,
-  Get
+  Get,
+  Delete,
+  PathParam
 } from '../..';
 import { Response } from 'express';
 import { expect } from 'chai';
 import { RequestHelper, ServerHelper } from '../helpers';
 import { PathUtils } from '@orchejs/common';
 
-@Interceptor('musics/*')
+@Interceptor('musics/:uuid', {
+  order: 0,
+  httpMethods: [
+    HttpRequestMethod.Delete
+  ]
+})
+export class AvoidDeletion {
+  @Process()
+  execute(@ResponseParam() res: Response): any {
+    return new ErrorResponse('Delete is Forbidden', undefined, HttpResponseCode.Forbidden);
+  }
+}
+
+@Interceptor('musics/:uuid')
 export class AuthenticatorInterceptor {
   @Process()
   execute(@HeaderParam('authentication') token: string, @ResponseParam() res: Response): any {
     if (!token) {
-      return new ErrorResponse('Forbidden', undefined, HttpResponseCode.Forbidden);
+      res.status(HttpResponseCode.Forbidden).send({ message: 'Session Expired' });
     }
   }
 }
@@ -26,20 +42,29 @@ export class AuthenticatorInterceptor {
 @Route('musics')
 export class MusicRs {
   @Get(':uuid')
-  getMusic() {
-    return { uuid: 123, name: 'Music 1' };
+  getMusic(@PathParam(':uuid') uuid: string) {
+    return { uuid, name: 'Music 1' };
+  }
+
+  @Delete(':uuid')
+  deleteMusic(@PathParam(':uuid') uuid: string) {
+    return { uuid };
   }
 }
 
 describe('Interceptor decorator tests', () => {
-
   before(async function() {
     this.timeout(0);
     await ServerHelper.initBasicServer();
   });
 
-  it('Should intercept requests to /orche/musics and cancel the request', async () => {
+  it('Should intercept requests to /orche/musics/:uuid and cancel the request', async () => {
     const result = await RequestHelper.get('/orche/musics/123');
-    expect(result.message).to.be.equal('Forbidden');
+    expect(result.message).to.be.equal('Session Expired');
   });
+
+  it('Should intercept requests to /orche/musics/:uuid and avoid deletion', async () => {
+    const result = await RequestHelper.delete('/orche/musics/123');
+    expect(result.message).to.be.equal('Delete is Forbidden');
+  });  
 });
