@@ -19,7 +19,6 @@ import {
   HttpResponseCode
 } from '../../';
 import { Response } from 'express';
-import * as moment from 'moment';
 import { RequestHelper, ServerHelper } from '../helpers';
 import { NotNullValidator } from '@orchejs/validators';
 
@@ -126,10 +125,9 @@ export class StudentRs {
   getHead(@ResponseParam() res: Response): void {
     res.setHeader('LastModified', '5');
   }
-
 }
 
-describe('HTTP Decorator tests', () => {
+describe('HTTP decorator tests', () => {
   before(async function() {
     this.timeout(0);
     await ServerHelper.initBasicServer();
