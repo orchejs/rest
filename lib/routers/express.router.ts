@@ -48,7 +48,7 @@ export class ExpressRouter extends Router {
     target: string,
     method: Function,
     methodName: string,
-    contentType: ContentType
+    contentType: ContentType = { response: MimeType.json, request: MimeType.json }
   ): Function {
     const loadParams = this.loadParams;
     const getParamValue = this.getParamValue;
