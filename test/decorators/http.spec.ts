@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import {
   Route,
   All,
-  NextParam,
   BodyParam,
   Post,
   Put,

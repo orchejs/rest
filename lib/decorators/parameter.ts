@@ -35,18 +35,6 @@ export function ResponseParam() {
   };
 }
 
-export function NextParam() {
-  return function(target: object, propertyKey: string, parameterIndex: number) {
-    ParameterLoader.addParameterConfig(
-      target,
-      propertyKey,
-      undefined,
-      parameterIndex,
-      ParamType.NextParam
-    );
-  };
-}
-
 export function QueryParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
