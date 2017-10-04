@@ -6,14 +6,20 @@ import {
   BodyParam,
   Post,
   Put,
+  Patch,
+  Head,
   Get,
+  Delete,
   PathParam,
   QueryParam,
   RequestParam,
+  ResponseParam,
   HeaderParam,
   GenericResponse,
   HttpResponseCode
 } from '../../';
+import { Response } from 'express';
+import * as moment from 'moment';
 import { RequestHelper, ServerHelper } from '../helpers';
 import { NotNullValidator } from '@orchejs/validators';
 
@@ -80,10 +86,27 @@ export class StudentRs {
     @PathParam('uuid') uuid: string,
     @BodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
   ): Student {
+    let stu = students.find(st => st._id === uuid);
+    stu = student;
+    return stu;
+  }  
+
+  @Patch(':uuid')
+  partialUpdateStudent(
+    @PathParam('uuid') uuid: string,
+    @BodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+  ): Student {
     const stu = students.find(st => st._id === uuid);
     stu.name = student.name;
     return stu;
-  }  
+  }
+
+  @Delete(':uuid')
+  deleteStudent(@PathParam('uuid') uuid: string): Student {
+    const index = students.findIndex(st => st._id === uuid);
+    const stu: Student[] = students.splice(index, 1);
+    return stu[0];
+  }
 
   @Get(':uuid')
   getStudent(@PathParam('uuid') uuid: string): Student {
@@ -98,6 +121,12 @@ export class StudentRs {
     );
     return filteredStudents;
   }
+
+  @Head()
+  getHead(@ResponseParam() res: Response): void {
+    res.setHeader('LastModified', '5');
+  }
+
 }
 
 describe('HTTP Decorator tests', () => {
@@ -113,18 +142,38 @@ describe('HTTP Decorator tests', () => {
 
   it('Should PUT to modify a student', async () => {
     const result = await RequestHelper.put('/orche/students/59d27001fc13ae439600012c', {
-      name: 'Adam Kiossel'
+      name: 'Adam Kiossel',
+      age: 40
     });
     expect(result.name).to.be.equal('Adam Kiossel');
+    expect(result.age).to.be.equal(40);
+  });
+
+  it('Should PATCH to modify a student', async () => {
+    const result = await RequestHelper.patch('/orche/students/59d27001fc13ae439600012c', {
+      name: 'Sandler Kiossel'
+    });
+    expect(result.name).to.be.equal('Sandler Kiossel');
+  });
+
+  it('Should DELETE a student', async () => {
+    const result = await RequestHelper.delete('/orche/students/59d27001fc13ae4396000136');
+    expect(result.name).to.be.equal('Roosevelt Skillman');
   });
 
   it('Should GET a student', async () => {
     const result = await RequestHelper.get('/orche/students/59d27001fc13ae439600012c');
-    expect(result.name).to.be.equal('Adam Kiossel');
+    expect(result.name).to.be.equal('Sandler Kiossel');
   });
 
-  it('Should GET a list of students with name hu and  ', async () => {
+  it('Should GET a list of students with name hu and minimum age 18.', async () => {
     const result = await RequestHelper.get('/orche/students?name=hu&&minAge=18');
     expect(result).length.gte(2);
   });
+  
+  it('Should make a HTTP HEAD request', async () => {
+    const result = await RequestHelper.head('/orche/students');
+    expect(result).to.be.equal('');
+  });  
+  
 });
