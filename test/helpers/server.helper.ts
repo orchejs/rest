@@ -8,7 +8,7 @@ import { OrcheRest, OrcheRestConfig, OrcheEngine, OrcheRestResult } from '../../
 export class ServerHelper {
   private static orcheResult: OrcheRestResult;
 
-  static async initBasicServer(): Promise<OrcheRestResult> {
+  static async initBasicServer(directory?: string): Promise<OrcheRestResult> {
     if (!this.orcheResult) {
       const orche = new OrcheRest();
 
@@ -16,7 +16,8 @@ export class ServerHelper {
         path: '/orche',
         apiEngine: OrcheEngine.ExpressJS,
         port: 8888,
-        middlewares: [json()]
+        middlewares: [json()],
+        baseDir: directory
       };
 
       this.orcheResult = await orche.init(config);
