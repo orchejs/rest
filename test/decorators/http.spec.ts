@@ -59,13 +59,11 @@ export class StudentRs {
   @All()
   checkHeader(
     @HeaderParam('content-type') contentType: string,
-    @NextParam() next: any,
     @RequestParam() req: any
   ) {
     if (!contentType) {
       req.headers['content-type'] = 'application/json';
     }
-    next();
   }
 
   @Post()
