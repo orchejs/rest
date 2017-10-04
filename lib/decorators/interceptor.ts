@@ -11,7 +11,7 @@ import { InterceptorLoader } from '../loaders';
 import { HttpRequestMethod } from '../constants';
 
 export function Interceptor(
-  path: string = '/',
+  path: string = '/*',
   options: InterceptorDecoratorOptions = { httpMethods: HttpRequestMethod.All }
 ) {
   return function(target: any) {
@@ -27,7 +27,7 @@ export function Interceptor(
   };
 }
 
-export function Processing() {
+export function Process() {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target), propertyKey);
   };
