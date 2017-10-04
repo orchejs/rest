@@ -16,7 +16,6 @@ export enum HttpRequestMethod {
   Post,
   Put,
   Head,
-  Options,
   Delete,
   All,
   Patch,

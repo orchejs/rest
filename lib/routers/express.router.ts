@@ -127,9 +127,6 @@ export class ExpressRouter extends Router {
       case HttpRequestMethod.Patch:
         router.patch(path, middlewares);
         break;
-      case HttpRequestMethod.Options:
-        router.options(path, middlewares);
-        break;
     }
   }
 

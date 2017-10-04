@@ -71,15 +71,6 @@ export class RequestHelper {
       req.end();
     });
   }
-  
-  static options(path: string, contentType?: MimeType, port?: number,
-                 host?: string, protocol?: string): any {
-    return new Promise((resolve, reject) => {
-      const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Options, contentType,
-                                                  port, host, protocol, null, resolve, reject);
-      req.end();
-    });
-  }    
 
   static delete(path: string, contentType?: MimeType, port?: number,
                 host?: string, protocol?: string): any {
@@ -123,7 +114,8 @@ export class RequestHelper {
       res.on('end', () => {
         if (
           res.headers['content-type'] && 
-          res.headers['content-type'].indexOf('application/json') > -1) {
+          res.headers['content-type'].indexOf('application/json') > -1 &&
+          rawData && rawData.trim() !== '') {
           rawData = JSON.parse(rawData);
         }
         resolve(rawData);

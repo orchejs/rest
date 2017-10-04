@@ -112,23 +112,6 @@ export function Patch(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Options(path: string = '', options: HttpDecoratorOptions = {}) {
-  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    const ct: ContentType = options.contentType || {
-      request: MimeType.json,
-      response: MimeType.json
-    };
-    RouterLoader.addRouteUnit(
-      path,
-      descriptor.value.bind(target),
-      propertyKey,
-      HttpRequestMethod.Options,
-      ct,
-      options.cors
-    );
-  };
-}
-
 export function Head(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || { response: MimeType.json };
