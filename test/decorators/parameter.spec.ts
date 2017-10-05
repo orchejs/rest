@@ -45,15 +45,14 @@ export class ComputersRs {
   }
 
   @Get(':uuid')
-  read(@PathParam('uuid') uuid: string, @HeaderParam('bearer') token: string) {
+  read(@PathParam('uuid') uuid: number, @HeaderParam('bearer') token: string) {
     return new GenericResponse({ uuid, token }, HttpResponseCode.Ok);
   }
 
   @Get()
   list(@QueryParam('name') name: string, @QueryParam('size') size: number): GenericResponse {
     return new GenericResponse({ name, size }, HttpResponseCode.Ok);
-  }
-
+  }  
 }
 
 describe('Parameter decorators tests', () => {
@@ -63,7 +62,7 @@ describe('Parameter decorators tests', () => {
     expect(response.size).to.be.equal(10);
   });  
 
-  it('Should get value from RequestParam set it in Response using ResponseParam', async () => {
+  it('Should get token - bearer from HeaderParam', async () => {
     const response = await RequestHelper.get(
       '/orche/computers/1234', 
       undefined, 
@@ -76,4 +75,9 @@ describe('Parameter decorators tests', () => {
     );
     expect(response.token).to.be.equal('1234567');
   });
+
+  it('Should get value from PathParam and return it', async () => {
+    const response = await RequestHelper.get('/orche/computers/123');
+    expect(response.uuid).to.be.equal(123);
+  });    
 });
