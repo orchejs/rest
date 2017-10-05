@@ -6,7 +6,7 @@ import { HttpRequestMethod, MimeType } from '../../';
 export class RequestHelper {
 
   static post(path: string, data: any, contentType?: MimeType, port?: number,
-              host?: string, protocol?: string): Promise<any> {
+              host?: string, protocol?: string, headers?: any): Promise<any> {
 
     let dataToSend: string = '';
     if (data) {
@@ -15,7 +15,7 @@ export class RequestHelper {
 
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Post, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
 
       req.write(dataToSend);
       req.end();
@@ -23,7 +23,7 @@ export class RequestHelper {
   }
 
   static put(path: string, data: any, contentType?: MimeType, port?: number,
-             host?: string, protocol?: string): any {
+             host?: string, protocol?: string, headers?: any): any {
     let dataToSend: string = '';
     if (data) {
       dataToSend = JSON.stringify(data);
@@ -31,7 +31,7 @@ export class RequestHelper {
 
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Put, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
 
       req.write(dataToSend);
       req.end();
@@ -39,7 +39,7 @@ export class RequestHelper {
   }
 
   static patch(path: string, data: any, contentType?: MimeType, port?: number,
-               host?: string, protocol?: string): any {
+               host?: string, protocol?: string, headers?: any): any {
     let dataToSend: string = '';
     if (data) {
       dataToSend = JSON.stringify(data);
@@ -47,7 +47,7 @@ export class RequestHelper {
 
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Patch, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
 
       req.write(dataToSend);
       req.end();
@@ -55,28 +55,28 @@ export class RequestHelper {
   }  
 
   static get(path: string, contentType?: MimeType, port?: number,
-             host?: string, protocol?: string): any {
+             host?: string, protocol?: string, headers?: any): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Get, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
       req.end();
     });
   }
 
   static head(path: string, contentType?: MimeType, port?: number,
-              host?: string, protocol?: string): any {
+              host?: string, protocol?: string, headers?: any): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Head, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
       req.end();
     });
   }
 
   static delete(path: string, contentType?: MimeType, port?: number,
-                host?: string, protocol?: string): any {
+                host?: string, protocol?: string, headers?: any): any {
     return new Promise((resolve, reject) => {
       const req: ClientRequest = this.makeRequest(path, HttpRequestMethod.Delete, contentType,
-                                                  port, host, protocol, null, resolve, reject);
+                                                  port, host, protocol, headers, resolve, reject);
       req.end();
     });
   }
