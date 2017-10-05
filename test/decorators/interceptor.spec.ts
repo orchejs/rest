@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Mauricio Gemelli Vigolo. All Rights Reserved.
+ *
+ * Use of this source code is governed by a MIT-style license that can be
+ * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
+ */
 import { HttpRequestMethod } from '../../lib/constants/index';
 import { 
   Interceptor, 
@@ -53,11 +60,6 @@ export class MusicRs {
 }
 
 describe('Interceptor decorator tests', () => {
-  before(async function() {
-    this.timeout(0);
-    await ServerHelper.initBasicServer();
-  });
-
   it('Should intercept requests to /orche/musics/:uuid and cancel the request', async () => {
     const result = await RequestHelper.get('/orche/musics/123');
     expect(result.message).to.be.equal('Session Expired');
