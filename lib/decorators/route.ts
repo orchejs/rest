@@ -5,7 +5,7 @@
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
-import { ClassUtils } from '@orchejs/common';
+import { ClassUtils, UrlUtils } from '@orchejs/common';
 import { RouterLoader } from '../loaders';
 
 export function Route(path: string = '') {
@@ -14,7 +14,7 @@ export function Route(path: string = '') {
     if (className) {
       let routerPath = path;
       if (routerPath === '') {
-        routerPath = className.toLowerCase();
+        routerPath = UrlUtils.transformToSpinalCase(className);
       }
       RouterLoader.addRouterConfig(className, routerPath);
     }
