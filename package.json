@@ -8,7 +8,7 @@
     "node": ">=6.9.0"
   },
   "dependencies": {
-    "@orchejs/common": "^0.1.0",
+    "@orchejs/common": "^0.2.0",
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
