@@ -26,19 +26,20 @@
     "express": "^4.15.3",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
+    "shx": "^0.2.2",
     "ts-node": "^3.0.6",
     "tslint": "^5.4.3",
     "tslint-config-airbnb": "^5.2.0",
     "typescript": "^2.5.3"
   },
   "scripts": {
-    "clean": "rm -rf ./build ./coverage .nyc_output",
+    "clean": "node ./node_modules/shx/lib/cli.js rm -rf ./build ./coverage .nyc_output",
     "lint": "node_modules/.bin/tslint ./lib/**/*.ts ./test/**/*.ts",
     "test": "node_modules/.bin/mocha",
     "tsc": "node_modules/.bin/tsc --project tsconfig.json",
-    "post-compile": "cp package.json README.md ./build/rest",
+    "post-compile": "node ./node_modules/shx/lib/cli.js cp -r {package.json,README.md} ./build/rest",
     "build": "npm run clean && npm run test && npm run tsc && npm run post-compile",
-    "coverage": "npm run clean && node_modules/.bin/nyc --reporter=lcov node_modules/.bin/mocha"
+    "coverage": "npm run clean && node ./node_modules/nyc/bin/nyc.js --reporter=lcov node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
