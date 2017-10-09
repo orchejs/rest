@@ -18,7 +18,7 @@ export class InterceptorLoader {
     className?: string,
     httpMethods?: HttpRequestMethod[]
   ) {
-    const interceptorPath: string = path || '/';
+    const interceptorPath: string = path || '/*';
     const interceptorOrder: number = order || this.interceptorConfigs.length + 1;
     const interceptorClassName: string = className || '';
     const interceptorHttpMethods: HttpRequestMethod[] = httpMethods || [];
