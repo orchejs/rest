@@ -8,7 +8,7 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
-import { CompatVersions, logger } from '@orchejs/common';
+import { CompatVersions, Environment, logger } from '@orchejs/common';
 import { Engine } from './';
 import {
   OrcheRestConfig,
@@ -43,7 +43,7 @@ export class ExpressEngine extends Engine {
       this.setupSettings();
 
       // Add Express's extensions
-      this.config.middlewares = this.config.middlewares || [];
+      this.config.middlewares = this.config.middlewares;
 
       // Check if CORS should be setup and add it as an extension
       if (this.config.corsConfig) {
@@ -98,7 +98,7 @@ export class ExpressEngine extends Engine {
     this.app.set('views', settings.views || process.cwd() + '/views');
     this.app.set('view engine', settings.viewEngine || undefined);
     this.app.set('x-powered-by', settings.xPoweredBy || false);
-    if (settings['env'] === 'production') {
+    if (this.config.environment === Environment.Production) {
       this.app.set('view cache', settings.viewCache || true);
     } else {
       this.app.set('view cache', settings.viewCache || undefined);
