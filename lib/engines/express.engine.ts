@@ -5,7 +5,6 @@
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
-import { RouterLoader } from '../loaders/router.loader';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as http from 'http';
@@ -20,6 +19,7 @@ import {
   RouterUnit,
   RouterConfig
 } from '../interfaces';
+import { RouterLoader } from '../loaders';
 import { ExpressRouter } from '../routers';
 import { ConfigUtils } from '../utils';
 
@@ -63,9 +63,9 @@ export class ExpressEngine extends Engine {
             loadStats.loadedRoutes
           );
 
-          logger.info(`Server running on port: ${this.config.port}\n\n`);
+          logger.info(`Server running on port: ${this.config.port}`);
           logger.info('------');
-          logger.info(`Number of endpoints loaded: ${loadedRoutes.length} \n`);
+          logger.info(`Number of endpoints loaded: ${loadedRoutes.length}`);
           logger.info('Loaded endpoints');
           logger.info('------');
           for (const loadedRoute of loadedRoutes) {
@@ -84,24 +84,24 @@ export class ExpressEngine extends Engine {
   }
 
   protected setupSettings(): void {
-    const settings = this.config.settings || {};
-    this.app.set('case sensitive routing', settings['caseSentiveRouting'] || undefined);
-    this.app.set('env', settings['env'] || 'development');
-    this.app.set('etag', settings['etag'] || 'weak');
-    this.app.set('jsonp callback name', settings['jsonpCallbackName'] || 'callback');
-    this.app.set('json replacer', settings['jsonReplacer'] || undefined);
-    this.app.set('json spaces', settings['jsonSpaces'] || undefined);
-    this.app.set('query parser', settings['queryParser'] || 'extended');
-    this.app.set('strict routing', settings['strictRouting'] || undefined);
-    this.app.set('subdomain offset', settings['subdomainOffset'] || 2);
-    this.app.set('trust proxy', settings['trustProxy'] || false);
-    this.app.set('views', settings['views'] || process.cwd() + '/views');
-    this.app.set('view engine', settings['viewEngine'] || undefined);
-    this.app.set('x-powered-by', settings['xPoweredBy'] || false);
+    const settings: ExpressSettings = this.config.settings || {};
+    this.app.set('case sensitive routing', settings.caseSentiveRouting || undefined);
+    this.app.set('env', settings.env || 'development');
+    this.app.set('etag', settings.etag || 'weak');
+    this.app.set('jsonp callback name', settings.jsonpCallbackName || 'callback');
+    this.app.set('json replacer', settings.jsonReplacer || undefined);
+    this.app.set('json spaces', settings.jsonSpaces || undefined);
+    this.app.set('query parser', settings.queryParser || 'extended');
+    this.app.set('strict routing', settings.strictRouting || undefined);
+    this.app.set('subdomain offset', settings.subdomainOffset || 2);
+    this.app.set('trust proxy', settings.trustProxy || false);
+    this.app.set('views', settings.views || process.cwd() + '/views');
+    this.app.set('view engine', settings.viewEngine || undefined);
+    this.app.set('x-powered-by', settings.xPoweredBy || false);
     if (settings['env'] === 'production') {
-      this.app.set('view cache', settings['viewCache'] || true);
+      this.app.set('view cache', settings.viewCache || true);
     } else {
-      this.app.set('view cache', settings['viewCache'] || undefined);
+      this.app.set('view cache', settings.viewCache || undefined);
     }
   }
 
