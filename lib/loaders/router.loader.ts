@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { HttpRequestMethod } from '../constants/http-request-method';
-import { RouterConfig, RouterUnit, ContentType, CorsConfig, LoadedRoute } from '../interfaces';
+import { RouterConfig, RouterUnit, ContentType, CorsConfig, LoadedRoutes } from '../interfaces';
 import { UrlUtils } from '@orchejs/common';
 
 export class RouterLoader {
@@ -46,8 +46,8 @@ export class RouterLoader {
     this.routerUnits.push(routerUnit);
   }
 
-  static formatLoadedRoutes(appPath: string, routerConfigs: RouterConfig[] = []): LoadedRoute[] {
-    const loadedRoutes: LoadedRoute[] = [];
+  static formatLoadedRoutes(appPath: string, routerConfigs: RouterConfig[] = []): LoadedRoutes[] {
+    const loadedRoutes: LoadedRoutes[] = [];
     const rootPath = UrlUtils.urlSanitation(appPath);
     for (const routerConfig of routerConfigs) {
       const routerPath = UrlUtils.urlSanitation(routerConfig.path);
