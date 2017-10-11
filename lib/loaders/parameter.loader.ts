@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { ValidatorRunner, ValidatorDetails } from '@orchejs/validators';
+import { ClassUtils } from '@orchejs/common';
 import { ParamType } from '../constants';
 import { ParamDetails, ParamConfig } from '../interfaces';
 
@@ -19,15 +20,16 @@ export class ParameterLoader {
     paramIndex: number,
     paramType: ParamType
   ) {
+    const className = ClassUtils.getClassName(target.constructor);
     let paramConfig: ParamConfig = this.paramsConfig.find(
-      pConfig => pConfig.methodName === methodName && pConfig.className === target.constructor.name
+      pConfig => pConfig.methodName === methodName && pConfig.className === className
     );
 
     if (!paramConfig) {
       paramConfig = {
+        className,
         methodName,
-        params: [],
-        className: target.constructor.name
+        params: []
       };
     }
 
