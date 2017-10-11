@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { expect } from 'chai';
+import { ParamType } from '../../lib/constants';
 import { ParameterLoader } from '../../lib/loaders';
 
 export class TestParameter {
@@ -15,11 +16,21 @@ export class TestParameter {
 describe('ParameterLoader', () => {
   describe('#addParameterConfig', () => {
     it(
-      'Should add a new parameter configuration for a ', 
+      'Should add a new parameter configuration and be able to get it', 
       () => {
-        ParameterLoader.addParameterConfig()
-        const interceptorConfigs = InterceptorLoader.interceptorConfigs;
-        expect(interceptorConfigs).length.above(0);
+        const testParam = new TestParameter();
+        ParameterLoader.addParameterConfig(
+          testParam, 
+          'testParameterMethod', 
+          null, 
+          1, 
+          ParamType.BodyParam
+        );
+        const paramConfig = ParameterLoader.getParameterConfig(
+          'TestParameter', 
+          'testParameterMethod'
+        );
+        expect(paramConfig).to.be.not.undefined;
       });
   });
 });
