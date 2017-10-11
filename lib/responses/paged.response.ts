@@ -39,7 +39,7 @@ export class PagedResponse extends GenericResponse {
    *
    * @return {ResponseTemplate}
    */
-  toObjectLiteral(): any {
+  toJSON(): any {
     return {
       data: this.data,
       size: this.size,

@@ -22,7 +22,7 @@ export class ErrorResponse extends Response {
    * Return the response as a Object Literal, having the main fields.
    * @return {ResponseTemplate}
    */
-  toObjectLiteral(): any {
+  toJSON(): any {
     return {
       message: this.message,
       detail: this.detail

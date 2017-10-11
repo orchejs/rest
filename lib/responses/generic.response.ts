@@ -16,7 +16,7 @@ export class GenericResponse extends Response {
     this.data = data;
   }
 
-  public toObjectLiteral(): any {
+  public toJSON(): any {
     return this.data;
   }
 }

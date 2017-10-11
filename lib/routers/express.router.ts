@@ -72,7 +72,7 @@ export class ExpressRouter extends Router {
           return;
         } else if (result && result.isResponseType) {
           res.contentType(contentType.response['value']);
-          res.status(result.getHttpStatus()).send(result.toObjectLiteral());
+          res.status(result.getHttpStatus()).send(result.toJSON());
         } else if (result) {
           res.contentType(contentType.response['value']);
           res.status(HttpResponseCode.Ok).send(result);
@@ -85,7 +85,7 @@ export class ExpressRouter extends Router {
         }
         result = new ErrorResponse(e.message, null, HttpResponseCode.InternalServerError);
         res.contentType(MimeType.json.toString());
-        res.status(result.getHttpStatus()).send(result.toObjectLiteral());
+        res.status(result.getHttpStatus()).send(result.toJSON());
       }
     };
     return executor;
@@ -154,9 +154,6 @@ export class ExpressRouter extends Router {
           case ParamType.ResponseParam:
             paramValue = res;
             break;
-          case ParamType.NextParam:
-            paramValue = next;
-            break;
           case ParamType.PathParam:
             details = param.paramDetails;
             paramValue = ConverterUtils.convertToType(
@@ -194,7 +191,7 @@ export class ExpressRouter extends Router {
               paramValue,
               details.name,
               details.validators
-            );            
+            );
             break;
           case ParamType.HeaderParam:
             details = param.paramDetails;

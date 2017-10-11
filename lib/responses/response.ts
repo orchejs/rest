@@ -13,7 +13,7 @@ export abstract class Response {
   protected httpStatus: HttpResponseCode;
 
   /**
-   * Most basic response type. 
+   * Most basic response type.
    * The default http status is OK (200), if not will be INTERNAL_SERVER_ERROR (500).
    *
    * @param {any} [contentType]
@@ -43,5 +43,5 @@ export abstract class Response {
    *
    * @return {ResponseTemplate}
    */
-  abstract toObjectLiteral(): any;
+  abstract toJSON(): any;
 }
