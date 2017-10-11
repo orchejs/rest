@@ -7,7 +7,7 @@
  */
 import { HttpRequestMethod } from '../../lib/constants/index';
 import { expect } from 'chai';
-import { RouterConfig, RouterUnit } from '../../lib/interfaces';
+import { RouterConfig, RouterUnit, LoadedRoutes } from '../../lib/interfaces';
 import { RouterLoader } from '../../lib/loaders';
 import { ClassUtils } from '@orchejs/common';
 
@@ -41,14 +41,6 @@ describe('RouterLoader', () => {
     );
   });
 
-  describe('#addRouteUnit', () => {
-    it(
-      'Should add a new route unit meaning an endpoint of a http method.', 
-      () => {
-        expect(RouterLoader.routerUnits).length.be.gt(0);
-      });
-  });
-
   describe('#addRouterConfig', () => {
     it('Should add a new router config', () => {
       expect(routerConfig).to.be.not.undefined;
@@ -60,6 +52,17 @@ describe('RouterLoader', () => {
   });
 
   describe('#formatLoadedRoutes', () => {
-    
+    it('Should return an empty array if no RouterConfigs are passed as argument', () => {
+      const loadedRoutes: LoadedRoutes[] = RouterLoader.formatLoadedRoutes('main-tests');
+      expect(loadedRoutes.length).to.be.eq(0);
+    });
+
+    it('Should return the loaded routes from main-tests, should be greater than 0', () => {
+      const loadedRoutes: LoadedRoutes[] = RouterLoader.formatLoadedRoutes(
+        'main-tests', 
+        [routerConfig]
+      );
+      expect(loadedRoutes.length).to.be.gt(0);
+    });    
   });
 });
