@@ -7,7 +7,7 @@
  */
 import { HttpRequestMethod } from '../..';
 
-export interface LoadedRoute {
+export interface LoadedRoutes {
   path: string;
   httpMethod: string;
 }

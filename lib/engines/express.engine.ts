@@ -15,7 +15,7 @@ import {
   OrcheRestResult,
   ExpressSettings,
   LoadStats,
-  LoadedRoute,
+  LoadedRoutes,
   RouterUnit,
   RouterConfig
 } from '../interfaces';
@@ -58,7 +58,7 @@ export class ExpressEngine extends Engine {
 
       this.server = this.app.listen(this.config.port, () => {
         if (this.config.debug) {
-          const loadedRoutes: LoadedRoute[] = RouterLoader.formatLoadedRoutes(
+          const loadedRoutes: LoadedRoutes[] = RouterLoader.formatLoadedRoutes(
             this.config.path,
             loadStats.loadedRoutes
           );

@@ -14,7 +14,7 @@ export * from './interceptor-config';
 export * from './interceptor-decorator-options';
 export * from './interceptor-unit';
 export * from './load-stats';
-export * from './loaded-route';
+export * from './loaded-routes';
 export * from './orche-rest-config';
 export * from './orche-rest-result';
 export * from './param-config';
