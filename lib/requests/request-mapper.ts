@@ -6,15 +6,13 @@
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 export abstract class RequestMapper {
-  [queryParams: string]: any;
+  [params: string]: any;
 
   constructor(request: any) {
-    this.pathParams = {};
     this.loadPathParams(request);
     this.loadQueryParams(request);
   }
 
   protected abstract loadPathParams(request: any): void;
-
   protected abstract loadQueryParams(request: any): void;
 }
