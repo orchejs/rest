@@ -46,6 +46,14 @@ export class AuthenticatorInterceptor {
   }
 }
 
+@Interceptor()
+export class NopInterceptor {
+  @Process()
+  execute() {
+    // Do nothing!
+  }
+}
+
 @Route('musics')
 export class MusicRs {
   @Get(':uuid')
