@@ -17,7 +17,10 @@ export class ServerHelper {
         apiEngine: OrcheEngine.ExpressJS,
         port: 8888,
         middlewares: [json()],
-        baseDir: directory
+        baseDir: directory,
+        corsConfig: {
+          origin: '*'
+        }
       };
 
       this.orcheResult = await orche.init(config);
