@@ -61,8 +61,7 @@ export class ExpressRouter extends Router {
       try {
         endpointArgs = await loadParams(target, methodName, getParamValue, arguments);
       } catch (error) {
-        console.log('aqui', error);
-        // TODO deal validation error!
+        return res.status(HttpResponseCode.BadRequest).send(error);
       }
 
       let result: any;

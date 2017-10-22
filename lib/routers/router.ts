@@ -42,21 +42,14 @@ export abstract class Router {
     const interceptorConfigs = InterceptorLoader.interceptorConfigs;
     interceptorConfigs.forEach(config => {
       const routerUnits: RouterUnit[] = [];
-      if (config.httpMethods && config.httpMethods.length > 0) {
-        for (const httpMethod of config.httpMethods) {
-          routerUnits.push({
-            httpMethod,
-            method: config.interceptorUnit.method,
-            methodName: config.interceptorUnit.methodName
-          });
-        }
-      } else {
+      for (const httpMethod of config.httpMethods) {
         routerUnits.push({
+          httpMethod,
           method: config.interceptorUnit.method,
-          methodName: config.interceptorUnit.methodName,
-          httpMethod: HttpRequestMethod.All
+          methodName: config.interceptorUnit.methodName
         });
       }
+  
       this.addRouterToApp(config.path, config.className, routerUnits, appPath);
       routerStats.loadedInterceptors.push(config);
     });
@@ -128,14 +121,13 @@ export abstract class Router {
             const valueResult = await getParamValue(param, args);
             if (valueResult.validatorErrors.length > 0) {
               validatorErrors = validatorErrors.concat(valueResult.validatorErrors);
-              return;
+              continue;
             }
             endpointArgs[param.parameterIndex] = valueResult.value;
           } catch (e) {
-            const msg = 'An error happened during parameter load.';
+            const msg = 'An error happened during parameter load';
             logger.error(msg, { details: e });
-            reject(msg);
-            return;
+            return reject(msg);
           }
         }
       } else {
