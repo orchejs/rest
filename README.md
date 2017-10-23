@@ -1,7 +1,10 @@
 Orchejs REST
 ==================
 
+[![npm version](https://badge.fury.io/js/%40orchejs%2Frest.svg)](https://badge.fury.io/js/%40orchejs%2Frest)
 [![Build Status](https://travis-ci.org/orchejs/rest.svg?branch=master)](https://travis-ci.org/orchejs/rest)
+[![Coverage Status](https://coveralls.io/repos/github/orchejs/rest/badge.svg?branch=master)](https://coveralls.io/github/orchejs/rest?branch=master)
+
 
 
 Create REST APIs in Node.js using Typescript decorators with lots of utilities that will make your code cleaner and boost your productivity.
@@ -17,6 +20,7 @@ Create REST APIs in Node.js using Typescript decorators with lots of utilities t
 - [Concepts](#cot)
   - [Server Configuration](#sec)
   - [Route](#rou)
+  - [Interceptors](#int)
   - [Parameters](#pam)
   - [Request](#req)
   - [Response](#res)
@@ -31,17 +35,35 @@ Create REST APIs in Node.js using Typescript decorators with lots of utilities t
 -------
 ## <a name="#aoj"></a> About Orchejs
 
-The Orchejs project is comprised of a set of libraries that aggregate key technologies and consolidated libraries for API development in Node.js.
+The Orchejs project delivers a set of libraries aggregating key technologies and consolidated libraries for API development in Node.js.
 
 The goal is to make the backend development in Node.js even more productive, organized and that promotes scalability and maintainability.
 
 ## <a name="#wor"></a> Orchejs REST
 
-// TODO: add documentation
+Use this library to create your REST APIs in Node.js and take advantage of the following benefits:
+- Simple server configuration.
+- Type checking from **Typescript**.
+- Clean and organized code.
+- Decorators (Annotations) to specify your endpoints, query and path params, properties and so on.
+- Parameter and object Validators.
+- Request and Response generic classes.
+- Interceptors to manipulate your requests and for hook creation.
+- API Logging.
 
 ## <a name="#ins"></a> Installation
 
-// TODO: add documentation
+Simple installation, without CORS support:
+
+With yarn:
+```bash
+yarn add @orchejs/rest express body-parser 
+```
+
+With npm:
+```bash
+npm install --save @orchejs/rest express body-parser
+```
 
 ## <a name="#set"></a> Setup
 
