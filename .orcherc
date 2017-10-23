@@ -1,7 +1,8 @@
 {
+  "appName": "cool APIs",
   "apps": {
     "rest": {
-      
+      "appName": "cool APIs"
     }
   }
 }
