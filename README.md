@@ -21,13 +21,13 @@ Create REST APIs in Node.js using Typescript Decorators with lots of utilities t
 - [License](#lic)
 
 -------
-## <a name="#aoj"></a> About Orchejs
+## <a name="aoj"></a> About Orchejs
 
 The Orchejs project provides a set of libraries aggregating key technologies and consolidated libraries for the development of APIs in Node.js.
 
 The goal is to make the backend development in Node.js even more productive, organized and that promotes scalability and maintainability.
 
-## <a name="#wor"></a> Orchejs REST
+## <a name="wor"></a> Orchejs REST
 
 Use this library to create your REST APIs in Node.js and take advantage of the following benefits:
 - Simple server configuration.
@@ -39,7 +39,7 @@ Use this library to create your REST APIs in Node.js and take advantage of the f
 - Interceptors to manipulate your requests and hooks.
 - API Logging.
 
-## <a name="#gen"></a> App Generator
+## <a name="gen"></a> App Generator
 
 The easiest way to start with orchejs rest is by using the yeoman generator.
 
@@ -58,12 +58,12 @@ The next step is to create the app using the generator-orchejs-rest package.
 
 ```
 
-## <a name="#qks"></a> Quick start
+## <a name="qks"></a> Quick start
 
 The easiest way to configure your project is by using the [yeoman generator](#gen), however if you
 want to configure your on project structure than follow this quickstart.
 
-### <a name="#ins"></a> Installation
+### <a name="ins"></a> Installation
 
 Installation, **without** CORS support:
 
@@ -89,7 +89,7 @@ With npm:
 npm install --save cors
 ```
 
-### <a name="#set"></a> Setup
+### <a name="set"></a> Setup
 
 Enable ```experimentalDecorators``` and ```emitDecoratorMetadata``` compiler options in tsconfig.json.
 
@@ -104,7 +104,7 @@ tsconfig.json example:
 }
 ```
 
-## <a name="#doc"></a> Documentation
+## <a name="doc"></a> Documentation
 
 // TODO: add documentation
 
@@ -115,7 +115,7 @@ document.
 
 **Thanks for supporting Orchejs!**
 
-## <a name="#cot"></a> Contact
+## <a name="cot"></a> Contact
 
 // TODO: add documentation
 
