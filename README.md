@@ -5,29 +5,17 @@ Orchejs REST
 [![Build Status](https://travis-ci.org/orchejs/rest.svg?branch=master)](https://travis-ci.org/orchejs/rest)
 [![Coverage Status](https://coveralls.io/repos/github/orchejs/rest/badge.svg?branch=master)](https://coveralls.io/github/orchejs/rest?branch=master)
 
-
-
-Create REST APIs in Node.js using Typescript decorators with lots of utilities that will make your code cleaner and boost your productivity.
+Create REST APIs in Node.js using Typescript Decorators with lots of utilities that will make your code cleaner and boost your productivity.
 
 -------
 
 - [About Orchejs](#aoj)
 - [Orchejs REST](#wor)
-- [Installation](#ins)
-  - [Setup](#set)
-  - [Debugging Setup](#dbs)
+- [App Generator](#gen)
 - [Quick start](#qks)
-- [Concepts](#cot)
-  - [Server Configuration](#sec)
-  - [Route](#rou)
-  - [Interceptors](#int)
-  - [Parameters](#pam)
-  - [Request](#req)
-  - [Response](#res)
-  - [Validators](#val)
-  - [Logging](#log)
-- [Testing](#tes)
-- [Examples](#exa)
+  - [Installation](#ins)
+  - [Setup](#set)
+- [Documentation](#doc)
 - [Contributing](#con)
 - [Contact](#cot)
 - [License](#lic)
@@ -35,7 +23,7 @@ Create REST APIs in Node.js using Typescript decorators with lots of utilities t
 -------
 ## <a name="#aoj"></a> About Orchejs
 
-The Orchejs project delivers a set of libraries aggregating key technologies and consolidated libraries for API development in Node.js.
+The Orchejs project provides a set of libraries aggregating key technologies and consolidated libraries for the development of APIs in Node.js.
 
 The goal is to make the backend development in Node.js even more productive, organized and that promotes scalability and maintainability.
 
@@ -45,15 +33,39 @@ Use this library to create your REST APIs in Node.js and take advantage of the f
 - Simple server configuration.
 - Type checking from **Typescript**.
 - Clean and organized code.
-- Decorators (Annotations) to specify your endpoints, query and path params, properties and so on.
-- Parameter and object Validators.
+- Decorators (Annotations) to specify your endpoints, query, path params and properties.
+- Validators.
 - Request and Response generic classes.
-- Interceptors to manipulate your requests and for hook creation.
+- Interceptors to manipulate your requests and hooks.
 - API Logging.
 
-## <a name="#ins"></a> Installation
+## <a name="#gen"></a> App Generator
 
-Simple installation, without CORS support:
+The easiest way to start with orchejs rest is by using the yeoman generator.
+
+First be sure that you have yeoman installed as a global dependency:
+```sh
+npm install -g yo
+```
+
+Then install the generator-orchejs-rest package as global:
+```sh
+npm install -g generator-orchejs-rest
+```
+
+The next step is to create the app using the generator-orchejs-rest package.
+```sh
+
+```
+
+## <a name="#qks"></a> Quick start
+
+The easiest way to configure your project is by using the [yeoman generator](#gen), however if you
+want to configure your on project structure than follow this quickstart.
+
+### <a name="#ins"></a> Installation
+
+Installation, **without** CORS support:
 
 With yarn:
 ```bash
@@ -65,55 +77,34 @@ With npm:
 npm install --save @orchejs/rest express body-parser
 ```
 
-## <a name="#set"></a> Setup
+And if you need CORS:
 
-// TODO: add documentation
+With yarn:
+```bash
+yarn add cors
+```
 
-## <a name="#dbs"></a> Debugging Setup
+With npm:
+```bash
+npm install --save cors
+```
 
-// TODO: add documentation
+### <a name="#set"></a> Setup
 
-## <a name="#qks"></a> Quick start
+Enable ```experimentalDecorators``` and ```emitDecoratorMetadata``` compiler options in tsconfig.json.
 
-// TODO: add documentation
+tsconfig.json example: 
+```json
+{
+  "compilerOptions": {
+    "target": "es6",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
 
-## <a name="#cot"></a> Concepts
-
-// TODO: add documentation
-
-## <a name="#sec"></a> Server Configuration
-
-// TODO: add documentation
-
-## <a name="#rou"></a> Route
-
-// TODO: add documentation
-
-## <a name="#pam"></a> Parameters
-
-// TODO: add documentation
-
-## <a name="#req"></a> Request
-
-// TODO: add documentation
-
-## <a name="#res"></a> Response
-
-// TODO: add documentation
-
-## <a name="#val"></a> Validators
-
-// TODO: add documentation
-
-## <a name="#log"></a> Logging
-
-// TODO: add documentation
-
-## <a name="#tes"></a> Testing
-
-// TODO: add documentation
-
-## <a name="#exa"></a> Examples
+## <a name="#doc"></a> Documentation
 
 // TODO: add documentation
 
