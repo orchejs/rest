@@ -28,7 +28,8 @@ export function Interceptor(
 }
 
 export function Process() {
-  return function(target: object, propertyKey: string, descriptor: PropertyDescriptor) {
-    InterceptorLoader.addInterceptorUnit(descriptor.value.bind(target), propertyKey);
+  return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const instance = new target.constructor();
+    InterceptorLoader.addInterceptorUnit(descriptor.value.bind(instance), propertyKey);
   };
 }
