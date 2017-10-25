@@ -23,17 +23,17 @@ Create REST APIs in Node.js using Typescript Decorators with lots of utilities t
 -------
 ## <a name="aoj"></a> About Orchejs
 
-The Orchejs project provides a set of libraries aggregating key technologies and consolidated libraries for the development of APIs in Node.js.
+The Orchejs project provides a set of libraries aggregating key technologies and consolidated libraries for APIs development in Node.js.
 
 The goal is to make the backend development in Node.js even more productive, organized and that promotes scalability and maintainability.
 
 ## <a name="wor"></a> Orchejs REST
 
 Use this library to create your REST APIs in Node.js and take advantage of the following benefits:
-- Simple server configuration.
+- Simple server configuration and setup.
 - Type checking from **Typescript**.
 - Clean and organized code.
-- Decorators (Annotations) to specify your endpoints, query, path params and properties.
+- Decorators to specify your endpoints, query, path params and properties.
 - Validators.
 - Request and Response generic classes.
 - Interceptors to manipulate your requests and hooks.
@@ -60,8 +60,8 @@ The next step is to create the app using the generator-orchejs-rest package.
 
 ## <a name="qks"></a> Quick start
 
-The easiest way to configure your project is by using the [yeoman generator](#gen), however if you
-want to configure your on project structure than follow this quickstart.
+If you don't want to use the [yeoman generator](#gen) and decide to build your app from scratch, 
+follow this quickstart.
 
 ### <a name="ins"></a> Installation
 
