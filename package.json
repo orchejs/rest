@@ -1,6 +1,6 @@
 {
   "name": "@orchejs/rest",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Orche - REST module",
   "main": "index.js",
   "typings": "index.d.ts",
