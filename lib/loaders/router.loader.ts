@@ -31,7 +31,7 @@ export class RouterLoader {
     httpMethod: HttpRequestMethod,
     contentType?: ContentType,
     cors?: CorsConfig,
-    ...middlewares: Function[]
+    middlewares?: Function[]
   ) {
     const routerUnit: RouterUnit = {
       path,

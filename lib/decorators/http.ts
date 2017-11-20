@@ -23,7 +23,8 @@ export function All(path: string = '/*', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.All,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -40,7 +41,8 @@ export function Get(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Get,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -58,7 +60,8 @@ export function Post(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Post,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -76,7 +79,8 @@ export function Put(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Put,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -94,7 +98,8 @@ export function Delete(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Delete,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -112,7 +117,8 @@ export function Patch(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Patch,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
@@ -127,7 +133,8 @@ export function Head(path: string = '', options: HttpDecoratorOptions = {}) {
       propertyKey,
       HttpRequestMethod.Head,
       ct,
-      options.cors
+      options.cors,
+      options.middlewares
     );
   };
 }
