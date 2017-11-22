@@ -7,62 +7,62 @@
  */
 import { HttpRequestMethod } from '../../lib/constants/index';
 import { 
-  Interceptor, 
-  Process, 
-  ResponseParam, 
-  HeaderParam, 
+  interceptor, 
+  process, 
+  responseParam, 
+  headerParam, 
   ErrorResponse, 
   HttpResponseCode,
-  Route,
-  Get,
-  Delete,
-  PathParam
+  route,
+  get,
+  del,
+  pathParam
 } from '../..';
 import { Response } from 'express';
 import { expect } from 'chai';
 import { RequestHelper, ServerHelper } from '../helpers';
 import { PathUtils } from '@orchejs/common';
 
-@Interceptor('musics/:uuid', {
+@interceptor('musics/:uuid', {
   order: 0,
   httpMethods: [
     HttpRequestMethod.Delete
   ]
 })
 export class AvoidDeletion {
-  @Process()
-  execute(@ResponseParam() res: Response): any {
+  @process()
+  execute(@responseParam() res: Response): any {
     return new ErrorResponse('Delete is Forbidden', undefined, HttpResponseCode.Forbidden);
   }
 }
 
-@Interceptor('musics/:uuid')
+@interceptor('musics/:uuid')
 export class AuthenticatorInterceptor {
-  @Process()
-  execute(@HeaderParam('authentication') token: string, @ResponseParam() res: Response): any {
+  @process()
+  execute(@headerParam('authentication') token: string, @responseParam() res: Response): any {
     if (!token) {
       res.status(HttpResponseCode.Forbidden).send({ message: 'Session Expired' });
     }
   }
 }
 
-@Interceptor()
+@interceptor()
 export class NopInterceptor {
-  @Process()
+  @process()
   execute() {
     // Do nothing!
   }
 }
 
-@Route('musics')
+@route('musics')
 export class MusicRs {
-  @Get(':uuid')
-  getMusic(@PathParam(':uuid') uuid: string) {
+  @get(':uuid')
+  getMusic(@pathParam(':uuid') uuid: string) {
     return { uuid, name: 'Music 1' };
   }
 
-  @Delete(':uuid')
-  deleteMusic(@PathParam(':uuid') uuid: string) {
+  @del(':uuid')
+  deleteMusic(@pathParam(':uuid') uuid: string) {
     return { uuid };
   }
 }

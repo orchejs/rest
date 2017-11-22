@@ -11,7 +11,7 @@ import { ParamOptions, ParamDetails } from '../interfaces';
 import { ParameterLoader } from '../loaders';
 import { ParamType } from '../constants';
 
-export function RequestParam() {
+export function requestParam() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -23,7 +23,7 @@ export function RequestParam() {
   };
 }
 
-export function ResponseParam() {
+export function responseParam() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -35,7 +35,7 @@ export function ResponseParam() {
   };
 }
 
-export function QueryParam(param: string, options: ParamOptions = {}) {
+export function queryParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -48,7 +48,7 @@ export function QueryParam(param: string, options: ParamOptions = {}) {
   };
 }
 
-export function PathParam(param: string, options: ParamOptions = {}) {
+export function pathParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -61,7 +61,7 @@ export function PathParam(param: string, options: ParamOptions = {}) {
   };
 }
 
-export function RequestParamMapper() {
+export function requestParamMapper() {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     ParameterLoader.addParameterConfig(
       target,
@@ -73,7 +73,7 @@ export function RequestParamMapper() {
   };
 }
 
-export function BodyParam(options?: ParamOptions) {
+export function bodyParam(options?: ParamOptions) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, undefined, parameterIndex, options);
     ParameterLoader.addParameterConfig(
@@ -86,7 +86,7 @@ export function BodyParam(options?: ParamOptions) {
   };
 }
 
-export function HeaderParam(param: string, options: ParamOptions = {}) {
+export function headerParam(param: string, options: ParamOptions = {}) {
   return function(target: object, propertyKey: string, parameterIndex: number) {
     const paramDetails = loadParam(target, propertyKey, param, parameterIndex, options);
     ParameterLoader.addParameterConfig(

@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import { Response } from 'express';
 import { PatternValidator, Validator, ValidatorError } from '@orchejs/validators';
 
-import { Get, Route, QueryParam, PathParam, HttpResponseCode, ResponseParam } from '../..';
+import { get, route, queryParam, pathParam, HttpResponseCode, responseParam } from '../..';
 
 const values: any[] = [
   {
@@ -71,9 +71,9 @@ class ThrowErrorValidator implements Validator {
   }
 }
 
-@Route()
+@route()
 class Pictures {
-  @Get('', {
+  @get('', {
     cors: {
       preflight: true,
       corsOptions: {
@@ -81,7 +81,7 @@ class Pictures {
       }
     }
   })
-  list(@QueryParam('name', {
+  list(@queryParam('name', {
     validators: [{
       parameters: /[A-Z|0-9]/g,
       validator: PatternValidator
@@ -90,8 +90,8 @@ class Pictures {
     return values.filter(picture => picture.name.indexOf(name) > -1);
   }
 
-  @Get(':uuid') 
-  get(@PathParam('name', {
+  @get(':uuid') 
+  get(@pathParam('name', {
     validators: [{
       validator: ThrowErrorValidator
     }]
@@ -99,13 +99,13 @@ class Pictures {
     return values.find(picture => picture.name === name);
   }
 
-  @Get(':uuid/actors')
+  @get(':uuid/actors')
   getActors() {
     throw new Error('An error happened');
   }
 
-  @Get(':uuid/actresses')
-  getActresses(@ResponseParam() res: Response) {
+  @get(':uuid/actresses')
+  getActresses(@responseParam() res: Response) {
     res.status(HttpResponseCode.BadRequest).send('Ops an error happened');
     throw new Error('An error happened');
   }  

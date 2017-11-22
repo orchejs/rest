@@ -7,20 +7,20 @@
  */
 import { expect } from 'chai';
 import {
-  Route,
-  All,
-  BodyParam,
-  Post,
-  Put,
-  Patch,
-  Head,
-  Get,
-  Delete,
-  PathParam,
-  QueryParam,
-  RequestParam,
-  ResponseParam,
-  HeaderParam,
+  route,
+  all,
+  bodyParam,
+  post,
+  put,
+  patch,
+  head,
+  get,
+  del,
+  pathParam,
+  queryParam,
+  requestParam,
+  responseParam,
+  headerParam,
   GenericResponse,
   HttpResponseCode
 } from '../../';
@@ -60,21 +60,21 @@ const students: Student[] = [
   new Student('59d27001fc13ae439600013a', 'Myrah Kervin', 27, 'mkervine@xinhuanet.com')
 ];
 
-@Route('students')
+@route('students')
 export class StudentRs {
-  @All()
+  @all()
   checkHeader(
-    @HeaderParam('content-type') contentType: string,
-    @RequestParam() req: any
+    @headerParam('content-type') contentType: string,
+    @requestParam() req: any
   ) {
     if (!contentType) {
       req.headers['content-type'] = 'application/json';
     }
   }
 
-  @Post()
+  @post()
   createStudent(
-    @BodyParam({
+    @bodyParam({
       validators: [{ validator: NotNullValidator }]
     })
     student: Student
@@ -84,49 +84,49 @@ export class StudentRs {
     return student;
   }
 
-  @Put(':uuid')
+  @put(':uuid')
   updateStudent(
-    @PathParam('uuid') uuid: string,
-    @BodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+    @pathParam('uuid') uuid: string,
+    @bodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
   ): Student {
     let stu = students.find(st => st._id === uuid);
     stu = student;
     return stu;
   }  
 
-  @Patch(':uuid')
+  @patch(':uuid')
   partialUpdateStudent(
-    @PathParam('uuid') uuid: string,
-    @BodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+    @pathParam('uuid') uuid: string,
+    @bodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
   ): Student {
     const stu = students.find(st => st._id === uuid);
     stu.name = student.name;
     return stu;
   }
 
-  @Delete(':uuid')
-  deleteStudent(@PathParam('uuid') uuid: string): Student {
+  @del(':uuid')
+  deleteStudent(@pathParam('uuid') uuid: string): Student {
     const index = students.findIndex(st => st._id === uuid);
     const stu: Student[] = students.splice(index, 1);
     return stu[0];
   }
 
-  @Get(':uuid')
-  getStudent(@PathParam('uuid') uuid: string): Student {
+  @get(':uuid')
+  getStudent(@pathParam('uuid') uuid: string): Student {
     const student = students.find(st => st._id === uuid);
     return student;
   }
 
-  @Get()
-  getStudents(@QueryParam('name') name: string, @QueryParam('minAge') minAge: number): Student[] {
+  @get()
+  getStudents(@queryParam('name') name: string, @queryParam('minAge') minAge: number): Student[] {
     const filteredStudents = students.filter(
       stu => stu.age >= minAge && stu.name.toLowerCase().indexOf(name.toLowerCase()) > -1
     );
     return filteredStudents;
   }
 
-  @Head()
-  getHead(@ResponseParam() res: Response): void {
+  @head()
+  getHead(@responseParam() res: Response): void {
     res.setHeader('LastModified', '5');
   }
 }

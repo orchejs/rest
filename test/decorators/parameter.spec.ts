@@ -9,20 +9,20 @@ import { expect } from 'chai';
 import { Request, Response } from 'express';
 import { RequestHelper } from '../helpers';
 import {
-  Route,
-  All,
-  Get,
-  Post,
-  Put,
-  Delete,
-  RequestParam,
-  ResponseParam,
-  QueryParam,
-  PathParam,
-  RequestParamMapper,
+  route,
+  all,
+  get,
+  post,
+  put,
+  del,
+  requestParam,
+  responseParam,
+  queryParam,
+  pathParam,
+  requestParamMapper,
   ExpressRequestMapper,
-  BodyParam,
-  HeaderParam,
+  bodyParam,
+  headerParam,
   GenericResponse,
   HttpResponseCode
 } from '../..';
@@ -37,26 +37,26 @@ export class Computer {
   }
 }
 
-@Route('computers')
+@route('computers')
 export class ComputersRs {
-  @All('*')
-  checkAccess(@RequestParam() req: Request) {
+  @all('*')
+  checkAccess(@requestParam() req: Request) {
     const token: string | string[] = req.headers['authentication'];
     req.query['bearer'] = token;
   }
 
-  @Get(':uuid')
-  read(@PathParam('uuid') uuid: number, @RequestParamMapper() mapper: ExpressRequestMapper) {
+  @get(':uuid')
+  read(@pathParam('uuid') uuid: number, @requestParamMapper() mapper: ExpressRequestMapper) {
     return new GenericResponse({ uuid, bearer: mapper.bearer }, HttpResponseCode.Ok);
   }
 
-  @Get()
-  list(@QueryParam('name') name: string, @QueryParam('size') size: number): GenericResponse {
+  @get()
+  list(@queryParam('name') name: string, @queryParam('size') size: number): GenericResponse {
     return new GenericResponse({ name, size }, HttpResponseCode.Ok);
   }
 
-  @Post()
-  create(@BodyParam() computer: Computer, @ResponseParam() res: Response) {
+  @post()
+  create(@bodyParam() computer: Computer, @responseParam() res: Response) {
     res.status(HttpResponseCode.Created).send(computer);
   }
 }

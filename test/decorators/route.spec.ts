@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { expect } from 'chai';
-import { Route, Get } from '../..';
+import { route, get } from '../..';
 import { RequestHelper } from '../helpers';
 
 export class ClassicalMusic {
@@ -19,9 +19,9 @@ export class ClassicalMusic {
   }
 }
 
-@Route()
+@route()
 export class ClassicalMusics {
-  @Get()
+  @get()
   list(): ClassicalMusic[] {
     return [
       new ClassicalMusic('123', 'The marriage of Figaro')

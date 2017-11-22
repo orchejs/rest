@@ -10,7 +10,7 @@ import { HttpDecoratorOptions, ContentType } from '../interfaces';
 import { HttpRequestMethod, MimeType } from '../constants';
 import { RouterLoader } from '../loaders';
 
-export function All(path: string = '/*', options: HttpDecoratorOptions = {}) {
+export function all(path: string = '/*', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
@@ -29,7 +29,7 @@ export function All(path: string = '/*', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Get(path: string = '', options: HttpDecoratorOptions = {}) {
+export function get(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       response: MimeType.json
@@ -47,7 +47,7 @@ export function Get(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Post(path: string = '', options: HttpDecoratorOptions = {}) {
+export function post(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
@@ -66,7 +66,7 @@ export function Post(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Put(path: string = '', options: HttpDecoratorOptions = {}) {
+export function put(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
@@ -85,7 +85,7 @@ export function Put(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Delete(path: string = '', options: HttpDecoratorOptions = {}) {
+export function del(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
@@ -104,7 +104,7 @@ export function Delete(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Patch(path: string = '', options: HttpDecoratorOptions = {}) {
+export function patch(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || {
       request: MimeType.json,
@@ -123,7 +123,7 @@ export function Patch(path: string = '', options: HttpDecoratorOptions = {}) {
   };
 }
 
-export function Head(path: string = '', options: HttpDecoratorOptions = {}) {
+export function head(path: string = '', options: HttpDecoratorOptions = {}) {
   return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const ct: ContentType = options.contentType || { response: MimeType.json };
     const instance = new target.constructor();

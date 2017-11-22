@@ -8,7 +8,7 @@
 import { ClassUtils, UrlUtils } from '@orchejs/common';
 import { RouterLoader } from '../loaders';
 
-export function Route(path: string = '') {
+export function route(path: string = '') {
   return function (target: object) {
     const className: string = ClassUtils.getClassName(target);
     if (className) {
