@@ -1,17 +1,17 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { HttpRequestMethod } from '../../lib/constants/index';
-import { 
-  interceptor, 
-  process, 
-  responseParam, 
-  headerParam, 
-  ErrorResponse, 
+import {
+  interceptor,
+  process,
+  responseParam,
+  headerParam,
+  ErrorResponse,
   HttpResponseCode,
   route,
   get,
@@ -25,9 +25,7 @@ import { PathUtils } from '@orchejs/common';
 
 @interceptor('musics/:uuid', {
   order: 0,
-  httpMethods: [
-    HttpRequestMethod.Delete
-  ]
+  httpMethods: [HttpRequestMethod.Delete]
 })
 export class AvoidDeletion {
   @process()
@@ -76,5 +74,5 @@ describe('Interceptor decorator tests', () => {
   it('Should intercept requests to /orche/musics/:uuid and avoid deletion', async () => {
     const result = await RequestHelper.delete('/orche/musics/123');
     expect(result.message).to.be.equal('Delete is Forbidden');
-  });  
+  });
 });

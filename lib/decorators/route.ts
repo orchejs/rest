@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -9,7 +9,7 @@ import { ClassUtils, UrlUtils } from '@orchejs/common';
 import { RouterLoader } from '../loaders';
 
 export function route(path: string = '') {
-  return function (target: object) {
+  return function(target: object) {
     const className: string = ClassUtils.getClassName(target);
     if (className) {
       let routerPath = path;

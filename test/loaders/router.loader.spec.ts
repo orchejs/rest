@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -12,7 +12,7 @@ import { RouterLoader } from '../../lib/loaders';
 import { ClassUtils } from '@orchejs/common';
 
 export class RouterExample {
-  routerMethod(): void { }
+  routerMethod(): void {}
 }
 
 describe('RouterLoader', () => {
@@ -24,17 +24,14 @@ describe('RouterLoader', () => {
     example = new RouterExample();
 
     RouterLoader.addRouteUnit(
-      'test', 
+      'test',
       example.routerMethod,
       'routerMethod',
-      HttpRequestMethod.Delete,
-    );    
+      HttpRequestMethod.Delete
+    );
 
     className = ClassUtils.getClassName(example);
-    RouterLoader.addRouterConfig(
-      className,
-      'main-tests'
-    );
+    RouterLoader.addRouterConfig(className, 'main-tests');
 
     routerConfig = RouterLoader.routerConfigs.find(
       routerConfig => routerConfig.className === className
@@ -48,7 +45,7 @@ describe('RouterLoader', () => {
 
     it('Should have one router unit in router config', () => {
       expect(routerConfig.routerUnits.length).to.be.eq(1);
-    });    
+    });
   });
 
   describe('#formatLoadedRoutes', () => {
@@ -58,11 +55,10 @@ describe('RouterLoader', () => {
     });
 
     it('Should return the loaded routes from main-tests, should be greater than 0', () => {
-      const loadedRoutes: LoadedRoutes[] = RouterLoader.formatLoadedRoutes(
-        'main-tests', 
-        [routerConfig]
-      );
+      const loadedRoutes: LoadedRoutes[] = RouterLoader.formatLoadedRoutes('main-tests', [
+        routerConfig
+      ]);
       expect(loadedRoutes.length).to.be.gt(0);
-    });    
+    });
   });
 });

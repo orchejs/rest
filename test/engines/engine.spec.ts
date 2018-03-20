@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -30,13 +30,11 @@ describe('Engine', () => {
   describe('#constructor', () => {
     it('Should result in error as the engine is not supported', () => {
       try {
-        const mockEngine = new MockEngine(
-          {
-            dependency: 'express',
-            from: '2.0.0',
-            to: '2.5.0'
-          }
-        );        
+        const mockEngine = new MockEngine({
+          dependency: 'express',
+          from: '2.0.0',
+          to: '2.5.0'
+        });
       } catch (error) {
         expect(error).to.be.not.undefined;
       }
@@ -49,8 +47,8 @@ describe('Engine', () => {
             from: '2.0.0',
             to: '100.0.0'
           },
-          { }
-        );      
+          {}
+        );
         expect(mockEngine).to.be.not.undefined;
       } catch (error) {
         expect(error).to.be.undefined;

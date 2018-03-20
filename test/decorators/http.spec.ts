@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -63,10 +63,7 @@ const students: Student[] = [
 @route('students')
 export class StudentRs {
   @all()
-  checkHeader(
-    @headerParam('content-type') contentType: string,
-    @requestParam() req: any
-  ) {
+  checkHeader(@headerParam('content-type') contentType: string, @requestParam() req: any) {
     if (!contentType) {
       req.headers['content-type'] = 'application/json';
     }
@@ -87,17 +84,19 @@ export class StudentRs {
   @put(':uuid')
   updateStudent(
     @pathParam('uuid') uuid: string,
-    @bodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+    @bodyParam({ validators: [{ validator: NotNullValidator }] })
+    student: Student
   ): Student {
     let stu = students.find(st => st._id === uuid);
     stu = student;
     return stu;
-  }  
+  }
 
   @patch(':uuid')
   partialUpdateStudent(
     @pathParam('uuid') uuid: string,
-    @bodyParam({ validators: [{ validator: NotNullValidator }] }) student: Student
+    @bodyParam({ validators: [{ validator: NotNullValidator }] })
+    student: Student
   ): Student {
     const stu = students.find(st => st._id === uuid);
     stu.name = student.name;
@@ -172,10 +171,9 @@ describe('HTTP decorator tests', () => {
     const result = await RequestHelper.get('/orche/students?name=hu&&minAge=18');
     expect(result).length.gte(2);
   });
-  
+
   it('Should make a HTTP HEAD request', async () => {
     const result = await RequestHelper.head('/orche/students');
     expect(result).to.be.equal('');
-  });  
-  
+  });
 });

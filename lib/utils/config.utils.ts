@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -58,15 +58,18 @@ export class ConfigUtils extends EventEmitter {
     // Base directory - default undefined
     this.config.baseDir = envCfg.baseDir || localCfg.baseDir || userConfig.baseDir;
     // Application name - default app directory name
-    this.config.appName = envCfg.appName || localCfg.appName || 
-                          userConfig.appName || PathUtils.appDirName;
+    this.config.appName =
+      envCfg.appName || localCfg.appName || userConfig.appName || PathUtils.appDirName;
     // Middlewares - default []
-    this.config.middlewares = envCfg.middlewares || localCfg.middlewares || 
-                              userConfig.middlewares || [];
+    this.config.middlewares =
+      envCfg.middlewares || localCfg.middlewares || userConfig.middlewares || [];
     // Environment - default development
-    this.config.environment = process.env.ENV || envCfg.environment || 
-                              localCfg.environment || userConfig.environment || 
-                              'development';
+    this.config.environment =
+      process.env.ENV ||
+      envCfg.environment ||
+      localCfg.environment ||
+      userConfig.environment ||
+      'development';
 
     this.emit('configLoaded', this.config);
   }
@@ -85,7 +88,8 @@ export class ConfigUtils extends EventEmitter {
         }
       } else {
         throw new Error(
-          'Orche environment config file not found. File: ' + process.env.ORCHE_CONFIG);
+          'Orche environment config file not found. File: ' + process.env.ORCHE_CONFIG
+        );
       }
     }
     return envCfg;

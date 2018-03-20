@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
@@ -71,7 +71,6 @@ export enum HttpResponseCode {
    */
   PartialContent = 206,
 
-
   // *** Redirection messages
   /**
    * The request has more than one possible responses. User-agent or user should
@@ -127,7 +126,6 @@ export enum HttpResponseCode {
    * in the first request, a POST must be used in the second request.
    */
   PermanentRedirect = 308,
-
 
   // *** Client error messages
   /**
@@ -265,7 +263,6 @@ export enum HttpResponseCode {
    */
   UnavailableForLegalReasons = 451,
 
-
   // *** Server error responses
   /**
    * 	The server has encountered a situation it doesn't know how to handle.
@@ -327,5 +324,5 @@ export enum HttpResponseCode {
    * The 511 status code indicates that the client needs to authenticate to gain
    * network access.
    */
-  NetworkAuthenticationRequired = 511,
+  NetworkAuthenticationRequired = 511
 }
