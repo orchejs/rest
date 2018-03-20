@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright Mauricio Gemelli Vigolo.
+ * Copyright Mauricio Gemelli Vigolo and contributors.
  *
  * Use of this source code is governed by a MIT-style license that can be
  * found in the LICENSE file at https://github.com/orchejs/rest/LICENSE
  */
 import { DecoratorLoader } from '@orchejs/common';
 import { OrcheRestConfig, OrcheRestResult } from './interfaces';
-import { OrcheEngine } from './constants';
 import { ExpressEngine } from './engines';
 
 export class OrcheRest {
